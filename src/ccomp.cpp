@@ -169,7 +169,6 @@ join(networkvector & comps, compgraph & cg)
 	}
 
 
-
 	network *j = new network(ncnt, ecnt + cg.edgebudget()); 
 
 	for (int32_t i = comps.size() - 1; i >= 0; i--) {

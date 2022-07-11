@@ -153,7 +153,6 @@ void batchcontract(network & g, vertex_t *first, network::edgevector & edges);
 void unroll_dual(network & g);
 void unroll_master(network & g);
 
-
 uint32_t ccomp(compgraph & g, cvertexhead *roots);
 network * create_network(compgraph & g, cvertex_t *root, uint32_t & ncnt, uint32_t & ecnt, uint32_t limit);
 network * join(networkvector & comps, compgraph & cg);

@@ -3,8 +3,8 @@ OBJS = $(SRCS:.cpp=.o)
 
 
 CC = g++
-LDFLAGS= -lm -O3 -L/opt/local/lib
-CFLAGS= -g -O3 -Wall -Wextra -isystem/opt/local/include/ #-Werror
+LDFLAGS= -lm -O3 #-L/opt/local/lib
+CFLAGS= -g -O3 -MMD -Wall -Wextra #-I/opt/local/include/ #-Werror
 
 all : agony 
 
@@ -21,12 +21,5 @@ clean:
 zip:
 	zip agony.zip *.cpp *.h Makefile
 
-depend:
-	makedepend -Y -- $(CFLAGS) -- $(SRCS)
-# DO NOT DELETE
 
-agony.o: defines.h graph.h queue.h circulation.h tree.h
-contract.o: defines.h graph.h queue.h circulation.h tree.h
-read.o: circulation.h defines.h graph.h queue.h tree.h
-balance.o: circulation.h defines.h graph.h queue.h tree.h
-ccomp.o: circulation.h defines.h graph.h queue.h tree.h
+-include $(SRCS:%.cpp=%.d)

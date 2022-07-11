@@ -55,8 +55,9 @@ computeagony(network & g, residual & r, vertex_t *canon)
 		/*
 		for (uint32_t i = 0; i < g.nodebudget(); i++) {
 			vertex_t *v = g.get(i);
-			printf("FINAL: %d %d %.2f %.2f %d\n", v->id, v->v.circ.dual, v->v.circ.bias,  v->v.circ.flow, v->v.contract.master);
-		}*/
+			printf("FINAL: %d %.2f %.2f\n", v->v.circ.dual, v->v.circ.bias,  v->v.circ.flow);
+		}
+		*/
 	}
 
 	unroll_dual(g);
@@ -64,8 +65,10 @@ computeagony(network & g, residual & r, vertex_t *canon)
 	/*
 	for (uint32_t i = 0; i < g.nodebudget(); i++) {
 		vertex_t *v = g.get(i);
-		printf("DONE: %d %d %f\n", v->id, v->v.circ.dual, v->v.circ.bias - v->v.circ.flow);
-	}*/
+		printf("DONE: %d %f\n", v->v.circ.dual, v->v.circ.bias - v->v.circ.flow);
+	}
+	*/
+
 }
 
 void

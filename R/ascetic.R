@@ -49,6 +49,7 @@
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export perform.ascetic.ccf.dataset.resampling
 #' @import bnlearn
+#' @import Rcpp
 #'
 perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.dataset, nsampling = 100, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
 
@@ -87,7 +88,7 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
             # save the orderings to file
             write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             # estimate a best agony ranking and save the results to file
-            system(paste0("./agony ",agony_files,"/inputs.txt ",agony_files,"/outputs.txt"),ignore.stdout=TRUE)
+            agony(agony_files)
             # read the estimated best agony ranking
             agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
             # remove the created files and directories
@@ -177,6 +178,7 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export perform.ascetic.phylogenies.dataset.bootstrap
 #' @import bnlearn
+#' @import Rcpp
 #'
 perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsampling = 100, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
 
@@ -213,7 +215,7 @@ perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsam
             # save the orderings to file
             write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             # estimate a best agony ranking and save the results to file
-            system(paste0("./agony ",agony_files,"/inputs.txt ",agony_files,"/outputs.txt"),ignore.stdout=TRUE)
+            agony(agony_files)
             # read the estimated best agony ranking
             agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
             # remove the created files and directories
@@ -300,6 +302,7 @@ perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsam
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export perform.ascetic.ccf.dataset
 #' @import bnlearn
+#' @import Rcpp
 #'
 perform.ascetic.ccf.dataset <- function( dataset, ccf.dataset, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
 
@@ -374,6 +377,7 @@ perform.ascetic.ccf.dataset <- function( dataset, ccf.dataset, regularization = 
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export perform.ascetic.phylogenies.dataset
 #' @import bnlearn
+#' @import Rcpp
 #'
 perform.ascetic.phylogenies.dataset <- function( dataset, models, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
 
@@ -679,7 +683,7 @@ compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(ge
         # save the orderings to file
         write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
         # estimate a best agony ranking and save the results to file
-        system(paste0("./agony ",agony_files,"/inputs.txt ",agony_files,"/outputs.txt"),ignore.stdout=TRUE)
+        agony(agony_files)
         # read the estimated best agony ranking
         agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
         # compute the poset based on the best agony ranking
