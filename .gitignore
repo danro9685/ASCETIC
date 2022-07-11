@@ -36,7 +36,9 @@ vignettes/*.pdf
 *.knit.md
 
 # executables compiled from C files
-/src/agony.so
+src/*.o
+src/*.so
+src/agony
 
 # pkgdown local
 docs
