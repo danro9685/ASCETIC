@@ -9,9 +9,10 @@ Authors@R: c(
                 comment = c(ORCID = "0000-0002-9618-3774")))
 Maintainer: Luca De Sano <luca.desano@gmail.com>
 Depends:
-    R (>= 4.2.0)
+    R (>= 4.1.0)
 Imports:
-    bnlearn
+    bnlearn,
+    Rcpp
 Suggests:
     BiocStyle,
     testthat,

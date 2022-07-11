@@ -35,5 +35,8 @@ vignettes/*.pdf
 *.utf8.md
 *.knit.md
 
+# executables compiled from C files
+/src/agony.so
+
 # pkgdown local
 docs

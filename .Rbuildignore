@@ -4,6 +4,8 @@
 ^nobuild/.*$
 ^README.md$
 ^.git/.*$
+src/*.o
+src/*.so
 ^LICENSE.md$
 ^\.github$
 ^vignettes/.*Rmd$
