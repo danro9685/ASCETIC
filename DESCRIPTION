@@ -1,0 +1,31 @@
+Package: ASCETIC
+Version: 1.0.0
+Date: 2022-07-11
+Title: ASCETIC
+Authors@R: c(
+    person("Daniele", "Ramazzotti", role=c("cre","aut"),email="daniele.ramazzotti@unimib.it",
+                comment = c(ORCID = "0000-0002-6087-2666")),
+    person("Luca", "De Sano", role=c("aut"), email="luca.desano@gmail.com",
+                comment = c(ORCID = "0000-0002-9618-3774")))
+Maintainer: Luca De Sano <luca.desano@gmail.com>
+Depends:
+    R (>= 4.2.0)
+Imports:
+    bnlearn
+Suggests:
+    BiocStyle,
+    testthat,
+    knitr
+Name:
+    An R package for the inference of statistically significant temporal patterns involving alternations in driver genes from cancer genomics data
+Description:
+    Cancer development is a stochastic process involving large populations of cells. Random genetic and epigenetic alterations commonly occurring in any cell can occasionally be beneficial to neoplastic ones, thus defining clones characterized by a functional selective advantage. During clonal evolution, certain clones can be positively selected for increased proliferation and survival ability, outgrowing competing cells and this can eventually lead to invasion and metastasis. Throughout such a multi-step stochastic process, cancer cells can acquire over time a set of biological capabilities that sometimes are referred to as hallmarks. Not all variants are involved in their acquisition, but only a relative small subset of them – i.e., the drivers –, while most mutations present in the cancer clones do not increase their fitness – i.e., the passengers.
+    ASCETIC (Agony-baSed Cancer EvoluTion InferenCe) is a novel framework for the inference of a set of statistically significant temporal patterns involving alternations in driver genes from cancer genomics data.
+Encoding: UTF-8
+License: file LICENSE
+URL: https://github.com/danro9685/ASCETIC
+BugReports: https://github.com/danro9685/ASCETIC
+biocViews: BiomedicalInformatics, 
+           SomaticMutation
+RoxygenNote: 7.1.2
+VignetteBuilder: knitr

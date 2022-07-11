@@ -1,0 +1,9 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.travis\.yml$
+^nobuild/.*$
+^README.md$
+^.git/.*$
+^LICENSE.md$
+^\.github$
+^vignettes/.*Rmd$
