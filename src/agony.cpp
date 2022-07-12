@@ -8,6 +8,9 @@
 #include "circulation.h"
 
 
+#include <Rcpp.h>
+using namespace Rcpp;
+
 
 void
 computeagony(network & g, residual & r, vertex_t *canon)
@@ -108,145 +111,203 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 
 
 
-int
-main(int argc, char **argv)
-{
-	static struct option longopts[] = {
-		{"out",             required_argument,  NULL, 'o'},
-		{"in",              required_argument,  NULL, 'i'},
-		{"groups",          required_argument,   NULL, 'k'},
-		{"weighted",        no_argument,        NULL, 'w'},
-		{"self",            no_argument,        NULL, 's'},
-		{"noscc",           no_argument,        NULL, 'C'},
-		{"help",            no_argument,        NULL, 'h'},
-		{ NULL,             0,                  NULL,  0 }
-	};
+// int
+// main(int argc, char **argv)
+// {
+// 	static struct option longopts[] = {
+// 		{"out",             required_argument,  NULL, 'o'},
+// 		{"in",              required_argument,  NULL, 'i'},
+// 		{"groups",          required_argument,   NULL, 'k'},
+// 		{"weighted",        no_argument,        NULL, 'w'},
+// 		{"self",            no_argument,        NULL, 's'},
+// 		{"noscc",           no_argument,        NULL, 'C'},
+// 		{"help",            no_argument,        NULL, 'h'},
+// 		{ NULL,             0,                  NULL,  0 }
+// 	};
 
-	char *inname = NULL;
-	char *outname = NULL;
-	bool weighted = false;
-	bool self = false;
-	bool scc = true;
-	uint32_t groupcnt = 0;
+// 	char *inname = NULL;
+// 	char *outname = NULL;
+// 	bool weighted = false;
+// 	bool self = false;
+// 	bool scc = true;
+// 	uint32_t groupcnt = 0;
 
 
-	int ch;
-	while ((ch = getopt_long(argc, argv, "whk:o:i:sC", longopts, NULL)) != -1) {
-		switch (ch) {
-			case 'h':
-				printf("Usage: %s -i <input file> -o <output file> [-k <number>] [-whsC]\n", argv[0]);
-				printf("  -h    print this help\n");
-				printf("  -i    input file\n");
-				printf("  -o    output file\n");
-				printf("  -k    number of groups\n");
-				printf("  -w    input file has weights\n");
-				printf("  -s    allow self loops\n");
-				printf("  -C    disable strongly connected components\n");
-				return 0;
-				break;
-			case 'i':
-				inname = optarg;
-				break;
-			case 'o':
-				outname = optarg;
-				break;
-			case 'w':
-				weighted = true;
-				break;
-			case 'k':
-				groupcnt = atoi(optarg);
-				break;
-			case 's':
-				self = true;
-				break;
-			case 'C':
-				scc = false;
-				break;
-		}
+// 	int ch;
+// 	while ((ch = getopt_long(argc, argv, "whk:o:i:sC", longopts, NULL)) != -1) {
+// 		switch (ch) {
+// 			case 'h':
+// 				printf("Usage: %s -i <input file> -o <output file> [-k <number>] [-whsC]\n", argv[0]);
+// 				printf("  -h    print this help\n");
+// 				printf("  -i    input file\n");
+// 				printf("  -o    output file\n");
+// 				printf("  -k    number of groups\n");
+// 				printf("  -w    input file has weights\n");
+// 				printf("  -s    allow self loops\n");
+// 				printf("  -C    disable strongly connected components\n");
+// 				return 0;
+// 				break;
+// 			case 'i':
+// 				inname = optarg;
+// 				break;
+// 			case 'o':
+// 				outname = optarg;
+// 				break;
+// 			case 'w':
+// 				weighted = true;
+// 				break;
+// 			case 'k':
+// 				groupcnt = atoi(optarg);
+// 				break;
+// 			case 's':
+// 				self = true;
+// 				break;
+// 			case 'C':
+// 				scc = false;
+// 				break;
+// 		}
 
-	}
-	if (inname == NULL) {
-		printf("Missing input file\n");
-		return 1;
-	}
+// 	}
+// 	if (inname == NULL) {
+// 		printf("Missing input file\n");
+// 		return 1;
+// 	}
 
-	uint32_t ncnt; 
-	uint32_t ecnt; 
+// 	uint32_t ncnt; 
+// 	uint32_t ecnt; 
 	
 
 
-	if (!scc || groupcnt > 0) {
-		FILE *f = fopen(inname, "r");
-		network *g = read(f, weighted, self, ncnt, ecnt, groupcnt);
-		fclose(f);
+// 	if (!scc || groupcnt > 0) {
+// 		FILE *f = fopen(inname, "r");
+// 		network *g = read(f, weighted, self, ncnt, ecnt, groupcnt);
+// 		fclose(f);
 
-		residual r(g->nodecnt(), 2*g->edgebudget());
-		init_residual(*g, r);
-		vertex_t *canon = g->get(g->nodecnt() - 2);
+// 		residual r(g->nodecnt(), 2*g->edgebudget());
+// 		init_residual(*g, r);
+// 		vertex_t *canon = g->get(g->nodecnt() - 2);
 
-		computeagony(*g, r, canon);
-		printf("Agony: %f \n", score(*g, ncnt, ecnt));
+// 		computeagony(*g, r, canon);
+// 		printf("Agony: %f \n", score(*g, ncnt, ecnt));
 
-		f = stdout;
-		if (outname) f = fopen(outname, "w");
-		outputrank(f, *g, ncnt);
-		if (outname) fclose(f);
+// 		f = stdout;
+// 		if (outname) f = fopen(outname, "w");
+// 		outputrank(f, *g, ncnt);
+// 		if (outname) fclose(f);
 
-		delete g;
-	}
-	else {
+// 		delete g;
+// 	}
+// 	else {
 
-		FILE *f = fopen(inname, "r");
-		compgraph *cg = read(f, weighted, self);
-		fclose(f);
+// 		FILE *f = fopen(inname, "r");
+// 		compgraph *cg = read(f, weighted, self);
+// 		fclose(f);
 
-		cvertexhead roots;
-		uint32_t compcnt = ccomp(*cg, &roots);
+// 		cvertexhead roots;
+// 		uint32_t compcnt = ccomp(*cg, &roots);
 		
-		printf("components: %d\n", compcnt);
+// 		printf("components: %d\n", compcnt);
 
-		double sc = 0;
+// 		double sc = 0;
 
-		networkvector comps(compcnt);
+// 		networkvector comps(compcnt);
 
-		uint32_t ind = 0;
-		cvertex_t *root;
-		TAILQ_FOREACH(root, &roots, v.root) {
-			comps[ind] = create_network(*cg, root, ncnt, ecnt, groupcnt);
-			network *g = comps[ind];
+// 		uint32_t ind = 0;
+// 		cvertex_t *root;
+// 		TAILQ_FOREACH(root, &roots, v.root) {
+// 			comps[ind] = create_network(*cg, root, ncnt, ecnt, groupcnt);
+// 			network *g = comps[ind];
 
-			residual r(g->nodecnt(), 2*g->edgebudget());
-			init_residual(*g, r);
-			vertex_t *canon = g->get(g->nodecnt() - 2);
+// 			residual r(g->nodecnt(), 2*g->edgebudget());
+// 			init_residual(*g, r);
+// 			vertex_t *canon = g->get(g->nodecnt() - 2);
 
-			computeagony(*g, r, canon);
-			sc += score(*g, ncnt, ecnt);
-			unroll_master(*g);
-			ind++;
-		}
-		printf("Agony: %f \n", sc);
+// 			computeagony(*g, r, canon);
+// 			sc += score(*g, ncnt, ecnt);
+// 			unroll_master(*g);
+// 			ind++;
+// 		}
+// 		printf("Agony: %f \n", sc);
 
-		network *joined = join(comps, *cg);
-		residual r(joined->nodecnt(), 2*joined->edgebudget());
-		init_residual(*joined, r);
+// 		network *joined = join(comps, *cg);
+// 		residual r(joined->nodecnt(), 2*joined->edgebudget());
+// 		init_residual(*joined, r);
 
-		canonize(*joined, r);
-		migrate_dual(*cg, comps, *joined);
+// 		canonize(*joined, r);
+// 		migrate_dual(*cg, comps, *joined);
 
-		f = stdout;
-		if (outname) f = fopen(outname, "w");
-		outputrank(f, *cg, cg->nodebudget());
-		if (outname) fclose(f);
+// 		f = stdout;
+// 		if (outname) f = fopen(outname, "w");
+// 		outputrank(f, *cg, cg->nodebudget());
+// 		if (outname) fclose(f);
 
-		for (uint32_t i = 0; i < comps.size(); i++)
-			delete comps[i];
+// 		for (uint32_t i = 0; i < comps.size(); i++)
+// 			delete comps[i];
 
-		delete joined;
-		delete cg;
-	}
+// 		delete joined;
+// 		delete cg;
+// 	}
 	
 
 
 
-	return 0;
+// 	return 0;
+// }
+
+
+// [[Rcpp::export]]
+void agony( Rcpp::CharacterVector inname, Rcpp::CharacterVector outname ) {
+
+    bool weighted = false;
+    bool self = false;
+    uint32_t groupcnt = 0;
+
+    uint32_t ncnt; 
+    uint32_t ecnt; 
+    
+    FILE *f = fopen(inname, "r");
+    compgraph *cg = read(f, weighted, self);
+    fclose(f);
+
+    cvertexhead roots;
+    uint32_t compcnt = ccomp(*cg, &roots);
+    
+    double sc = 0;
+
+    networkvector comps(compcnt);
+
+    uint32_t ind = 0;
+    cvertex_t *root;
+    TAILQ_FOREACH(root, &roots, v.root) {
+        comps[ind] = create_network(*cg, root, ncnt, ecnt, groupcnt);
+        network *g = comps[ind];
+
+        residual r(g->nodecnt(), 2*g->edgebudget());
+        init_residual(*g, r);
+        vertex_t *canon = g->get(g->nodecnt() - 2);
+
+        computeagony(*g, r, canon);
+        sc += score(*g, ncnt, ecnt);
+        unroll_master(*g);
+        ind++;
+    }
+
+    network *joined = join(comps, *cg);
+    residual r(joined->nodecnt(), 2*joined->edgebudget());
+    init_residual(*joined, r);
+
+    canonize(*joined, r);
+    migrate_dual(*cg, comps, *joined);
+
+    f = stdout;
+    if (outname) f = fopen(outname, "w");
+    outputrank(f, *cg, cg->nodebudget());
+    if (outname) fclose(f);
+
+    for (uint32_t i = 0; i < comps.size(); i++)
+        delete comps[i];
+
+    delete joined;
+    delete cg;
+    
 }

@@ -1,5 +1,0 @@
-# The code for agony computation was developed by Professor Nikolaj Tatti and colleagues and refers to the publication: Tatti, Nikolaj. 
-# "Tiers for peers: a practical algorithm for discovering hierarchy in weighted networks." Data mining and knowledge discovery 31.3 (2017): 702-738.
-agony <- function( agony_files ) {
-  return(.agony(paste0(" -i ",agony_files,"/inputs.txt -o ",agony_files,"/outputs.txt")))
-}

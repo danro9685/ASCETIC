@@ -29,4 +29,6 @@ BugReports: https://github.com/danro9685/ASCETIC
 biocViews: BiomedicalInformatics, 
            SomaticMutation
 RoxygenNote: 7.1.2
+LinkingTo: Rcpp
+NeedsCompilation: yes
 VignetteBuilder: knitr
