@@ -36,6 +36,7 @@ vignettes/*.pdf
 *.knit.md
 
 # executables compiled from C files
+src/*.d
 src/*.o
 src/*.so
 src/agony
