@@ -261,59 +261,59 @@ main(int argc, char **argv)
 // agony(Rcpp::CharacterVector inname, Rcpp::CharacterVector outname)
 // {
 void
-agony(char input, char output)
+agony(char inname, char outname)
 {
 	
-	// bool weighted = false;
-    // bool self = false;
-    // uint32_t groupcnt = 0;
+	bool weighted = false;
+    bool self = false;
+    uint32_t groupcnt = 0;
 
-    // uint32_t ncnt; 
-    // uint32_t ecnt; 
+    uint32_t ncnt; 
+    uint32_t ecnt; 
     
-    // FILE *f = fopen(inname, "r");
-    // compgraph *cg = read(f, weighted, self);
-    // fclose(f);
+    FILE *f = fopen(inname, "r");
+    compgraph *cg = read(f, weighted, self);
+    fclose(f);
 
-    // cvertexhead roots;
-    // uint32_t compcnt = ccomp(*cg, &roots);
+    cvertexhead roots;
+    uint32_t compcnt = ccomp(*cg, &roots);
     
-    // double sc = 0;
+    double sc = 0;
 
-    // networkvector comps(compcnt);
+    networkvector comps(compcnt);
 
-    // uint32_t ind = 0;
-    // cvertex_t *root;
-    // TAILQ_FOREACH(root, &roots, v.root) {
-    //     comps[ind] = create_network(*cg, root, ncnt, ecnt, groupcnt);
-    //     network *g = comps[ind];
+    uint32_t ind = 0;
+    cvertex_t *root;
+    TAILQ_FOREACH(root, &roots, v.root) {
+        comps[ind] = create_network(*cg, root, ncnt, ecnt, groupcnt);
+        network *g = comps[ind];
 
-    //     residual r(g->nodecnt(), 2*g->edgebudget());
-    //     init_residual(*g, r);
-    //     vertex_t *canon = g->get(g->nodecnt() - 2);
+        residual r(g->nodecnt(), 2*g->edgebudget());
+        init_residual(*g, r);
+        vertex_t *canon = g->get(g->nodecnt() - 2);
 
-    //     computeagony(*g, r, canon);
-    //     sc += score(*g, ncnt, ecnt);
-    //     unroll_master(*g);
-    //     ind++;
-    // }
+        computeagony(*g, r, canon);
+        sc += score(*g, ncnt, ecnt);
+        unroll_master(*g);
+        ind++;
+    }
 
-    // network *joined = join(comps, *cg);
-    // residual r(joined->nodecnt(), 2*joined->edgebudget());
-    // init_residual(*joined, r);
+    network *joined = join(comps, *cg);
+    residual r(joined->nodecnt(), 2*joined->edgebudget());
+    init_residual(*joined, r);
 
-    // canonize(*joined, r);
-    // migrate_dual(*cg, comps, *joined);
+    canonize(*joined, r);
+    migrate_dual(*cg, comps, *joined);
 
-    // f = stdout;
-    // if (outname) f = fopen(outname, "w");
-    // outputrank(f, *cg, cg->nodebudget());
-    // if (outname) fclose(f);
+    f = stdout;
+    fopen(outname, "w");
+    outputrank(f, *cg, cg->nodebudget());
+    fclose(f);
 
-    // for (uint32_t i = 0; i < comps.size(); i++)
-    //     delete comps[i];
+    for (uint32_t i = 0; i < comps.size(); i++)
+        delete comps[i];
 
-    // delete joined;
-    // delete cg;
+    delete joined;
+    delete cg;
     
 }
