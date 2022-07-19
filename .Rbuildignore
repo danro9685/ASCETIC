@@ -4,10 +4,6 @@
 ^nobuild/.*$
 ^README.md$
 ^.git/.*$
-src/*.d
-src/*.o
-src/*.so
-src/agony
 ^LICENSE.md$
 ^\.github$
 ^vignettes/.*Rmd$
