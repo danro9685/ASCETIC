@@ -49,7 +49,9 @@
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export perform.ascetic.ccf.dataset.resampling
 #' @import bnlearn
-#' @import Rcpp
+#' @importFrom Rcpp evalCpp
+#' @useDynLib ASCETIC, .registration = TRUE
+#' @exportPattern "^[[:alpha:]]+"
 #'
 perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.dataset, nsampling = 100, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
 

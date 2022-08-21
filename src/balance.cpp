@@ -2,6 +2,8 @@
 #include <limits>
 #include <assert.h>
 #include <stdio.h>
+#include <Rcpp.h>
+using namespace Rcpp;
 
 inline int
 treecomp(const vertex_t *a, const vertex_t *b)

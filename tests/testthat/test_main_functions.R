@@ -7,5 +7,5 @@ test_that("ASCETIC produces correct output", {
 
 data("res_example_phylogenies_dataset_bootstrap")
 test_that("ASCETIC produces correct output", {
-    expect_equal(names(res_example_phylogenies_dataset_bootstrap),c("dataset","ccf_dataset","ranking_estimate","poset","inference"))
+    expect_equal(names(res_example_phylogenies_dataset_bootstrap),c("dataset","models","ranking_estimate","poset","inference"))
 })

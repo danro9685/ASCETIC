@@ -43,3 +43,5 @@ src/agony
 
 # pkgdown local
 docs
+*.Rproj
+*.dll

@@ -11,15 +11,14 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // agony
-// void // agony(Rcpp::CharacterVector inname, Rcpp::CharacterVector outname);
+void agony(Rcpp::String inname, Rcpp::String outname);
 RcppExport SEXP _ASCETIC_agony(SEXP innameSEXP, SEXP outnameSEXP) {
 BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type inname(innameSEXP);
-    Rcpp::traits::input_parameter< Rcpp::CharacterVector >::type outname(outnameSEXP);
-    rcpp_result_gen = Rcpp::wrap(agony(inname, outname));
-    return rcpp_result_gen;
+    Rcpp::traits::input_parameter< Rcpp::String >::type inname(innameSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type outname(outnameSEXP);
+    agony(inname, outname);
+    return R_NilValue;
 END_RCPP
 }
 
