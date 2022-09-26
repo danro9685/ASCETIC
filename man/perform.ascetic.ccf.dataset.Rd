@@ -15,7 +15,7 @@ perform.ascetic.ccf.dataset(
 \arguments{
 \item{dataset}{Binary matrix where rows are samples and columns are mutations.
 Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise.
-Values reported in dataset must be consistent with the ones reported in ccf.dataset.}
+Values reported in the variable named dataset must be consistent with the ones reported in ccf.dataset.}
 
 \item{ccf.dataset}{Matrix where rows are samples and columns are mutations.
 Each cell of the matrix is the cancer cell fraction (CCF) estimated for the related mutation when observed in the sample.
