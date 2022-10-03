@@ -42,10 +42,11 @@ Perform the ASCETIC inference framework on multiple samples (using phylogenies a
 set.seed(12345)
 data(dataset_example_phylogenies)
 data(models_phylogenies)
-res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset( dataset = dataset_example_phylogenies, 
-                                                                       models = models_phylogenies, 
-                                                                       regularization = "aic", 
-                                                                       command = "hc", 
-                                                                       restarts = 0 )
+res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset( 
+                                                  dataset = dataset_example_phylogenies, 
+                                                  models = models_phylogenies, 
+                                                  regularization = "aic", 
+                                                  command = "hc", 
+                                                  restarts = 0 )
 
 }

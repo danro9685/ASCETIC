@@ -14,5 +14,5 @@ data(res_example_single_samples_resampling)
 Results obtained by running the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples.
 }
 \description{
-Example of results obtained by running the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples from Nguyen, Bastien, et al., 2022.
+Example of results by the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples from Nguyen, Bastien, et al., 2022.
 }

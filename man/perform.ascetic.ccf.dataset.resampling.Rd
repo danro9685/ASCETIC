@@ -65,12 +65,13 @@ set.seed(12345)
 data(dataset_example_single_samples)
 data(ccf_dataset_example_single_samples)
 data(vaf_dataset_example_single_samples)
-res_example_single_samples_resampling = perform.ascetic.ccf.dataset.resampling( dataset = dataset_example_single_samples, 
-                                                                                ccf.dataset = ccf_dataset_example_single_samples, 
-                                                                                vaf.dataset = vaf_dataset_example_single_samples, 
-                                                                                nsampling = 5, 
-                                                                                regularization = "aic", 
-                                                                                command = "hc", 
-                                                                                restarts = 0 )
+res_example_single_samples_resampling = perform.ascetic.ccf.dataset.resampling( 
+                                                dataset = dataset_example_single_samples, 
+                                                ccf.dataset = ccf_dataset_example_single_samples, 
+                                                vaf.dataset = vaf_dataset_example_single_samples, 
+                                                nsampling = 5, 
+                                                regularization = "aic", 
+                                                command = "hc", 
+                                                restarts = 0 )
 
 }

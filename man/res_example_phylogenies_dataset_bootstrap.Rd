@@ -5,13 +5,13 @@
 \alias{res_example_phylogenies_dataset_bootstrap}
 \title{Example of results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies}
 \format{
-Results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
+Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
 }
 \usage{
 data(res_example_phylogenies_dataset_bootstrap)
 }
 \value{
-Results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
+Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
 }
 \description{
 Example of results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies from Miles, Linde A., et al., 2020.

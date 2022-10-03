@@ -46,10 +46,11 @@ Perform the ASCETIC inference framework on single samples (using CCF) datasets.
 set.seed(12345)
 data(dataset_example_single_samples)
 data(ccf_dataset_example_single_samples)
-res_example_single_samples = perform.ascetic.ccf.dataset( dataset = dataset_example_single_samples, 
-                                                          ccf.dataset = ccf_dataset_example_single_samples, 
-                                                          regularization = "aic", 
-                                                          command = "hc", 
-                                                          restarts = 0 )
+res_example_single_samples = perform.ascetic.ccf.dataset( 
+                                     dataset = dataset_example_single_samples, 
+                                     ccf.dataset = ccf_dataset_example_single_samples, 
+                                     regularization = "aic", 
+                                     command = "hc", 
+                                     restarts = 0 )
 
 }

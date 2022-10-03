@@ -49,11 +49,12 @@ with bootstrap for a robust estimation of the agony ranking.
 set.seed(12345)
 data(dataset_example_phylogenies)
 data(models_phylogenies)
-res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.bootstrap( dataset = dataset_example_phylogenies, 
-                                                                                           models = models_phylogenies, 
-                                                                                           nsampling = 5, 
-                                                                                           regularization = "aic", 
-                                                                                           command = "hc", 
-                                                                                           restarts = 0 )
+res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.bootstrap( 
+                                                    dataset = dataset_example_phylogenies, 
+                                                    models = models_phylogenies, 
+                                                    nsampling = 5, 
+                                                    regularization = "aic", 
+                                                    command = "hc", 
+                                                    restarts = 0 )
 
 }

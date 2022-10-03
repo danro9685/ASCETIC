@@ -6,13 +6,14 @@
 #' data(dataset_example_single_samples)
 #' data(ccf_dataset_example_single_samples)
 #' data(vaf_dataset_example_single_samples)
-#' res_example_single_samples_resampling = perform.ascetic.ccf.dataset.resampling( dataset = dataset_example_single_samples, 
-#'                                                                                 ccf.dataset = ccf_dataset_example_single_samples, 
-#'                                                                                 vaf.dataset = vaf_dataset_example_single_samples, 
-#'                                                                                 nsampling = 5, 
-#'                                                                                 regularization = "aic", 
-#'                                                                                 command = "hc", 
-#'                                                                                 restarts = 0 )
+#' res_example_single_samples_resampling = perform.ascetic.ccf.dataset.resampling( 
+#'                                                 dataset = dataset_example_single_samples, 
+#'                                                 ccf.dataset = ccf_dataset_example_single_samples, 
+#'                                                 vaf.dataset = vaf_dataset_example_single_samples, 
+#'                                                 nsampling = 5, 
+#'                                                 regularization = "aic", 
+#'                                                 command = "hc", 
+#'                                                 restarts = 0 )
 #'
 #' @title perform.ascetic.ccf.dataset.resampling
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -153,12 +154,13 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
 #' set.seed(12345)
 #' data(dataset_example_phylogenies)
 #' data(models_phylogenies)
-#' res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.bootstrap( dataset = dataset_example_phylogenies, 
-#'                                                                                            models = models_phylogenies, 
-#'                                                                                            nsampling = 5, 
-#'                                                                                            regularization = "aic", 
-#'                                                                                            command = "hc", 
-#'                                                                                            restarts = 0 )
+#' res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.bootstrap( 
+#'                                                     dataset = dataset_example_phylogenies, 
+#'                                                     models = models_phylogenies, 
+#'                                                     nsampling = 5, 
+#'                                                     regularization = "aic", 
+#'                                                     command = "hc", 
+#'                                                     restarts = 0 )
 #'
 #' @title perform.ascetic.phylogenies.dataset.bootstrap
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -281,11 +283,12 @@ perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsam
 #' set.seed(12345)
 #' data(dataset_example_single_samples)
 #' data(ccf_dataset_example_single_samples)
-#' res_example_single_samples = perform.ascetic.ccf.dataset( dataset = dataset_example_single_samples, 
-#'                                                           ccf.dataset = ccf_dataset_example_single_samples, 
-#'                                                           regularization = "aic", 
-#'                                                           command = "hc", 
-#'                                                           restarts = 0 )
+#' res_example_single_samples = perform.ascetic.ccf.dataset( 
+#'                                      dataset = dataset_example_single_samples, 
+#'                                      ccf.dataset = ccf_dataset_example_single_samples, 
+#'                                      regularization = "aic", 
+#'                                      command = "hc", 
+#'                                      restarts = 0 )
 #'
 #' @title perform.ascetic.ccf.dataset
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -363,11 +366,12 @@ perform.ascetic.ccf.dataset <- function( dataset, ccf.dataset, regularization = 
 #' set.seed(12345)
 #' data(dataset_example_phylogenies)
 #' data(models_phylogenies)
-#' res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset( dataset = dataset_example_phylogenies, 
-#'                                                                        models = models_phylogenies, 
-#'                                                                        regularization = "aic", 
-#'                                                                        command = "hc", 
-#'                                                                        restarts = 0 )
+#' res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset( 
+#'                                                   dataset = dataset_example_phylogenies, 
+#'                                                   models = models_phylogenies, 
+#'                                                   regularization = "aic", 
+#'                                                   command = "hc", 
+#'                                                   restarts = 0 )
 #'
 #' @title perform.ascetic.phylogenies.dataset
 #' @param dataset Binary matrix where rows are samples and columns are mutations.

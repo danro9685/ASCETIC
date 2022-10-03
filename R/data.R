@@ -50,7 +50,7 @@ NULL
 
 #' @name res_example_single_samples_resampling
 #' @title Example of results obtained by running the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples.
-#' @description Example of results obtained by running the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples from Nguyen, Bastien, et al., 2022.
+#' @description Example of results by the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples from Nguyen, Bastien, et al., 2022.
 #' @docType data
 #' @usage data(res_example_single_samples_resampling)
 #' @format Results obtained by running the function perform.ascetic.ccf.dataset.resampling on dataset_example_single_samples.
@@ -62,6 +62,6 @@ NULL
 #' @description Example of results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies from Miles, Linde A., et al., 2020.
 #' @docType data
 #' @usage data(res_example_phylogenies_dataset_bootstrap)
-#' @format Results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
-#' @return Results obtained by running the function perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
+#' @format Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
+#' @return Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
 NULL

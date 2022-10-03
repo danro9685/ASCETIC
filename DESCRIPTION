@@ -1,6 +1,6 @@
 Package: ASCETIC
-Version: 0.99.1
-Date: 2022-09-26
+Version: 0.99.2
+Date: 2022-10-03
 Title: ASCETIC
 Authors@R: c(
     person("Daniele", "Ramazzotti", role=c("cre","aut"),email="daniele.ramazzotti@unimib.it",
