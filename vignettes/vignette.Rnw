@@ -139,6 +139,8 @@ res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.
 
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
 
+\section{\Rcode{sessionInfo()}}
+
 <<sessioninfo,results='asis',echo=FALSE>>=
 toLatex(sessionInfo())
 @
