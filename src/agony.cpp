@@ -130,7 +130,7 @@ void agony(Rcpp::String inname, Rcpp::String outname)
   c = fgetc(fptr);
   while (c != EOF)
   {
-    Rprintf ("%c", c);
+    //Rprintf ("%c", c);
     c = fgetc(fptr);
   }
   
