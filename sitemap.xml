@@ -25,25 +25,7 @@
     <loc>/reference/agony.html</loc>
   </url>
   <url>
-    <loc>/reference/apply.pr.html</loc>
-  </url>
-  <url>
-    <loc>/reference/as.categorical.dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build.agony.input.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build.agony.input.multiple.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/build.ranking.adj.matrix.html</loc>
-  </url>
-  <url>
     <loc>/reference/ccf_dataset_example_single_samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/compute.agony.poset.html</loc>
   </url>
   <url>
     <loc>/reference/dataset_example_phylogenies.html</loc>
@@ -52,31 +34,7 @@
     <loc>/reference/dataset_example_single_samples.html</loc>
   </url>
   <url>
-    <loc>/reference/estimate.agony.poset.multiple.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.agony.poset.single.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.model.multiple.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.model.single.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.null.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.probs.html</loc>
-  </url>
-  <url>
     <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/infer.order.in.ccf.dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/infer.total.order.html</loc>
   </url>
   <url>
     <loc>/reference/models_phylogenies.html</loc>
@@ -92,9 +50,6 @@
   </url>
   <url>
     <loc>/reference/perform.ascetic.phylogenies.dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/perform.likelihood.fit.html</loc>
   </url>
   <url>
     <loc>/reference/res_example_phylogenies_dataset_bootstrap.html</loc>
