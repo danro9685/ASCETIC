@@ -1,13 +1,12 @@
 Package: ASCETIC
-Version: 0.99.3
-Date: 2022-10-10
+Version: 0.99.4
+Date: 2022-10-12
 Title: ASCETIC
 Authors@R: c(
-    person("Daniele", "Ramazzotti", role=c("cre","aut"),email="daniele.ramazzotti@unimib.it",
+    person("Daniele", "Ramazzotti", role=c("aut"),email="daniele.ramazzotti@unimib.it",
                 comment = c(ORCID = "0000-0002-6087-2666")),
-    person("Luca", "De Sano", role=c("aut"), email="luca.desano@gmail.com",
+    person("Luca", "De Sano", role=c("cre","aut"), email="luca.desano@gmail.com",
                 comment = c(ORCID = "0000-0002-9618-3774")))
-Maintainer: Luca De Sano <luca.desano@gmail.com>
 Depends:
     R (>= 4.1.0)
 Imports:
