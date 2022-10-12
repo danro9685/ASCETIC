@@ -10,5 +10,11 @@ estimate.probs(dataset)
 \item{dataset}{Binary matrix where rows are samples and columns are mutations.}
 }
 \description{
-Estimate marginal and joint probabilities from the dataset
+Estimate marginal and joint probabilities from the dataset.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["estimate.probs"]]
+res = estimate.probs(data_example)
+
 }

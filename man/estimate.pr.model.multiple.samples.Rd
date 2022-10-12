@@ -14,3 +14,9 @@ estimate.pr.model.multiple.samples(models, events)
 \description{
 Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a inferences on multiple patients.
 }
+\examples{
+data(data_examples)
+data_example = data_examples[["estimate.pr.model.multiple.samples"]]
+res = estimate.pr.model.multiple.samples(data_example$models,data_example$events)
+
+}

@@ -14,5 +14,11 @@ apply.pr(poset, pr_model, pr_null)
 \item{pr_null}{ASCETIC null model based on Suppes' theory of probabilistic causation.}
 }
 \description{
-Enforce probability raising constraints
+Enforce probability raising constraints.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["apply.pr"]]
+res = apply.pr(poset=data_example$poset,pr_model=data_example$pr_model,pr_null=data_example$pr_null)
+
 }

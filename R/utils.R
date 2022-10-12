@@ -1,5 +1,10 @@
 #' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a dataset of cancer cell fractions.
 #'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["estimate.pr.model.single.samples"]]
+#' res = estimate.pr.model.single.samples(ccf.dataset=data_example)
+#'
 #' @title estimate.pr.model.single.samples
 #' @param ccf.dataset Matrix where rows are samples and columns are mutations.
 #'
@@ -33,6 +38,11 @@ estimate.pr.model.single.samples <- function( ccf.dataset ) {
 }
 
 #' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a inferences on multiple patients.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["estimate.pr.model.multiple.samples"]]
+#' res = estimate.pr.model.multiple.samples(data_example$models,data_example$events)
 #'
 #' @title estimate.pr.model.multiple.samples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
@@ -72,7 +82,12 @@ estimate.pr.model.multiple.samples <- function( models, events ) {
     
 }
 
-#' Estimate the null model for the probability raising, i.e., j --> i, P(i,not j)
+#' Estimate the null model for the probability raising, i.e., j --> i, P(i,not j).
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["estimate.pr.null"]]
+#' res = estimate.pr.null(data_example)
 #'
 #' @title estimate.pr.null
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -98,7 +113,12 @@ estimate.pr.null <- function( dataset ) {
     
 }
 
-#' Estimate marginal and joint probabilities from the dataset
+#' Estimate marginal and joint probabilities from the dataset.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["estimate.probs"]]
+#' res = estimate.probs(data_example)
 #'
 #' @title estimate.probs
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -122,7 +142,7 @@ estimate.probs <- function( dataset ) {
 
 }
 
-#' Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions
+#' Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions.
 #'
 #' @title estimate.agony.poset.single.samples
 #' @param ccf.dataset Matrix where rows are samples and columns are mutations.
@@ -148,7 +168,7 @@ estimate.agony.poset.single.samples <- function( ccf.dataset ) {
 
 }
 
-#' Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples
+#' Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples.
 #'
 #' @title estimate.agony.poset.multiple.samples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
@@ -172,7 +192,12 @@ estimate.agony.poset.multiple.samples <- function( models, events ) {
 
 }
 
-#' Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample
+#' Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["infer.order.in.ccf.dataset"]]
+#' res = infer.order.in.ccf.dataset(data_example)
 #'
 #' @title infer.order.in.ccf.dataset
 #' @param ccf.dataset Matrix where rows are samples and columns are mutations.
@@ -192,7 +217,12 @@ infer.order.in.ccf.dataset <- function( ccf.dataset  ) {
 
 }
 
-#' Estimate a total ordering for a sample given the observed cancer cell fractions
+#' Estimate a total ordering for a sample given the observed cancer cell fractions.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["infer.total.order"]]
+#' res = infer.total.order(data_example)
 #'
 #' @title infer.total.order
 #' @param ccf.entry Cancer cell fractions for each sample.
@@ -208,7 +238,12 @@ infer.total.order <- function( ccf.entry ) {
 
 }
 
-#' Create the input file for computing a best agony ranking given a total ordering
+#' Create the input file for computing a best agony ranking given a total ordering.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["build.agony.input"]]
+#' res = build.agony.input(data_example)
 #'
 #' @title build.agony.input
 #' @param agony_orders Agony-based rankings.
@@ -244,7 +279,12 @@ build.agony.input <- function( agony_orders ) {
 
 }
 
-#' Compute a set of time orderings among each event, given a set of models inferred from multiple samples
+#' Compute a set of time orderings among each event, given a set of models inferred from multiple samples.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["build.agony.input.multiple.samples"]]
+#' res = build.agony.input.multiple.samples(data_example$models,data_example$events)
 #'
 #' @title build.agony.input.multiple.samples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
@@ -290,7 +330,7 @@ build.agony.input.multiple.samples <- function( models, events ) {
 
 }
 
-#' Estimate an optimal agony ranking poset given a set of temporal observations
+#' Estimate an optimal agony ranking poset given a set of temporal observations.
 #'
 #' @title compute.agony.poset
 #' @param agony_arcs Agony-based rankings.
@@ -323,7 +363,12 @@ compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(ge
 
 }
 
-#' Compute the poset based on the best agony ranking
+#' Compute the poset based on the best agony ranking.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["build.ranking.adj.matrix"]]
+#' res = build.ranking.adj.matrix(agony_ranking=data_example$agony_ranking,num_events=data_example$num_events)
 #'
 #' @title build.ranking.adj.matrix
 #' @param agony_ranking Agony-based rankings.
@@ -355,7 +400,12 @@ build.ranking.adj.matrix <- function( agony_ranking, num_events ) {
     
 }
 
-#' Enforce probability raising constraints
+#' Enforce probability raising constraints.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["apply.pr"]]
+#' res = apply.pr(poset=data_example$poset,pr_model=data_example$pr_model,pr_null=data_example$pr_null)
 #'
 #' @title apply.pr
 #' @param poset Partially order set to be considered during the inference.
@@ -379,7 +429,12 @@ apply.pr <- function( poset, pr_model, pr_null ) {
 
 }
 
-#' Perform structure learning by maximum likelihood given a poset
+#' Perform structure learning by maximum likelihood given a poset.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["perform.likelihood.fit"]]
+#' res = perform.likelihood.fit(dataset=data_example$dataset,poset=data_example$poset,regularization="aic",command="hc",restarts=0)
 #'
 #' @title perform.likelihood.fit
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
@@ -455,7 +510,12 @@ perform.likelihood.fit <- function( dataset, poset, regularization, command, res
 
 }
 
-#' Create a categorical data structure
+#' Create a categorical data structure.
+#'
+#' @examples
+#' data(data_examples)
+#' data_example = data_examples[["as.categorical.dataset"]]
+#' res = as.categorical.dataset(data_example)
 #'
 #' @title as.categorical.dataset
 #' @param dataset Binary matrix where rows are samples and columns are mutations.

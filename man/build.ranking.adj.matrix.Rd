@@ -12,5 +12,11 @@ build.ranking.adj.matrix(agony_ranking, num_events)
 \item{num_events}{Number of driver genes considered for the inference.}
 }
 \description{
-Compute the poset based on the best agony ranking
+Compute the poset based on the best agony ranking.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["build.ranking.adj.matrix"]]
+res = build.ranking.adj.matrix(agony_ranking=data_example$agony_ranking,num_events=data_example$num_events)
+
 }

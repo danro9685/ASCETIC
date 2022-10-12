@@ -18,5 +18,5 @@ compute.agony.poset(
 \item{agony_files}{Location of agony files.}
 }
 \description{
-Estimate an optimal agony ranking poset given a set of temporal observations
+Estimate an optimal agony ranking poset given a set of temporal observations.
 }

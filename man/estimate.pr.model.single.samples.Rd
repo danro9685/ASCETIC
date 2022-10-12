@@ -12,3 +12,9 @@ estimate.pr.model.single.samples(ccf.dataset)
 \description{
 Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a dataset of cancer cell fractions.
 }
+\examples{
+data(data_examples)
+data_example = data_examples[["estimate.pr.model.single.samples"]]
+res = estimate.pr.model.single.samples(ccf.dataset=data_example)
+
+}

@@ -12,5 +12,5 @@ estimate.agony.poset.multiple.samples(models, events)
 \item{events}{Driver genes to be considered in the inference.}
 }
 \description{
-Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples
+Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples.
 }

@@ -12,5 +12,11 @@ build.agony.input.multiple.samples(models, events)
 \item{events}{Driver genes to be considered in the inference.}
 }
 \description{
-Compute a set of time orderings among each event, given a set of models inferred from multiple samples
+Compute a set of time orderings among each event, given a set of models inferred from multiple samples.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["build.agony.input.multiple.samples"]]
+res = build.agony.input.multiple.samples(data_example$models,data_example$events)
+
 }

@@ -65,3 +65,13 @@ NULL
 #' @format Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
 #' @return Results by perform.ascetic.phylogenies.dataset.bootstrap on dataset_example_phylogenies.
 NULL
+
+#' @name data_examples 
+#' @title list data structure to run examples 
+#' @description list data structure to run examples. 
+#' @docType data 
+#' @usage data(data_examples) 
+#' @format list data structure to run examples
+#' @source list data structure to run examples. 
+#' @return list data structure to run examples 
+NULL

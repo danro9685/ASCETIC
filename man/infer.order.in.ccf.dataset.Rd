@@ -10,5 +10,11 @@ infer.order.in.ccf.dataset(ccf.dataset)
 \item{ccf.dataset}{Matrix where rows are samples and columns are mutations.}
 }
 \description{
-Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample
+Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["infer.order.in.ccf.dataset"]]
+res = infer.order.in.ccf.dataset(data_example)
+
 }

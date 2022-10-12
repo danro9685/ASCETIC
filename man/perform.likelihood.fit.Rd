@@ -18,5 +18,11 @@ perform.likelihood.fit(dataset, poset, regularization, command, restarts)
 \item{restarts}{Number of restarts to be performed during the maximum likelihood estimation when Hill Climbing optimization technique is used.}
 }
 \description{
-Perform structure learning by maximum likelihood given a poset
+Perform structure learning by maximum likelihood given a poset.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["perform.likelihood.fit"]]
+res = perform.likelihood.fit(dataset=data_example$dataset,poset=data_example$poset,regularization="aic",command="hc",restarts=0)
+
 }

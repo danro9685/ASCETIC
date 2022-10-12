@@ -10,5 +10,11 @@ infer.total.order(ccf.entry)
 \item{ccf.entry}{Cancer cell fractions for each sample.}
 }
 \description{
-Estimate a total ordering for a sample given the observed cancer cell fractions
+Estimate a total ordering for a sample given the observed cancer cell fractions.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["infer.total.order"]]
+res = infer.total.order(data_example)
+
 }

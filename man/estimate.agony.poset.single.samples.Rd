@@ -10,5 +10,5 @@ estimate.agony.poset.single.samples(ccf.dataset)
 \item{ccf.dataset}{Matrix where rows are samples and columns are mutations.}
 }
 \description{
-Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions
+Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions.
 }

@@ -10,5 +10,11 @@ as.categorical.dataset(dataset)
 \item{dataset}{Binary matrix where rows are samples and columns are mutations.}
 }
 \description{
-Create a categorical data structure
+Create a categorical data structure.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["as.categorical.dataset"]]
+res = as.categorical.dataset(data_example)
+
 }

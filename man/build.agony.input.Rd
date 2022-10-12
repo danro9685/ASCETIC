@@ -10,5 +10,11 @@ build.agony.input(agony_orders)
 \item{agony_orders}{Agony-based rankings.}
 }
 \description{
-Create the input file for computing a best agony ranking given a total ordering
+Create the input file for computing a best agony ranking given a total ordering.
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["build.agony.input"]]
+res = build.agony.input(data_example)
+
 }

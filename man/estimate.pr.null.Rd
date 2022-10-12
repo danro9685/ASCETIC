@@ -10,5 +10,11 @@ estimate.pr.null(dataset)
 \item{dataset}{Binary matrix where rows are samples and columns are mutations.}
 }
 \description{
-Estimate the null model for the probability raising, i.e., j --> i, P(i,not j)
+Estimate the null model for the probability raising, i.e., j --> i, P(i,not j).
+}
+\examples{
+data(data_examples)
+data_example = data_examples[["estimate.pr.null"]]
+res = estimate.pr.null(data_example)
+
 }
