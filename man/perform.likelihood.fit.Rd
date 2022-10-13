@@ -23,6 +23,10 @@ Perform structure learning by maximum likelihood given a poset.
 \examples{
 data(data_examples)
 data_example = data_examples[["perform.likelihood.fit"]]
-res = perform.likelihood.fit(dataset=data_example$dataset,poset=data_example$poset,regularization="aic",command="hc",restarts=0)
+res = perform.likelihood.fit( dataset = data_example$dataset, 
+                              poset = data_example$poset, 
+                              regularization = "aic", 
+                              command = "hc", 
+                              restarts = 0)
 
 }

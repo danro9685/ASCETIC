@@ -434,7 +434,11 @@ apply.pr <- function( poset, pr_model, pr_null ) {
 #' @examples
 #' data(data_examples)
 #' data_example = data_examples[["perform.likelihood.fit"]]
-#' res = perform.likelihood.fit(dataset=data_example$dataset,poset=data_example$poset,regularization="aic",command="hc",restarts=0)
+#' res = perform.likelihood.fit( dataset = data_example$dataset, 
+#'                               poset = data_example$poset, 
+#'                               regularization = "aic", 
+#'                               command = "hc", 
+#'                               restarts = 0)
 #'
 #' @title perform.likelihood.fit
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
