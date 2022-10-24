@@ -1,7 +1,45 @@
 ---
-title: Using the package
-output: html_document
+title: "An introduction to the `ASCETIC` R package"
+author: 
+  - Luca De Sano
+  - Daniele Ramazzotti
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+graphics: yes
+package: ASCETIC
+output:
+  BiocStyle::html_document:
+    toc_float: true
+vignette: >
+  %\VignetteIndexEntry{An R package for the inference of statistically significant temporal patterns involving alternations in driver genes from cancer genomics data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ASCETIC,BiocStyle}
 ---
+
+Cancer development is a stochastic process involving large populations of cells. Random genetic and epigenetic alterations commonly occurring in any cell can occasionally be beneficial to neoplastic ones, thus defining clones characterized by a functional selective advantage. During clonal evolution, certain clones can be positively selected for increased proliferation and survival ability, outgrowing competing cells and this can eventually lead to invasion and metastasis. Throughout such a multi-step stochastic process, cancer cells can acquire over time a set of biological capabilities that sometimes are referred to as hallmarks. Not all variants are involved in their acquisition, but only a relative small subset of them – i.e., the drivers –, while most mutations present in the cancer clones do not increase their fitness – i.e., the passengers.
+
+ASCETIC (Agony-baSed Cancer EvoluTion InferenCe) is a novel framework for the inference of a set of statistically significant temporal patterns involving alternations in driver genes from cancer genomics data. The framework can be applied to data at different resolutions, from classical NGS genomics data of cancer samples, to single-cell data.
+
+In its basic implementation, ASCETIC requires two main inputs: (i) a binary matrix where rows are patients (i.e., samples) and columns are mutations. Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise. (2) Information of temporal patters across the considered driver genes. Such information can be determined either from classical NGS genomics data considering a single biopsy per patient, in terms of cancer cell fractions reported for each gene, or from data at different resolutions such as multi-region or single-cell data where multiple samples per patients are provided; in this latter case, ASCETIC takes as input a phylogenetic tree per patient.
+
+In this vignette, we give an overview of the package by presenting some of its main functions.
+
+# Installing the ASCETIC R package
+
+The ASCETIC package can be installed from Bioconductor as follow.
+
+```{r eval=FALSE}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("ASCETIC")
+```
+
+# Changelog
+
+- *1.0.0* Package released in October 2022.
+
+# Using the ASCETIC R package
 
 We provide within the package example datasets for both the single biopsy and the multi-regions/single-cell cases. We now load such example datasets.
 
@@ -76,3 +114,9 @@ res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.
 ```
 
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
+
+# Current R Session
+
+```{r}
+sessionInfo()
+```
