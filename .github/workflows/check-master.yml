@@ -29,11 +29,9 @@
 ## http://bioconductor.org/developers/how-to/git/
 on:
   push:
-    branches:
-      - master
+    branches: [main, master]
   pull_request:
-    branches:
-      - master
+    branches: [main, master]
 
 name: check-master
 
@@ -131,7 +129,7 @@ jobs:
       ## Most of these steps are the same as the ones in
       ## https://github.com/r-lib/actions/blob/master/examples/check-standard.yaml
       ## If they update their steps, we will also need to update ours.
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       
       - name: Install dependencies
         run: |
@@ -140,11 +138,11 @@ jobs:
           sudo apt-get install libharfbuzz-dev
           sudo apt-get install libfribidi-dev
           sudo apt-get install texlive-fonts-extra
-      - uses: r-lib/actions/setup-tinytex@master
+      - uses: r-lib/actions/setup-tinytex@v2
 
-      - uses: r-lib/actions/setup-r@master
+      - uses: r-lib/actions/setup-r@v2
       
-      - uses: r-lib/actions/setup-pandoc@master
+      - uses: r-lib/actions/setup-pandoc@v2
 
       - name: Install latex packages
         run: |
@@ -159,7 +157,9 @@ jobs:
 
       - name: Install R packages
         run: |
-          ##install.packages('Rfast')
+          install.packages("BiocManager")
+          BiocManager::install("BSgenome.Hsapiens.1000genomes.hs37d5")
+          BiocManager::install("rtracklayer")
         shell: Rscript {0}
 
       - name: Query dependencies
@@ -261,7 +261,7 @@ jobs:
           rcmdcheck::rcmdcheck(
               args = c("--timings"),
               build_args = c("--no-resave-data"),
-              error_on = "error",
+              error_on = "warning",
               check_dir = "check"
           )
         shell: Rscript {0}
@@ -348,8 +348,8 @@ jobs:
       matrix:
         config:
           ## Comment/Un-comment in case you also want to run other versions
-          - {os: windows-latest}
-          - {os: macOS-latest}
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
           # - {os: ubuntu-16.04, rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
     env:
@@ -359,18 +359,19 @@ jobs:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Setup R from r-lib
-        uses: r-lib/actions/setup-r@master
+        uses: r-lib/actions/setup-r@v2
         with:
-          r-version: ${{ needs.R-CMD-check-bioc.outputs.rversion }}
+          r-version: ${{ matrix.config.r }}
+          use-public-rspm: true
 
       - name: Setup pandoc from r-lib
-        uses: r-lib/actions/setup-pandoc@master
+        uses: r-lib/actions/setup-pandoc@v2
 
       - name: Setup tinytex from r-lib
-        uses: r-lib/actions/setup-tinytex@master
+        uses: r-lib/actions/setup-tinytex@v2
 
       - name: Install latex packages
         run: |
