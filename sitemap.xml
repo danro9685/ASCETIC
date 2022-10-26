@@ -7,10 +7,7 @@
     <loc>/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>/articles/1_introduction.html</loc>
-  </url>
-  <url>
-    <loc>/articles/2_using_the_package.html</loc>
+    <loc>/articles/ASCETIC.html</loc>
   </url>
   <url>
     <loc>/articles/index.html</loc>
@@ -23,6 +20,9 @@
   </url>
   <url>
     <loc>/reference/agony.html</loc>
+  </url>
+  <url>
+    <loc>/reference/aml_example.html</loc>
   </url>
   <url>
     <loc>/reference/apply.pr.html</loc>
@@ -71,6 +71,9 @@
   </url>
   <url>
     <loc>/reference/estimate.probs.html</loc>
+  </url>
+  <url>
+    <loc>/reference/evosigs.html</loc>
   </url>
   <url>
     <loc>/reference/index.html</loc>
