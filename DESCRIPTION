@@ -14,8 +14,8 @@ Imports:
     glmnet,
     ggplot2,
     Rcpp,
-    survival,
-    survminer
+    stats,
+    survival
 Suggests:
     BiocStyle,
     testthat,

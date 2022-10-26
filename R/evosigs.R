@@ -16,8 +16,8 @@
 #' @export evosigs
 #' @import ggplot2
 #' @importFrom glmnet cv.glmnet
-#' @importFrom survival Surv survfit
-#' @importFrom survminer ggsurvplot
+#' @importFrom stats coef fivenum
+#' @importFrom survival Surv
 #'
 evosigs <- function( survival_data, evolutionary_steps ) {
 
@@ -89,24 +89,6 @@ evosigs <- function( survival_data, evolutionary_steps ) {
     }
     if(length(unique(survival_analysis$clusters))<2) {
         is.valid = FALSE
-    }
-
-    # perform Kaplan-Meier analysis
-    if(is.valid==TRUE) {
-        survival_data_km = survival_analysis$data
-        K = survival_analysis$clusters
-        print(ggsurvplot(survfit(Surv(as.numeric(survival_data_km$times),as.numeric(survival_data_km$status))~K,data=survival_data_km),
-            xlab = "Time",
-            ylab = "Survival", mark.time = TRUE, pval = TRUE, ggtheme = theme_bw(),
-            title = "Kaplan-Meier analysis",
-            palette = "Dark2",
-            font.main = 18,
-            font.x = 18,
-            font.y = 18,
-            font.caption = 18,
-            font.legend = 18,
-            font.tickslab = 18,
-            risk.table = TRUE))
     }
 
     # save the extracted evolutionary signatures
