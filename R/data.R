@@ -71,7 +71,17 @@ NULL
 #' @description list data structure to run examples. 
 #' @docType data 
 #' @usage data(data_examples) 
-#' @format list data structure to run examples
-#' @source list data structure to run examples. 
-#' @return list data structure to run examples 
+#' @format List data structure to run examples.
+#' @source List data structure to run examples.
+#' @return List data structure to run examples.
+NULL
+
+#' @name aml_example
+#' @title Example dataset for 366 patients with Acute Myeloid Leukaemia.
+#' @description 366 patients with Acute Myeloid Leukaemia obtained from Tyner, Jeffrey W., et al. 2018.
+#' @docType data
+#' @usage data(aml_example)
+#' @format List of two elements, i.e., survival data and evolutionary steps extracted by ASCETIC.
+#' @source Tyner, Jeffrey W., et al. "Functional genomic landscape of acute myeloid leukaemia." Nature 562.7728 (2018): 526-531.
+#' @return List of two elements, i.e., survival data and evolutionary steps extracted by ASCETIC.
 NULL

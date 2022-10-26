@@ -26,7 +26,7 @@ In this vignette, we give an overview of the package by presenting some of its m
 
 # Installing the ASCETIC R package
 
-The ASCETIC package can be installed from Bioconductor as follow.
+The ASCETIC package can be installed from Bioconductor as follows.
 
 ```{r eval=FALSE}
 if (!require("BiocManager", quietly = TRUE))
@@ -67,7 +67,7 @@ res_example_single_samples = perform.ascetic.ccf.dataset(
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) ccf dataset, input ccf dataset; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 
-To improve the statistical stability of the framework expecially in the common situation of noisy data, ASCETIC implements a re-sampling algorithm which builds on the function just described. This procedure is more computational intensive compared to the basic one, but should be preferred on real data. It requires an additional dataset with variant allele frequencies information and can be executed as follow.
+To improve the statistical stability of the framework expecially in the common situation of noisy data, ASCETIC implements a re-sampling algorithm which builds on the function just described. This procedure is more computational intensive compared to the basic one, but should be preferred on real data. It requires an additional dataset with variant allele frequencies information and can be executed as follows.
 
 ```{r}
 set.seed(12345)
@@ -100,7 +100,7 @@ res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset(
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) models, input phylogenetic models; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 
-Also in this case we provide a method to improve the statistical stability of the framework expecially in the situation of noisy data. ASCETIC implements a bootstrap procedure which builds on the function just described. This procedure should be preferred on real data. It can be executed as follow.
+Also in this case we provide a method to improve the statistical stability of the framework expecially in the situation of noisy data. ASCETIC implements a bootstrap procedure which builds on the function just described. This procedure should be preferred on real data. It can be executed as follows.
 
 ```{r}
 set.seed(12345)
@@ -111,6 +111,17 @@ res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.
                                                 regularization = "aic", 
                                                 command = "hc", 
                                                 restarts = 0 )
+```
+
+Finally, ASCETIC can perform the extraction of evolutionary signatures significantly associated to prognosis and use them to stratify patients. This can be done as follows.
+
+```{r}
+set.seed(12345)
+data(aml_example)
+res_example_evosigs = evosigs( 
+                              survival_data = aml_example$survival_data, 
+                              evolutionary_steps = aml_example$evolutionary_steps )
+print(names(res_example_evosigs))
 ```
 
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
