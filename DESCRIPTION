@@ -12,6 +12,7 @@ Depends:
 Imports:
     bnlearn,
     glmnet,
+    ggplot2,
     Rcpp,
     survival,
     survminer

@@ -14,6 +14,7 @@
 #'                               2) evolutionary_steps, evolutionary steps significantly associated with survival data.
 #'                               3) clusters_prevalence, prevalence per cluster of the selected evolutionary steps.
 #' @export evosigs
+#' @import ggplot2
 #' @importFrom glmnet cv.glmnet
 #' @importFrom survival Surv survfit
 #' @importFrom survminer ggsurvplot
