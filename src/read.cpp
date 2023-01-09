@@ -13,16 +13,22 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 
 
 	while (fscanf(f, "%d%d", &a, &b) == 2) {
-		if (weighted) fscanf(f, "%*f");
-		if (!self && a == b) continue;
-		if (lm.count(a) == 0)
+		if (weighted) {
+			int resscanf = fscanf(f, "%*f");
+		}
+		if (!self && a == b) {
+			continue;
+		}
+		if (lm.count(a) == 0) {
 			lm[a] = cnt++;
-		if (lm.count(b) == 0)
+		}
+		if (lm.count(b) == 0) {
 			lm[b] = cnt++;
+		}
 		ecnt++;
 	}
 
-	printf("%d vertices, %d edges\n", cnt, ecnt);
+	//printf("%d vertices, %d edges\n", cnt, ecnt);
 
 	rewind(f);
 
@@ -35,8 +41,13 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 	uint32_t ind = 0;
 	while (fscanf(f, "%d%d", &a, &b) == 2) {
 		double w = 1;
-		if (weighted) fscanf(f, "%lf", &w);
-		if (!self && a == b) continue;
+		if (weighted) {
+			int resscanf = fscanf(f, "%lf", &w);
+		}
+		
+		if (!self && a == b) {
+			continue;
+		}
 		uint32_t x = lm[a];
 		uint32_t y = lm[b];
 
@@ -110,16 +121,23 @@ read(FILE *f, bool weighted, bool self)
 
 
 	while (fscanf(f, "%d%d", &a, &b) == 2) {
-		if (weighted) fscanf(f, "%*f");
-		if (!self && a == b) continue;
-		if (lm.count(a) == 0)
+		if (weighted) {
+			int resscanf = fscanf(f, "%*f");
+		}
+		
+		if (!self && a == b) {
+			continue;
+		}
+		if (lm.count(a) == 0) {
 			lm[a] = cnt++;
-		if (lm.count(b) == 0)
+		}
+		if (lm.count(b) == 0) {
 			lm[b] = cnt++;
+		}
 		ecnt++;
 	}
 
-	printf("%d vertices, %d edges\n", cnt, ecnt);
+	//printf("%d vertices, %d edges\n", cnt, ecnt);
 
 	rewind(f);
 
@@ -131,8 +149,13 @@ read(FILE *f, bool weighted, bool self)
 	uint32_t ind = 0;
 	while (fscanf(f, "%d%d", &a, &b) == 2) {
 		double w = 1;
-		if (weighted) fscanf(f, "%lf", &w);
-		if (!self && a == b) continue;
+		if (weighted) {
+			int resscanf = fscanf(f, "%lf", &w);
+		}
+		
+		if (!self && a == b) {
+			continue;
+		}
 		uint32_t x = lm[a];
 		uint32_t y = lm[b];
 

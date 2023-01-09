@@ -38,7 +38,7 @@ computeagony(network & g, residual & r, vertex_t *canon)
 			while (delta*3/4 > d) delta /= 2;
 		}
 
-		printf("delta: %f %f %f\n", delta, d1, d2);
+		//printf("delta: %f %f %f\n", delta, d1, d2);
 
 
 		if (g.nodecnt() == 1) break;
