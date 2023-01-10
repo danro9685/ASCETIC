@@ -222,6 +222,7 @@ jobs:
           ## For running the checks
           message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
           remotes::install_cran("rcmdcheck")
+          install.packages("rcmdcheck",dependencies=TRUE)
           BiocManager::install("BiocCheck")
         shell: Rscript {0}
 
@@ -454,6 +455,7 @@ jobs:
           ## For running the checks
           message(paste('****', Sys.time(), 'installing rcmdcheck and BiocCheck ****'))
           remotes::install_cran("rcmdcheck")
+          install.packages("rcmdcheck",dependencies=TRUE)
           BiocManager::install("BiocCheck")
         shell: Rscript {0}
 
