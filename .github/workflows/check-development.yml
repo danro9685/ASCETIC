@@ -159,6 +159,7 @@ jobs:
           install.packages("BiocManager")
           BiocManager::install("rtracklayer")
           BiocManager::install("BSgenome.Hsapiens.1000genomes.hs37d5")
+          install.packages("rcmdcheck")
         shell: Rscript {0}
 
       - name: Query dependencies
@@ -348,7 +349,7 @@ jobs:
         config:
           ## Comment/Un-comment in case you also want to run other versions
           - {os: ubuntu-latest, r: 'devel'}
-          - {os: macos-latest, r: 'devel'}
+          - {os: macOS-latest, r: 'devel'}
           - {os: windows-latest, r: 'devel'}
           # - {os: ubuntu-16.04, rspm: "https://packagemanager.rstudio.com/cran/__linux__/xenial/latest"}
 
