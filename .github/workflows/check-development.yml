@@ -132,7 +132,9 @@ jobs:
       
       - name: Install dependencies
         run: |
+          sudo apt update
           sudo apt-get install libcurl4-openssl-dev
+          sudo apt install curl
           sudo apt-get install libgsl-dev
           sudo apt-get install libharfbuzz-dev
           sudo apt-get install libfribidi-dev
