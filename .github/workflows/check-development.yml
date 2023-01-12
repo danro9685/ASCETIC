@@ -46,7 +46,7 @@ env:
   run_covr: 'false'
   run_pkgdown: 'false'
   has_RUnit: 'false'
-  cache-version: 'cache-v1'
+  cache-version: 'cache-v2'
 
 jobs:
   ## This first job uses the GitHub repository branch name to infer what
@@ -156,7 +156,6 @@ jobs:
 
       - name: Install R packages
         run: |
-          system("sudo apt-get install libcurl4-openssl-dev")
           install.packages('curl')
           install.packages('rcmdcheck')
         shell: Rscript {0}
