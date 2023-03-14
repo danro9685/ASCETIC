@@ -109,7 +109,7 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 }
 
 // [[Rcpp::export]]
-void agony(Rcpp::String inname, Rcpp::String outname)
+void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatrix)
 {
   
   bool weighted = false;
@@ -121,6 +121,17 @@ void agony(Rcpp::String inname, Rcpp::String outname)
   
   const char* test_in = inname.get_cstring();
   const char* test_out = outname.get_cstring();
+  
+  IntegerMatrix m = as<IntegerMatrix>(inmatrix);
+  printf("inmatrix\n");
+  printf("m.nrow(): %d\n", m.nrow());
+  printf("m.ncol(): %d\n", m.ncol());
+  for(int i = 0; i < m.nrow(); i++) {
+    for(int j = 0; j < m.ncol(); j++) {
+      printf("%d ", m(i,j));
+    }
+    printf("\n");
+  }
   
   //Rprintf("%s\n", test_in);
   //Rprintf("%s\n", test_out);
@@ -137,7 +148,7 @@ void agony(Rcpp::String inname, Rcpp::String outname)
   fclose(fptr);
   
   FILE *f = fopen(test_in, "r");
-  compgraph *cg = read(f, weighted, self);
+  compgraph *cg = read(f, m, weighted, self);
   fclose(f);
   
   cvertexhead roots;

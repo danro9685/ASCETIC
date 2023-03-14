@@ -1,5 +1,7 @@
 #include "circulation.h"
 #include <stdio.h>
+#include <Rcpp.h>
+using namespace Rcpp;
 
 network *
 read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_t limit)
@@ -110,34 +112,71 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 }
 
 compgraph *
-read(FILE *f, bool weighted, bool self)
+read(FILE *f, IntegerMatrix m, bool weighted, bool self)
 {
 	uint32_t a, b;
+  uint32_t a_alt, b_alt;
 
 	uint32_t cnt = 0;
 	uint32_t ecnt = 0;
+	
+	uint32_t cnt_alt = 0;
+	uint32_t ecnt_alt = 0;
 
 	uintmap lm;
+	uintmap lm_alt;
 
-
-	while (fscanf(f, "%d%d", &a, &b) == 2) {
+  // to be rewritten in a for loop, check what to do with "weighted"
+  // resscanf is an integer, assuming third possible column type is integer
+  
+  for(int i = 0; i < m.nrow(); i++) {
+    a = m(i,0);
+    b = m(i,1);
+    printf("a: %d - b: %d \n", a, b);
+    printf("wighted: %s \n", (weighted ? "true" : "false"));
+    if (weighted) {
+      int resscanf = m(i,2);
+      printf("resscanf: %u\n", resscanf);
+    }
+    
+    if (a != b || self) {
+      if (lm.count(a) == 0) {
+        lm[a] = cnt++;
+      }
+      if (lm.count(b) == 0) {
+        lm[b] = cnt++;
+      }
+      ecnt++;
+    }
+    
+  }
+  
+  
+	while (fscanf(f, "%d%d", &a_alt, &b_alt) == 2) {
+	  
+	  printf("a: %d - b: %d \n", a_alt, b_alt);
+	  
+	  printf("wighted: %s \n", (weighted ? "true" : "false"));
+	  
 		if (weighted) {
 			int resscanf = fscanf(f, "%*f");
+		  printf("resscanf: %u\n", resscanf);
 		}
 		
-		if (!self && a == b) {
+		if (!self && a_alt == b_alt) {
 			continue;
 		}
-		if (lm.count(a) == 0) {
-			lm[a] = cnt++;
+		if (lm_alt.count(a_alt) == 0) {
+			lm_alt[a_alt] = cnt_alt++;
 		}
-		if (lm.count(b) == 0) {
-			lm[b] = cnt++;
+		if (lm_alt.count(b_alt) == 0) {
+			lm_alt[b_alt] = cnt_alt++;
 		}
-		ecnt++;
+		ecnt_alt++;
 	}
 
-	//printf("%d vertices, %d edges\n", cnt, ecnt);
+	printf("%d vertices, %d edges NORMAL\n", cnt, ecnt);
+  printf("%d vertices, %d edges ALT\n", cnt_alt, ecnt_alt);
 
 	rewind(f);
 
@@ -145,31 +184,76 @@ read(FILE *f, bool weighted, bool self)
 	for (uint32_t i = 0; i < cnt; i++) {
 		g->addnode();
 	}
+	
+	compgraph *g_alt = new compgraph(cnt_alt, ecnt_alt); 
+	for (uint32_t i = 0; i < cnt_alt; i++) {
+	  g_alt->addnode();
+	}
 
+	
+	// ok now this other loop
 	uint32_t ind = 0;
-	while (fscanf(f, "%d%d", &a, &b) == 2) {
+	uint32_t ind_alt = 0;
+	
+	for(int i = 0; i < m.nrow(); i++) {
+	  a = m(i,0);
+	  b = m(i,1);
+	  printf("a: %d - b: %d \n", a, b);
+	  printf("wighted: %s \n", (weighted ? "true" : "false"));
+	  double w = 1;
+	  
+	  if (weighted) {
+	    int resscanf = m(i,2);
+	    printf("resscanf: %u\n", resscanf);
+	  }
+	  
+	  if (a != b || self) {
+	    uint32_t x = lm[a];
+	    uint32_t y = lm[b];
+	    
+	    cvertex_t *from = g->get(x);
+	    cvertex_t *to = g->get(y);
+	    from->v.label = a;
+	    to->v.label = b;
+	    carc_t *e = g->addedge();
+	    
+	    g->bindedge(e, from, to);
+	    e->v.cost = w;
+	    
+	    ind++;
+	  
+	  }
+	  
+	}
+	
+	while (fscanf(f, "%d%d", &a_alt, &b_alt) == 2) {
+	  printf("a: %d - b: %d \n", a_alt, b_alt);
 		double w = 1;
 		if (weighted) {
 			int resscanf = fscanf(f, "%lf", &w);
+		  printf("resscanf: %u\n", resscanf);
 		}
 		
-		if (!self && a == b) {
+		if (!self && a_alt == b_alt) {
 			continue;
 		}
-		uint32_t x = lm[a];
-		uint32_t y = lm[b];
+		uint32_t x = lm_alt[a_alt];
+		uint32_t y = lm_alt[b_alt];
 
-		cvertex_t *from = g->get(x);
-		cvertex_t *to = g->get(y);
-		from->v.label = a;
-		to->v.label = b;
-		carc_t *e = g->addedge();
+		cvertex_t *from = g_alt->get(x);
+		cvertex_t *to = g_alt->get(y);
+		from->v.label = a_alt;
+		to->v.label = b_alt;
+		carc_t *e = g_alt->addedge();
 
-		g->bindedge(e, from, to);
+		g_alt->bindedge(e, from, to);
 		e->v.cost = w;
 
-		ind++;
+		ind_alt++;
 	}
+	
+	printf("ind %u\n", ind);
+	printf("ind_alt %u\n", ind_alt);
 
 	return g;
 }

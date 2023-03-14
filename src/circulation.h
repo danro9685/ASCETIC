@@ -4,6 +4,8 @@
 #include "defines.h"
 #include "graph.h"
 #include "tree.h"
+#include <Rcpp.h>
+using namespace Rcpp;
 
 struct nvalue_t;
 struct evalue_t;
@@ -140,7 +142,7 @@ struct compedge_t {
 
 typedef graph<compnode_t, compedge_t> compgraph;
 
-compgraph * read(FILE *f, bool weighted, bool self);
+compgraph * read(FILE *f, IntegerMatrix m, bool weighted, bool self);
 network *read(FILE *f, bool weighted, bool self, uint32_t & ncnt, uint32_t & ecnt, uint32_t limit);
 
 void balance(network & g, residual & r, double delta);
