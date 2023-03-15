@@ -8,11 +8,10 @@
 #' For a detailed description, please refer to: Tatti, Nikolaj. "Tiers for peers: a practical algorithm for discovering hierarchy in weighted networks." Data mining and knowledge discovery 31.3 (2017): 702-738.
 #'
 #' @title agony
-#' @param inname Input agony file.
-#' @param outname Output agony file.
 #' @param inmatrix Input agony matrix.
+#' @param outname Output agony file.
 #'
-agony <- function(inname, outname, inmatrix) {
-    invisible(.Call(`_ASCETIC_agony`, inname, outname, inmatrix))
+agony <- function(inmatrix, outname) {
+    invisible(.Call(`_ASCETIC_agony`, inmatrix, outname))
 }
 

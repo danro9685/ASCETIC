@@ -351,7 +351,7 @@ compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(ge
         
 
         # estimate a best agony ranking and save the results to file
-        agony(paste0(agony_files,"/inputs.txt"),paste0(agony_files,"/outputs.txt"), agony_arcs)
+        agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
         # read the estimated best agony ranking
         agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
         # compute the poset based on the best agony ranking

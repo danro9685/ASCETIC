@@ -116,12 +116,11 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //' For a detailed description, please refer to: Tatti, Nikolaj. "Tiers for peers: a practical algorithm for discovering hierarchy in weighted networks." Data mining and knowledge discovery 31.3 (2017): 702-738.
 //'
 //' @title agony
-//' @param inname Input agony file.
-//' @param outname Output agony file.
 //' @param inmatrix Input agony matrix.
+//' @param outname Output agony file.
 //'
 // [[Rcpp::export]]
-void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatrix)
+void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
 {
   
   bool weighted = false;
@@ -131,10 +130,12 @@ void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatr
   uint32_t ncnt; 
   uint32_t ecnt; 
   
-  const char* test_in = inname.get_cstring();
+  //const char* test_in = inname.get_cstring();
   const char* test_out = outname.get_cstring();
   
   IntegerMatrix m = as<IntegerMatrix>(inmatrix);
+  
+  /*
   printf("inmatrix\n");
   printf("m.nrow(): %d\n", m.nrow());
   printf("m.ncol(): %d\n", m.ncol());
@@ -144,10 +145,12 @@ void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatr
     }
     printf("\n");
   }
+  */
   
   //Rprintf("%s\n", test_in);
   //Rprintf("%s\n", test_out);
   
+  /*
   FILE *fptr = fopen(test_in, "r");
   char c;
   c = fgetc(fptr);
@@ -158,10 +161,10 @@ void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatr
   }
   
   fclose(fptr);
-  
-  FILE *f = fopen(test_in, "r");
-  compgraph *cg = read(f, m, weighted, self);
-  fclose(f);
+  */
+  //FILE *f = fopen(test_in, "r");
+  compgraph *cg = read(m, weighted, self);
+  //fclose(f);
   
   cvertexhead roots;
   uint32_t compcnt = ccomp(*cg, &roots);
@@ -196,7 +199,7 @@ void agony(Rcpp::String inname, Rcpp::String outname, Rcpp::IntegerMatrix inmatr
   migrate_dual(*cg, comps, *joined);
   
   //f = stdout;
-  f = fopen(test_out, "w");
+  FILE *f = fopen(test_out, "w");
   outputrank(f, *cg, cg->nodebudget());
   fclose(f);
   

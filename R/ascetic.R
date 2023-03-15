@@ -91,7 +91,7 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
             unlink(agony_files,recursive=TRUE,force=TRUE)
             dir.create(agony_files,showWarnings=FALSE)
             # save the orderings to file
-            write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
+            # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             
             
             # estimate a best agony ranking and save the results to file
@@ -100,7 +100,7 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
             print(agony_arcs)
             
             
-            agony(paste0(agony_files,"/inputs.txt"),paste0(agony_files,"/outputs.txt"), agony_arcs)
+            agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
             # read the estimated best agony ranking
             agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
             # remove the created files and directories
@@ -229,11 +229,11 @@ perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsam
             unlink(agony_files,recursive=TRUE,force=TRUE)
             dir.create(agony_files,showWarnings=FALSE)
             # save the orderings to file
-            write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
+            # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             
 
             # estimate a best agony ranking and save the results to file
-            agony(paste0(agony_files,"/inputs.txt"),paste0(agony_files,"/outputs.txt"), agony_arcs)
+            agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
             # read the estimated best agony ranking
             agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
             # remove the created files and directories

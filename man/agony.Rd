@@ -4,14 +4,12 @@
 \alias{agony}
 \title{agony}
 \usage{
-agony(inname, outname, inmatrix)
+agony(inmatrix, outname)
 }
 \arguments{
-\item{inname}{Input agony file.}
+\item{inmatrix}{Input agony matrix.}
 
 \item{outname}{Output agony file.}
-
-\item{inmatrix}{Input agony matrix.}
 }
 \description{
 Perform agony computation. The software for agony computation (exact algorithm) adopted here was developed by Professor Nikolaj Tatti and colleagues.
