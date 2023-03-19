@@ -142,7 +142,8 @@ struct compedge_t {
 
 typedef graph<compnode_t, compedge_t> compgraph;
 
-compgraph * read(IntegerMatrix m, bool weighted, bool self);
+//compgraph * read(IntegerMatrix m, bool weighted, bool self);
+compgraph * read(IntegerMatrix m);
 network *read(FILE *f, bool weighted, bool self, uint32_t & ncnt, uint32_t & ecnt, uint32_t limit);
 
 void balance(network & g, residual & r, double delta);

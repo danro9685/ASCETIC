@@ -111,35 +111,29 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 	return g;
 }
 
-compgraph *
-read(IntegerMatrix m, bool weighted, bool self)
+compgraph * read(IntegerMatrix m)
 {
 	uint32_t a, b;
-  //uint32_t a_alt, b_alt;
 
 	uint32_t cnt = 0;
 	uint32_t ecnt = 0;
-	
-	//uint32_t cnt_alt = 0;
-	//uint32_t ecnt_alt = 0;
 
 	uintmap lm;
-	//uintmap lm_alt;
 
-  // to be rewritten in a for loop, check what to do with "weighted"
-  // resscanf is an integer, assuming third possible column type is integer
-  
   for(int i = 0; i < m.nrow(); i++) {
     a = m(i,0);
     b = m(i,1);
     //printf("a: %d - b: %d \n", a, b);
     //printf("wighted: %s \n", (weighted ? "true" : "false"));
+    /*
     if (weighted) {
       int resscanf = m(i,2);
       //printf("resscanf: %u\n", resscanf);
     }
+    */
     
-    if (a != b || self) {
+    //if (a != b || self) {
+    if (a != b) {
       if (lm.count(a) == 0) {
         lm[a] = cnt++;
       }
@@ -151,64 +145,28 @@ read(IntegerMatrix m, bool weighted, bool self)
     
   }
   
-  /*
-	while (fscanf(f, "%d%d", &a_alt, &b_alt) == 2) {
-	  
-	  printf("a: %d - b: %d \n", a_alt, b_alt);
-	  
-	  printf("wighted: %s \n", (weighted ? "true" : "false"));
-	  
-		if (weighted) {
-			int resscanf = fscanf(f, "%*f");
-		  printf("resscanf: %u\n", resscanf);
-		}
-		
-		if (!self && a_alt == b_alt) {
-			continue;
-		}
-		if (lm_alt.count(a_alt) == 0) {
-			lm_alt[a_alt] = cnt_alt++;
-		}
-		if (lm_alt.count(b_alt) == 0) {
-			lm_alt[b_alt] = cnt_alt++;
-		}
-		ecnt_alt++;
-	}
-	*/
-	//printf("%d vertices, %d edges NORMAL\n", cnt, ecnt);
-  //printf("%d vertices, %d edges ALT\n", cnt_alt, ecnt_alt);
-
-	//rewind(f);
-
 	compgraph *g = new compgraph(cnt, ecnt); 
 	for (uint32_t i = 0; i < cnt; i++) {
 		g->addnode();
 	}
 	
-	/*
-	compgraph *g_alt = new compgraph(cnt_alt, ecnt_alt); 
-	for (uint32_t i = 0; i < cnt_alt; i++) {
-	  g_alt->addnode();
-	}
-	*/
 	
 	// ok now this other loop
 	uint32_t ind = 0;
-	//uint32_t ind_alt = 0;
 	
 	for(int i = 0; i < m.nrow(); i++) {
 	  a = m(i,0);
 	  b = m(i,1);
-	  //printf("a: %d - b: %d \n", a, b);
-	  //printf("wighted: %s \n", (weighted ? "true" : "false"));
 	  double w = 1;
 	  
+	  /*
 	  if (weighted) {
 	    int resscanf = m(i,2);
-	    //printf("resscanf: %u\n", resscanf);
 	  }
+	  */
 	  
-	  if (a != b || self) {
+	  //if (a != b || self) {
+	  if (a != b) {
 	    uint32_t x = lm[a];
 	    uint32_t y = lm[b];
 	    
@@ -226,37 +184,6 @@ read(IntegerMatrix m, bool weighted, bool self)
 	  }
 	  
 	}
-	
-	/*
-	while (fscanf(f, "%d%d", &a_alt, &b_alt) == 2) {
-	  printf("a: %d - b: %d \n", a_alt, b_alt);
-		double w = 1;
-		if (weighted) {
-			int resscanf = fscanf(f, "%lf", &w);
-		  printf("resscanf: %u\n", resscanf);
-		}
-		
-		if (!self && a_alt == b_alt) {
-			continue;
-		}
-		uint32_t x = lm_alt[a_alt];
-		uint32_t y = lm_alt[b_alt];
-
-		cvertex_t *from = g_alt->get(x);
-		cvertex_t *to = g_alt->get(y);
-		from->v.label = a_alt;
-		to->v.label = b_alt;
-		carc_t *e = g_alt->addedge();
-
-		g_alt->bindedge(e, from, to);
-		e->v.cost = w;
-
-		ind_alt++;
-	}
-	*/
-	
-	//printf("ind %u\n", ind);
-	//printf("ind_alt %u\n", ind_alt);
 
 	return g;
 }

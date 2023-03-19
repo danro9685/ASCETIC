@@ -123,49 +123,20 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
 {
   
-  bool weighted = false;
-  bool self = false;
+  //bool weighted = false;
+  //bool self = false;
   uint32_t groupcnt = 0;
   
   uint32_t ncnt; 
   uint32_t ecnt; 
   
-  //const char* test_in = inname.get_cstring();
   const char* test_out = outname.get_cstring();
   
   IntegerMatrix m = as<IntegerMatrix>(inmatrix);
   
-  /*
-  printf("inmatrix\n");
-  printf("m.nrow(): %d\n", m.nrow());
-  printf("m.ncol(): %d\n", m.ncol());
-  for(int i = 0; i < m.nrow(); i++) {
-    for(int j = 0; j < m.ncol(); j++) {
-      printf("%d ", m(i,j));
-    }
-    printf("\n");
-  }
-  */
-  
-  //Rprintf("%s\n", test_in);
-  //Rprintf("%s\n", test_out);
-  
-  /*
-  FILE *fptr = fopen(test_in, "r");
-  char c;
-  c = fgetc(fptr);
-  while (c != EOF)
-  {
-    //Rprintf ("%c", c);
-    c = fgetc(fptr);
-  }
-  
-  fclose(fptr);
-  */
-  //FILE *f = fopen(test_in, "r");
-  compgraph *cg = read(m, weighted, self);
-  //fclose(f);
-  
+  //compgraph *cg = read(m, weighted, self);
+  compgraph *cg = read(m);
+
   cvertexhead roots;
   uint32_t compcnt = ccomp(*cg, &roots);
   
@@ -187,8 +158,6 @@ void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
     sc += score(*g, ncnt, ecnt);
     unroll_master(*g);
     ind++;
-    //Rprintf("%d", sc);
-    //Rprintf("%u", ind);
   }
   
   network *joined = join(comps, *cg);
