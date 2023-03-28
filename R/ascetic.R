@@ -87,27 +87,28 @@ perform.ascetic.ccf.dataset.resampling <- function( dataset, ccf.dataset, vaf.da
         # estimate a best agony poset given the time orderings
         if(!is.null(agony_arcs)) {
             # safely create the directoy to save the files to compute the best agony ranking
-            agony_files = paste0(getwd(),"/agony_files")
-            unlink(agony_files,recursive=TRUE,force=TRUE)
-            dir.create(agony_files,showWarnings=FALSE)
+            # agony_files = paste0(getwd(),"/agony_files")
+            # unlink(agony_files,recursive=TRUE,force=TRUE)
+            # dir.create(agony_files,showWarnings=FALSE)
             # save the orderings to file
             # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             
             
             # estimate a best agony ranking and save the results to file
             
-            print("agony_arcs")
-            print(agony_arcs)
+            #print("agony_arcs")
+            #print(agony_arcs)
             
             
-            agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
+            agony_ranking = agony(agony_arcs)
             # read the estimated best agony ranking
-            agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
+            # agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
+            
             # remove the created files and directories
-            unlink(agony_files,recursive=TRUE,force=TRUE)
+            # unlink(agony_files,recursive=TRUE,force=TRUE)
             cont = cont + 1
             for(j in 1:nrow(agony_ranking)) {
-                resampling_agony_ranking_estimate[agony_ranking[j,"V1"],"rank"] = resampling_agony_ranking_estimate[agony_ranking[j,"V1"],"rank"] + agony_ranking[j,"V2"]
+                resampling_agony_ranking_estimate[agony_ranking[j,1],"rank"] = resampling_agony_ranking_estimate[agony_ranking[j,1],"rank"] + agony_ranking[j,2]
             }
         }
         cat(i/nsampling,"\n")
@@ -225,22 +226,22 @@ perform.ascetic.phylogenies.dataset.bootstrap <- function( dataset, models, nsam
         # estimate a best agony poset given the time orderings
         if(!is.null(agony_arcs)) {
             # safely create the directoy to save the files to compute the best agony ranking
-            agony_files = paste0(getwd(),"/agony_files")
-            unlink(agony_files,recursive=TRUE,force=TRUE)
-            dir.create(agony_files,showWarnings=FALSE)
+            #agony_files = paste0(getwd(),"/agony_files")
+            #unlink(agony_files,recursive=TRUE,force=TRUE)
+            #dir.create(agony_files,showWarnings=FALSE)
             # save the orderings to file
             # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
             
 
             # estimate a best agony ranking and save the results to file
-            agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
+            agony_ranking = agony(agony_arcs)
             # read the estimated best agony ranking
-            agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
+            # agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
             # remove the created files and directories
-            unlink(agony_files,recursive=TRUE,force=TRUE)
+            #unlink(agony_files,recursive=TRUE,force=TRUE)
             cont = cont + 1
             for(j in 1:nrow(agony_ranking)) {
-                bootstrap_agony_ranking_estimate[agony_ranking[j,"V1"],"rank"] = bootstrap_agony_ranking_estimate[agony_ranking[j,"V1"],"rank"] + agony_ranking[j,"V2"]
+                bootstrap_agony_ranking_estimate[agony_ranking[j,1],"rank"] = bootstrap_agony_ranking_estimate[agony_ranking[j,1],"rank"] + agony_ranking[j,2]
             }
         }
         cat(i/nsampling,"\n")

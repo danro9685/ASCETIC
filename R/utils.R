@@ -347,15 +347,15 @@ compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(ge
 
     if(!is.null(agony_arcs)) {
         # save the orderings to file
-        write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
+        # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
         
 
         # estimate a best agony ranking and save the results to file
-        agony(agony_arcs, paste0(agony_files,"/outputs.txt"))
+        agony_ranking = agony(agony_arcs)
         # read the estimated best agony ranking
-        agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
+        #agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
         # compute the poset based on the best agony ranking
-        poset = build.ranking.adj.matrix(agony_ranking,num_events)
+        poset = build.ranking.adj.matrix(agony_ranking, num_events)
     }
 
     # remove the created files and directories

@@ -82,13 +82,22 @@ outputrank(FILE *f, network & g, uint32_t ncnt)
 	}
 }
 
-void
-outputrank(FILE *f, compgraph & g, uint32_t ncnt)
+
+// ytfyt
+IntegerMatrix
+outputrank(compgraph & g, uint32_t ncnt)
 {
+	IntegerMatrix output(ncnt, 2);
+	//printf("outputrank:\n");
 	for (uint32_t i = 0; i < ncnt; i++) {
 		cvertex_t *v = g.get(i);
-		fprintf(f, "%d %d\n", v->v.label, v->v.dual);
+		output(i, 0) = v->v.label;
+		output(i, 1) = v->v.dual;
+		//printf("%d %d\n", v->v.label, v->v.dual);
+		//fprintf(f, "%d %d\n", v->v.label, v->v.dual);
 	}
+	//printf("\n");
+	return(output);
 }
 
 double
@@ -118,9 +127,10 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //' @title agony
 //' @param inmatrix Input agony matrix.
 //' @param outname Output agony file.
+//' @return Output agony matrix.
 //'
 // [[Rcpp::export]]
-void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
+Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
 {
   
   //bool weighted = false;
@@ -130,7 +140,7 @@ void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
   uint32_t ncnt; 
   uint32_t ecnt; 
   
-  const char* test_out = outname.get_cstring();
+  //const char* test_out = outname.get_cstring();
   
   IntegerMatrix m = as<IntegerMatrix>(inmatrix);
   
@@ -168,15 +178,17 @@ void agony(Rcpp::IntegerMatrix inmatrix, Rcpp::String outname)
   migrate_dual(*cg, comps, *joined);
   
   //f = stdout;
-  FILE *f = fopen(test_out, "w");
-  outputrank(f, *cg, cg->nodebudget());
-  fclose(f);
+  //FILE *f = fopen(test_out, "w");
+  IntegerMatrix output = outputrank(*cg, cg->nodebudget());
+  //fclose(f);
   
   for (uint32_t i = 0; i < comps.size(); i++)
     delete comps[i];
   
   delete joined;
   delete cg;
+
+  return(output);
   
 }
 
