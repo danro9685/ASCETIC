@@ -126,14 +126,6 @@ asceticCCFResampling <- function( dataset, ccfDataset, vafDataset, nsampling = 1
     inference <- agonyInference
 
     # Create the data structures with the results
-    rownames(dataset) <- as.character(1:nrow(dataset))
-    colnames(dataset) <- as.character(1:ncol(dataset))
-    rownames(ccfDataset) <- as.character(1:nrow(ccfDataset))
-    colnames(ccfDataset) <- as.character(1:ncol(ccfDataset))
-    rownames(prModel) <- as.character(1:ncol(dataset))
-    colnames(prModel) <- as.character(1:ncol(dataset))
-    rownames(prNull) <- as.character(1:ncol(dataset))
-    colnames(prNull) <- as.character(1:ncol(dataset))
     results <- list(dataset = dataset, ccfDataset = ccfDataset, 
                     rankingEstimate = resamplingAgonyRankingEstimate, 
                     poset = poset, inference = inference)
@@ -251,13 +243,6 @@ asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regul
     inference <- agonyInference
 
     # Create the data structures with the results
-    rownames(dataset) <- as.character(1:nrow(dataset))
-    colnames(dataset) <- as.character(1:ncol(dataset))
-    names(models) <- as.character(1:length(models))
-    rownames(prModel) <- as.character(1:ncol(dataset))
-    colnames(prModel) <- as.character(1:ncol(dataset))
-    rownames(prNull) <- as.character(1:ncol(dataset))
-    colnames(prNull) <- as.character(1:ncol(dataset))
     results <- list(
          dataset = dataset,
          models = models,
@@ -337,14 +322,6 @@ asceticCCF <- function( dataset, ccfDataset, regularization = c("aic","bic"), co
     inference <- setNames(agonyInference, regularization)
 
     # Create the data structures with the results
-    rownames(dataset) <- as.character(1:nrow(dataset))
-    colnames(dataset) <- as.character(1:ncol(dataset))
-    rownames(ccfDataset) <- as.character(1:nrow(ccfDataset))
-    colnames(ccfDataset) <- as.character(1:ncol(ccfDataset))
-    rownames(prModel) <- as.character(1:ncol(dataset))
-    colnames(prModel) <- as.character(1:ncol(dataset))
-    rownames(prNull) <- as.character(1:ncol(dataset))
-    colnames(prNull) <- as.character(1:ncol(dataset))
     results <- list(dataset = dataset, ccfDataset = ccfDataset, poset = poset, inference = inference)
 
     return(results)
@@ -403,6 +380,7 @@ asceticPhylogenies <- function( dataset, models, regularization = c("aic","bic")
     agonyInference <- lapply(regularization, function(reg) {
         .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     })
+    names(agonyInference) <- regularization
 
     # Create the data structures with the posets and the inference results
     rownames(agonyPoset) <- as.character(1:ncol(dataset))
@@ -415,14 +393,10 @@ asceticPhylogenies <- function( dataset, models, regularization = c("aic","bic")
     })
 
     # Create the data structures with the results
-    rownames(dataset) <- as.character(1:nrow(dataset))
-    colnames(dataset) <- as.character(1:ncol(dataset))
-    names(models) <- as.character(1:length(models))
-    rownames(prModel) <- as.character(1:ncol(dataset))
-    colnames(prModel) <- as.character(1:ncol(dataset))
-    rownames(prNull) <- as.character(1:ncol(dataset))
-    colnames(prNull) <- as.character(1:ncol(dataset))
-    results <- list(dataset=dataset, models=models, poset=poset, inference=inference)
+    results <- list( dataset = dataset, 
+        models = models, 
+        poset = poset, 
+        inference = inference)
 
     return(results)
 

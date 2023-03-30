@@ -49,12 +49,12 @@ evoSigs <- function( survivalData, evolutionarySteps ) {
     }, error = function(e) {})
 
     # Evaluate selected features evolutionary steps
-    if (is.valid == TRUE) {
+    if (isValid == TRUE) {
         currData <- survivalAnalysis[["data"]]
         currFit <- survivalAnalysis[["fit"]]
         betaTemp <- matrix(NA, nrow = dim(currData)[1], ncol = 1)
         Coefficients <- as.numeric(coef(currFit, s = currFit$lambda.min)[-1, ])
-        coeffNames <- gsub("lasso_cov\\$", "", names(Coefficients))
+        coeffNames <- gsub("lassoCov\\$", "", names(coef(currFit, s = currFit$lambda.min)[-1, ]))
         coeffNames <- coeffNames[which(Coefficients != 0)]
         Coefficients <- Coefficients[which(Coefficients != 0)]
         for (k in 1:nrow(currData)) {
@@ -96,7 +96,7 @@ evoSigs <- function( survivalData, evolutionarySteps ) {
         survivalAnalysis$clusters <- clusters
     }
     if (length(unique(survivalAnalysis$clusters)) < 2) {
-        is.valid <- FALSE
+        isValid <- FALSE
     }
 
     # Save the extracted evolutionary signatures
@@ -117,7 +117,9 @@ evoSigs <- function( survivalData, evolutionarySteps ) {
             currEstimate <- colSums(currSamplesData) / nrow(currSamplesData)
             freqFeatures[i, names(currEstimate)] <- as.numeric(currEstimate)
         }
-        evolutionarySignatures <- list(survivalAnalysis=survivalAnalysis, evolutionarySteps=selectedEvolutionarySteps, clustersPrevalence=freqFeatures)
+        evolutionarySignatures <- list( survivalAnalysis = survivalAnalysis, 
+            evolutionarySteps = selectedEvolutionarySteps, 
+            clustersPrevalence = freqFeatures)
     }
 
     return(evolutionarySignatures)

@@ -103,8 +103,8 @@
     for (i in 1:nrow(prNullEstimate)) {
         for (j in i:nrow(prNullEstimate)) {
             if (i != j) {
-                prNullEstimate[i, j] <- probsEstimate$marginal.probs[i, 1] - probsEstimate$joint.probs[i, j]
-                prNullEstimate[j, i] <- probsEstimate$marginal.probs[j, 1] - probsEstimate$joint.probs[j, i]
+                prNullEstimate[i, j] <- probsEstimate$marginalProbs[i, 1] - probsEstimate$jointProbs[i, j]
+                prNullEstimate[j, i] <- probsEstimate$marginalProbs[j, 1] - probsEstimate$jointProbs[j, i]
             }
         }
     }
@@ -442,7 +442,7 @@
     colnames(adjMatrixFit) <- as.character(1:nrow(adjMatrixFit))
 
     # create a categorical data frame from the dataset
-    data <- as.categorical.dataset(dataset)
+    data <- .asCategoricalDataset(dataset)
 
     # create the blacklist based on the poset
     cont <- 0
