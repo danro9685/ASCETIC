@@ -1,11 +1,11 @@
 context("ASCETIC")
 
-data("res_example_single_samples_resampling")
+data("resExampleSingleSamplesResampling")
 test_that("ASCETIC produces correct output", {
-    expect_equal(names(res_example_single_samples_resampling),c("dataset","ccf_dataset","ranking_estimate","poset","inference"))
+    expect_equal(names(resExampleSingleSamplesResampling),c("dataset","ccf_dataset","ranking_estimate","poset","inference"))
 })
 
-data("res_example_phylogenies_dataset_bootstrap")
+data("resExamplePhylogeniesDatasetBootstrap")
 test_that("ASCETIC produces correct output", {
-    expect_equal(names(res_example_phylogenies_dataset_bootstrap),c("dataset","models","ranking_estimate","poset","inference"))
+    expect_equal(names(resExamplePhylogeniesDatasetBootstrap),c("dataset","models","ranking_estimate","poset","inference"))
 })

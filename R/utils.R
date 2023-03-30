@@ -1,365 +1,347 @@
 #' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a dataset of cancer cell fractions.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["estimate.pr.model.single.samples"]]
-#' res = estimate.pr.model.single.samples(ccf.dataset=data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["estimate.pr.model.single.samples"]]
+#' res <- .estimatePrModelSingleSamples(ccf.dataset=dataExample)
 #'
-#' @title estimate.pr.model.single.samples
-#' @param ccf.dataset Matrix where rows are samples and columns are mutations.
+#' @title .estimatePrModelSingleSamples
+#' @param ccfDataset Matrix where rows are samples and columns are mutations.
 #'
-estimate.pr.model.single.samples <- function( ccf.dataset ) {
+.estimatePrModelSingleSamples <- function(ccfDataset) {
     
-    pr.model.estimate = array(0,c(ncol(ccf.dataset),ncol(ccf.dataset)))
+    prModelEstimate <- array(0, c(ncol(ccfDataset), ncol(ccfDataset)))
     
     # consider any pair of events in the dataset
-    for (i in 1:nrow(pr.model.estimate)) {
-        for (j in i:nrow(pr.model.estimate)) {
-            if(i!=j) {
+    for (i in 1:nrow(prModelEstimate)) {
+        for (j in i:nrow(prModelEstimate)) {
+            if (i != j) {
                 # get the subset of the dataset where events i and j are co-occurring
-                co_occurring_samples = which(ccf.dataset[,i]>0&ccf.dataset[,j]>0)
+                coOccurringSamples <- which(ccfDataset[,i] > 0 & ccfDataset[,j] > 0)
                 # if there is at least 1 sample where the 2 genes are co-occurring
-                if(length(co_occurring_samples)>0) {
-                    curr_i = as.vector(ccf.dataset[co_occurring_samples,i])
-                    curr_j = as.vector(ccf.dataset[co_occurring_samples,j])
-                    pr.model.estimate[i,j] = length(which(curr_i>curr_j))/length(co_occurring_samples)
-                    pr.model.estimate[j,i] = length(which(curr_j>curr_i))/length(co_occurring_samples)
+                if (length(coOccurringSamples) > 0) {
+                    currI <- as.vector(ccfDataset[coOccurringSamples, i])
+                    currJ <- as.vector(ccfDataset[coOccurringSamples, j])
+                    prModelEstimate[i, j] <- length(which(currI > currJ)) / length(coOccurringSamples)
+                    prModelEstimate[j, i] <- length(which(currJ > currI)) / length(coOccurringSamples)
                 }
                 else {
-                    pr.model.estimate[i,j] = 0
-                    pr.model.estimate[j,i] = 0
+                    prModelEstimate[i, j] <- 0
+                    prModelEstimate[j, i] <- 0
                 }
             }
         }
     }
     
-    return(pr.model.estimate)
+    return(prModelEstimate)
     
 }
 
 #' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a inferences on multiple patients.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["estimate.pr.model.multiple.samples"]]
-#' res = estimate.pr.model.multiple.samples(data_example$models,data_example$events)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["estimate.pr.model.multiple.samples"]]
+#' res <- .estimatePrModelMultipleSamples(dataExample$models,dataExample$events)
 #'
-#' @title estimate.pr.model.multiple.samples
+#' @title .estimatePrModelMultipleSamples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
 #' @param events Driver genes to be considered in the inference.
 #'
-estimate.pr.model.multiple.samples <- function( models, events ) {
-    
-    pr.model.estimate = array(0,c(length(events),length(events)))
-    
-    # get the counts for each event
-    counts.time.orderings = array(0,dim(pr.model.estimate))
-    counts.co_occurance = array(0,dim(pr.model.estimate))
-    
-    for(i in 1:length(models)) {
-        
-        curr_model = models[[i]]
-        # compute the time ordering counts, i.e., P(t_j<t_i,i,j)
-        time_orderings = which(curr_model==1,arr.ind=TRUE)
+.estimatePrModelMultipleSamples <- function(models, events) {
 
-        if(length(time_orderings)>0) {
-            time_orderings_parents = rownames(curr_model)[time_orderings[,"row"]]
-            time_orderings_children = colnames(curr_model)[time_orderings[,"col"]]
-            for(j in 1:length(time_orderings_parents)) {
-                counts.time.orderings[which(events==time_orderings_parents[j]),which(events==time_orderings_children[j])] = counts.time.orderings[which(events==time_orderings_parents[j]),which(events==time_orderings_children[j])] + 1
+    prModelEstimate <- array(0, c(length(events), length(events)))
+
+    # get the counts for each event
+    countsTimeOrderings <- array(0, dim(prModelEstimate))
+    countsCoOccurrence <- array(0, dim(prModelEstimate))
+
+    for(i in seq_along(models)) {
+        currModel <- models[[i]]
+        # compute the time ordering counts, i.e., P(t_j<t_i,i,j)
+        timeOrderings <- which(currModel == 1, arr.ind = TRUE)
+        
+        if(length(timeOrderings) > 0) {
+            timeOrderingsParents <- rownames(currModel)[timeOrderings[,"row"]]
+            timeOrderingsChildren <- colnames(currModel)[timeOrderings[,"col"]]
+            for(j in seq_along(timeOrderingsParents)) {
+                countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] <- 
+                  countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] + 1
             }
         }
         
-        # compute the co_occurance count increment, i.e., P(i,j)
-        counts.co_occurance[which(events%in%colnames(curr_model)),which(events%in%colnames(curr_model))] = counts.co_occurance[which(events%in%colnames(curr_model)),which(events%in%colnames(curr_model))] + 1
-        
+        # compute the co-occurrence count increment, i.e., P(i,j)
+        countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] <- 
+          countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] + 1
     }
-    
-    pr.model.estimate = counts.time.orderings / counts.co_occurance
-    pr.model.estimate[which(is.nan(pr.model.estimate),arr.ind=TRUE)] = 0
-    
-    return(pr.model.estimate)
-    
+
+    prModelEstimate <- countsTimeOrderings / countsCoOccurrence
+    prModelEstimate[which(is.nan(prModelEstimate), arr.ind = TRUE)] <- 0
+
+    return(prModelEstimate)
+
 }
 
 #' Estimate the null model for the probability raising, i.e., j --> i, P(i,not j).
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["estimate.pr.null"]]
-#' res = estimate.pr.null(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["estimate.pr.null"]]
+#' res <- .estimatePrNull(dataExample)
 #'
-#' @title estimate.pr.null
+#' @title .estimatePrNull
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #'
-estimate.pr.null <- function( dataset ) {
+.estimatePrNull <- function(dataset) {
     
-    pr.null.estimate = array(0,c(ncol(dataset),ncol(dataset)))
+    prNullEstimate <- array(0, c(ncol(dataset), ncol(dataset)))
 
-    # compute marginal and joint probabilities
-    probs.estimate = estimate.probs(dataset)
+    # Compute marginal and joint probabilities
+    probsEstimate <- .estimateProbs(dataset)
     
-    # consider any pair of events in the dataset
-    for (i in 1:nrow(pr.null.estimate)) {
-        for (j in i:nrow(pr.null.estimate)) {
-            if(i!=j) {
-                pr.null.estimate[i,j] = probs.estimate$marginal.probs[i,1] - probs.estimate$joint.probs[i,j]
-                pr.null.estimate[j,i] = probs.estimate$marginal.probs[j,1] - probs.estimate$joint.probs[j,i]
+    # Consider any pair of events in the dataset
+    for (i in 1:nrow(prNullEstimate)) {
+        for (j in i:nrow(prNullEstimate)) {
+            if (i != j) {
+                prNullEstimate[i, j] <- probsEstimate$marginal.probs[i, 1] - probsEstimate$joint.probs[i, j]
+                prNullEstimate[j, i] <- probsEstimate$marginal.probs[j, 1] - probsEstimate$joint.probs[j, i]
             }
         }
     }
     
-    return(pr.null.estimate)
+    return(prNullEstimate)
     
 }
 
 #' Estimate marginal and joint probabilities from the dataset.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["estimate.probs"]]
-#' res = estimate.probs(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["estimate.probs"]]
+#' res <- .estimateProbs(dataExample)
 #'
-#' @title estimate.probs
+#' @title .estimateProbs
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #'
-estimate.probs <- function( dataset ) {
+.estimateProbs <- function(dataset) {
 
-    pair.count = array(0,dim=c(ncol(dataset),ncol(dataset)))
-
+    pairCount <- array(0, dim = c(ncol(dataset), ncol(dataset)))
+    
     for (i in 1:ncol(dataset)) {
         for (j in 1:ncol(dataset)) {
-            val1 = dataset[,i]
-            val2 = dataset[,j]
-            pair.count[i,j] = (t(val1)%*%val2)
+            val1 <- dataset[, i]
+            val2 <- dataset[, j]
+            pairCount[i, j] <- (t(val1) %*% val2)
         }
     }
-
-    marginal.probs = array(as.matrix(diag(pair.count)/nrow(dataset)),dim=c(ncol(dataset),1))
-    joint.probs = as.matrix(pair.count/nrow(dataset))
-
-    return(list(marginal.probs=marginal.probs,joint.probs=joint.probs))
+    
+    marginalProbs <- array(as.matrix(diag(pairCount) / nrow(dataset)), dim = c(ncol(dataset), 1))
+    jointProbs <- as.matrix(pairCount / nrow(dataset))
+    
+    return(list(marginalProbs = marginalProbs, jointProbs = jointProbs))
 
 }
 
 #' Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions.
 #'
-#' @title estimate.agony.poset.single.samples
-#' @param ccf.dataset Matrix where rows are samples and columns are mutations.
+#' @title .estimateAgonyPosetSingleSamples
+#' @param ccfDataset Matrix where rows are samples and columns are mutations.
 #'
-estimate.agony.poset.single.samples <- function( ccf.dataset ) {
+.estimateAgonyPosetSingleSamples <- function(ccfDataset) {
 
     # compute a set of total orderings, one per patient
-    total_orderings = infer.order.in.ccf.dataset(ccf.dataset)
+    totalOrderings <- .inferOrderInCcfDataset(ccfDataset)
 
     # compute a set of time orderings among each event, given the total orderings
-    agony_arcs = build.agony.input(total_orderings)
+    agonyArcs <- .buildAgonyInput(totalOrderings)
 
     # estimate a best agony poset given the time orderings
-    if(!is.null(agony_arcs)) {
-        agony_poset = compute.agony.poset(agony_arcs,ncol(ccf.dataset))
-    }
-    else {
-        agony_poset = array(1,c(ncol(ccf.dataset),ncol(ccf.dataset)))
-        diag(agony_poset) = 0
+    if(!is.null(agonyArcs)) {
+        agonyPoset <- .computeAgonyPoset(agonyArcs, ncol(ccfDataset))
+    } else {
+        agonyPoset <- array(1, c(ncol(ccfDataset), ncol(ccfDataset)))
+        diag(agonyPoset) <- 0
     }
 
-    return(agony_poset)
+    return(agonyPoset)
 
 }
 
 #' Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples.
 #'
-#' @title estimate.agony.poset.multiple.samples
+#' @title .estimateAgonyPosetMultipleSamples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
 #' @param events Driver genes to be considered in the inference.
 #'
-estimate.agony.poset.multiple.samples <- function( models, events ) {
+.estimateAgonyPosetMultipleSamples <- function(models, events) {
 
     # compute a set of time orderings among each event, given a set of models inferred from multiple samples
-    agony_arcs = build.agony.input.multiple.samples(models,events)
+    agonyArcs <- .buildAgonyInputMultipleSamples(models, events)
 
     # estimate a best agony poset given the time orderings
-    if(!is.null(agony_arcs)) {
-        agony_poset = compute.agony.poset(agony_arcs,length(events))
+    if(!is.null(agonyArcs)) {
+        agonyPoset <- .computeAgonyPoset(agonyArcs, length(events))
     }
     else {
-        agony_poset = array(1,c(length(models),length(events)))
-        diag(agony_poset) = 0
+        agonyPoset <- array(1, c(length(models), length(events)))
+        diag(agonyPoset) <- 0
     }
 
-    return(agony_poset)
+    return(agonyPoset)
 
 }
 
 #' Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["infer.order.in.ccf.dataset"]]
-#' res = infer.order.in.ccf.dataset(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["infer.order.in.ccf.dataset"]]
+#' res <- .inferOrderInCcfDataset(dataExample)
 #'
-#' @title infer.order.in.ccf.dataset
-#' @param ccf.dataset Matrix where rows are samples and columns are mutations.
+#' @title .inferOrderInCcfDataset
+#' @param ccfDataset Matrix where rows are samples and columns are mutations.
 #'
-infer.order.in.ccf.dataset <- function( ccf.dataset  ) {
+.inferOrderInCcfDataset <- function(ccfDataset) {
 
-    total.order = list()
+    totalOrder <- list()
 
-    for(i in 1:nrow(ccf.dataset)) {
-        curr_res = infer.total.order(ccf.dataset[i,])
-        if(length(curr_res)>1) {
-            total.order[[(length(total.order)+1)]] = curr_res
+    for (i in 1:nrow(ccfDataset)) {
+        currRes <- .inferTotalOrder(ccfDataset[i, ])
+        if (length(currRes) > 1) {
+        totalOrder[[(length(totalOrder) + 1)]] <- currRes
         }
     }
 
-    return(total.order)
+    return(totalOrder)
 
 }
 
 #' Estimate a total ordering for a sample given the observed cancer cell fractions.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["infer.total.order"]]
-#' res = infer.total.order(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["infer.total.order"]]
+#' res <- .inferTotalOrder(dataExample)
 #'
-#' @title infer.total.order
-#' @param ccf.entry Cancer cell fractions for each sample.
+#' @title .inferTotalOrder
+#' @param ccfEntry Cancer cell fractions for each sample.
 #'
-infer.total.order <- function( ccf.entry ) {
+.inferTotalOrder <- function(ccfEntry) {
 
-    total.order_sort = sort(ccf.entry,decreasing=TRUE,index.return=TRUE)
-    total.order = list()
-    total.order[["value"]] = total.order_sort$x[which(total.order_sort$x>0)]
-    total.order[["position"]] = total.order_sort$ix[which(total.order_sort$x>0)]
+    totalOrderSort <- sort(ccfEntry, decreasing = TRUE, index.return = TRUE)
+    totalOrder <- list()
+    totalOrder[["value"]] <- totalOrderSort$x[which(totalOrderSort$x > 0)]
+    totalOrder[["position"]] <- totalOrderSort$ix[which(totalOrderSort$x > 0)]
 
-    return(total.order)
+    return(totalOrder)
 
 }
 
 #' Create the input file for computing a best agony ranking given a total ordering.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["build.agony.input"]]
-#' res = build.agony.input(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["build.agony.input"]]
+#' res <- .buildAgonyInput(dataExample)
 #'
-#' @title build.agony.input
-#' @param agony_orders Agony-based rankings.
+#' @title .buildAgonyInput
+#' @param agonyOrders Agony-based rankings.
 #'
-build.agony.input <- function( agony_orders ) {
+.buildAgonyInput <- function(agonyOrders) {
 
-    my_arcs = NULL
+    myArcs <- NULL
 
-    if(length(agony_orders)>0) {
-        for(i in 1:length(agony_orders)) {
-            curr_order = agony_orders[[i]]
-            if(length(unique(curr_order$value))>1) {
-                curr_order_val = unique(curr_order$value)
-                for (j in 1:length(curr_order_val[-length(curr_order_val)])) {
-                    curr_parents = which(curr_order$value==curr_order_val[j])
-                    curr_children = which(curr_order$value==curr_order_val[(j+1)])
-                    for(a in names(curr_parents)) {
-                        for(b in names(curr_children)) {
-                            curr_edge = c(curr_order$position[j],curr_order$position[(j+1)])
-                            my_arcs = rbind(my_arcs,curr_edge)
+    if (length(agonyOrders) > 0) {
+        for (i in 1:length(agonyOrders)) {
+            currOrder <- agonyOrders[[i]]
+            if (length(unique(currOrder$value)) > 1) {
+                currOrderVal <- unique(currOrder$value)
+                for (j in 1:length(currOrderVal[-length(currOrderVal)])) {
+                    currParents <- which(currOrder$value == currOrderVal[j])
+                    currChildren <- which(currOrder$value == currOrderVal[(j+1)])
+                    for (a in names(currParents)) {
+                        for (b in names(currChildren)) {
+                            currEdge <- c(currOrder$position[j], currOrder$position[(j+1)])
+                            myArcs <- rbind(myArcs, currEdge)
                         }
                     }
                 }
             }
         }
-        if(!is.null(my_arcs)) {
-            colnames(my_arcs) = c("parent","child")
-            rownames(my_arcs) = as.character(1:nrow(my_arcs))
+        if (!is.null(myArcs)) {
+            colnames(myArcs) <- c("parent", "child")
+            rownames(myArcs) <- as.character(1:nrow(myArcs))
         }
     }
 
-    return(my_arcs)
+    return(myArcs)
 
 }
 
 #' Compute a set of time orderings among each event, given a set of models inferred from multiple samples.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["build.agony.input.multiple.samples"]]
-#' res = build.agony.input.multiple.samples(data_example$models,data_example$events)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["build.agony.input.multiple.samples"]]
+#' res <- .buildAgonyInputMultipleSamples(dataExample$models,dataExample$events)
 #'
-#' @title build.agony.input.multiple.samples
+#' @title .buildAgonyInputMultipleSamples
 #' @param models Phylogenetic models estimated for each sample included in dataset.
 #' @param events Driver genes to be considered in the inference.
 #'
-build.agony.input.multiple.samples <- function( models, events ) {
+.buildAgonyInputMultipleSamples <- function(models, events) {
 
-    my_arcs = NULL
+    myArcs <- NULL
 
-    if(length(models)>0) {
-        
-        for(i in 1:length(models)) {
-            
-            curr_model = models[[i]]
-            time_orderings = which(curr_model==1,arr.ind=TRUE)
-            time_orderings_parents = rownames(curr_model)[time_orderings[,"row"]]
-            time_orderings_children = colnames(curr_model)[time_orderings[,"col"]]
-            
-            if(length(time_orderings_parents)>0) {
-                for(j in 1:length(time_orderings_parents)) {
+    if (length(models) > 0) {
+        for (i in 1:length(models)) {
+            currModel <- models[[i]]
+            timeOrderings <- which(currModel == 1, arr.ind = TRUE)
+            timeOrderingsParents <- rownames(currModel)[timeOrderings[,"row"]]
+            timeOrderingsChildren <- colnames(currModel)[timeOrderings[,"col"]]
+            if (length(timeOrderingsParents) > 0) {
+                for (j in 1:length(timeOrderingsParents)) {
                     # consider each arch in the input model
-                    curr_parent = which(events==time_orderings_parents[j])
-                    curr_child = which(events==time_orderings_children[j])
+                    currParent <- which(events == timeOrderingsParents[j])
+                    currChild <- which(events == timeOrderingsChildren[j])
                     # add this ordering to the arcs to be considered
-                    if(length(curr_parent)>0 && length(curr_child)>0) {
-                        curr_edge = c(curr_parent,curr_child)
-                        my_arcs = rbind(my_arcs,curr_edge)
+                    if (length(currParent) > 0 && length(currChild) > 0) {
+                        currEdge <- c(currParent, currChild)
+                        myArcs <- rbind(myArcs, currEdge)
                     }
-                    
                 }
             }
-            
         }
-        
-    }
-    
-    if(!is.null(my_arcs)) {
-        colnames(my_arcs) = c("parent","child")
-        rownames(my_arcs) = as.character(1:nrow(my_arcs))
     }
 
-    return(my_arcs)
+    if (!is.null(myArcs)) {
+        colnames(myArcs) <- c("parent", "child")
+        rownames(myArcs) <- as.character(1:nrow(myArcs))
+    }
+
+    return(myArcs)
 
 }
 
 #' Estimate an optimal agony ranking poset given a set of temporal observations.
 #'
-#' @title compute.agony.poset
-#' @param agony_arcs Agony-based rankings.
-#' @param num_events Number of driver genes considered for the inference.
-#' @param agony_files Location of agony files.
+#' @title .computeAgonyPoset
+#' @param agonyArcs Agony-based rankings.
+#' @param numEvents Number of driver genes considered for the inference.
 #'
-compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(getwd(),"/agony_files") ) {
+.computeAgonyPoset <- function(agonyArcs, numEvents) {
 
-    poset = array(0,c(num_events,num_events))
+    poset <- array(0, c(numEvents, numEvents))
 
-    # safely create the directoy to save the files to compute the best agony ranking
-    unlink(agony_files,recursive=TRUE,force=TRUE)
-    dir.create(agony_files,showWarnings=FALSE)
+    if (!is.null(agonyArcs)) {
 
-    if(!is.null(agony_arcs)) {
-        # save the orderings to file
-        # write.table(agony_arcs,file=paste0(agony_files,"/inputs.txt"),quote=FALSE,row.names=FALSE,col.names=FALSE)
-        
+        # Estimate a best agony ranking and save the results to file
+        agonyRanking <- agony(agonyArcs)
 
-        # estimate a best agony ranking and save the results to file
-        agony_ranking = agony(agony_arcs)
-        # read the estimated best agony ranking
-        #agony_ranking = read.table(file=paste0(agony_files,"/outputs.txt"),check.names=FALSE,stringsAsFactors=FALSE)
-        # compute the poset based on the best agony ranking
-        poset = build.ranking.adj.matrix(agony_ranking, num_events)
+        # Compute the poset based on the best agony ranking
+        poset <- .buildRankingAdjMatrix(agonyRanking, numEvents)
+
     }
-
-    # remove the created files and directories
-    unlink(agony_files,recursive=TRUE,force=TRUE)
 
     return(poset)
 
@@ -368,65 +350,64 @@ compute.agony.poset <- function( agony_arcs, num_events, agony_files = paste0(ge
 #' Compute the poset based on the best agony ranking.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["build.ranking.adj.matrix"]]
-#' res = build.ranking.adj.matrix(agony_ranking=data_example$agony_ranking,num_events=data_example$num_events)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["build.ranking.adj.matrix"]]
+#' res <- .buildRankingAdjMatrix(agonyRanking=dataExample$agony_ranking,num_events=dataExample$num_events)
 #'
-#' @title build.ranking.adj.matrix
-#' @param agony_ranking Agony-based rankings.
+#' @title .buildRankingAdjMatrix
+#' @param agonyRanking Agony-based rankings.
 #' @param num_events Number of driver genes considered for the inference.
 #'
-build.ranking.adj.matrix <- function( agony_ranking, num_events ) {
-    
-    adj.matrix = array(0,c(num_events,num_events))
+.buildRankingAdjMatrix <- function(agonyRanking, numEvents) {
 
-    if(length(agony_ranking)>0) {
-        curr_rank = (max(agony_ranking[,2])-1)
-        while(curr_rank>=0) {
+    adjMatrix <- array(0, c(numEvents, numEvents))
+
+    if (length(agonyRanking) > 0) {
+        currRank <- (max(agonyRanking[, 2]) - 1)
+        while (currRank >= 0) {
             # consider each ranking from max to min + 1 (nodes at minimum ranking have no predecessors)
-            curr_children = agony_ranking[which(agony_ranking[,2]==(curr_rank+1)),1]
-            for (my_rank in 0:curr_rank) {
+            currChildren <- agonyRanking[which(agonyRanking[, 2] == (currRank + 1)), 1]
+            for (myRank in 0:currRank) {
                 # the predecessors of nodes at ranking curr_rank + 1 are all the nodes at ranking from 0 to curr_rank included
-                curr_parents = agony_ranking[which(agony_ranking[,2]==my_rank),1]
-                adj.matrix[curr_parents,curr_children] = 1
+                currParents <- agonyRanking[which(agonyRanking[, 2] == myRank), 1]
+                adjMatrix[currParents, currChildren] <- 1
             }
-            curr_rank = curr_rank - 1
+            currRank <- currRank - 1
         }
+    } else {
+        adjMatrix <- array(1, c(ncol(numEvents), ncol(numEvents)))
+        diag(adjMatrix) <- 0
     }
-    else {
-        adj.matrix = array(1,c(ncol(num_events),ncol(num_events)))
-        diag(adj.matrix) = 0
-    }
-    
-    return(adj.matrix)
-    
+
+    return(adjMatrix)
+
 }
 
 #' Enforce probability raising constraints.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["apply.pr"]]
-#' res = apply.pr(poset=data_example$poset,pr_model=data_example$pr_model,pr_null=data_example$pr_null)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["apply.pr"]]
+#' res <- .applyPr(poset=dataExample$poset,pr_model=dataExample$pr_model,pr_null=dataExample$pr_null)
 #'
-#' @title apply.pr
+#' @title .applyPr
 #' @param poset Partially order set to be considered during the inference.
 #' @param pr_model ASCETIC statistical model based on Suppes' theory of probabilistic causation.
 #' @param pr_null ASCETIC null model based on Suppes' theory of probabilistic causation.
 #'
-apply.pr <- function( poset, pr_model, pr_null ) {
+.applyPr <- function(poset, prModel, prNull) {
 
-    for(i in 1:nrow(poset)) {
-        for(j in 1:ncol(poset)) {
-            # consider arc i --> j, if it is in the poset
-            if(poset[i,j]==1) {
-                if(pr_model[i,j]<=pr_null[i,j]) {
-                    poset[i,j] = 0
+    for (i in 1:nrow(poset)) {
+        for (j in 1:ncol(poset)) {
+            # Consider arc i --> j if it is in the poset.
+            if (poset[i, j] == 1) {
+                if (prModel[i, j] <= prNull[i, j]) {
+                    poset[i, j] <- 0
                 }
             }
         }
     }
-    
+
     return(poset)
 
 }
@@ -434,51 +415,51 @@ apply.pr <- function( poset, pr_model, pr_null ) {
 #' Perform structure learning by maximum likelihood given a poset.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["perform.likelihood.fit"]]
-#' res = perform.likelihood.fit( dataset = data_example$dataset, 
-#'                               poset = data_example$poset, 
-#'                               regularization = "aic", 
-#'                               command = "hc", 
-#'                               restarts = 0)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["perform.likelihood.fit"]]
+#' res <- .performLikelihoodFit( dataset = dataExample$dataset,
+#'                              poset = dataExample$poset,
+#'                              regularization = "aic",
+#'                              command = "hc",
+#'                              restarts = 0)
 #'
-#' @title perform.likelihood.fit
+#' @title .performLikelihoodFit
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #' @param poset Partially order set to be considered during the inference.
 #' @param regularization Regularization to be used for the maximum likelihood estimation.
 #' @param command Optimization technique to be used for maximum likelihood estimation.
-#' @param restarts Number of restarts to be performed during the maximum likelihood estimation when Hill Climbing optimization technique is used.
+#' @param restarts Number of restarts to be performed during the maximum likelihood estimation when 
+#' Hill Climbing optimization technique is used.
 #'
-perform.likelihood.fit <- function( dataset, poset, regularization, command, restarts ) {
+.performLikelihoodFit <- function(dataset, poset, regularization, command, restarts) {
 
     # initialization
-    adj.matrix = poset
-    rownames(adj.matrix) = as.character(1:nrow(adj.matrix))
-    colnames(adj.matrix) = as.character(1:ncol(adj.matrix))
-    adj.matrix.fit = array(0, c(nrow(adj.matrix),ncol(adj.matrix)))
-    rownames(adj.matrix.fit) = as.character(1:ncol(adj.matrix.fit))
-    colnames(adj.matrix.fit) = as.character(1:nrow(adj.matrix.fit))
+    adjMatrix <- poset
+    rownames(adjMatrix) <- as.character(1:nrow(adjMatrix))
+    colnames(adjMatrix) <- as.character(1:ncol(adjMatrix))
+    adjMatrixFit <- array(0, c(nrow(adjMatrix), ncol(adjMatrix)))
+    rownames(adjMatrixFit) <- as.character(1:ncol(adjMatrixFit))
+    colnames(adjMatrixFit) <- as.character(1:nrow(adjMatrixFit))
 
     # create a categorical data frame from the dataset
-    data = as.categorical.dataset(dataset)
+    data <- as.categorical.dataset(dataset)
 
     # create the blacklist based on the poset
-    cont = 0
-    parent = -1
-    child = -1
-    for (i in rownames(adj.matrix)) {
-        for (j in colnames(adj.matrix)) {
-            if(i!=j) {
-                if (adj.matrix[i,j] == 0) {
+    cont <- 0
+    parent <- -1
+    child <- -1
+    for (i in rownames(adjMatrix)) {
+        for (j in colnames(adjMatrix)) {
+            if (i != j) {
+                if (adjMatrix[i, j] == 0) {
                     # [i,j] refers to causation i --> j
-                    cont = cont + 1
+                    cont <- cont + 1
                     if (cont == 1) {
-                        parent = i
-                        child = j
-                    }
-                    else {
-                        parent = c(parent,i)
-                        child = c(child,j)
+                        parent <- i
+                        child <- j
+                    } else {
+                        parent <- c(parent, i)
+                        child <- c(child, j)
                     }
                 }
             }
@@ -486,65 +467,64 @@ perform.likelihood.fit <- function( dataset, poset, regularization, command, res
     }
 
     # perform the reconstruction by likelihood fit with regularization
-    if(cont>0) {
-        blacklist = data.frame(from=parent,to=child)
-        if(command == "hc") {
-            my.net = hc(data,score=regularization,blacklist=blacklist,restart=restarts)
+    if (cont > 0) {
+        blacklist <- data.frame(from = parent, to = child)
+        if (command == "hc") {
+            myNet <- hc(data, score = regularization, blacklist = blacklist, restart = restarts)
+        } else if (command == "tabu") {
+            myNet <- tabu(data, score = regularization, blacklist = blacklist)
         }
-        else if (command == "tabu") {
-            my.net = tabu(data,score=regularization,blacklist=blacklist)
-        }
-    }
-    else {
-        if(command == "hc") {
-            my.net = hc(data,score=regularization,restart=restarts)
-        }
-        else if (command == "tabu") {
-            my.net = tabu(data,score=regularization)
+    } else {
+        if (command == "hc") {
+            myNet <- hc(data, score = regularization, restart = restarts)
+        } else if (command == "tabu") {
+            myNet <- tabu(data, score = regularization)
         }
     }
-    my.arcs = my.net$arcs
-    
+    myArcs <- myNet$arcs
+
     # build the adjacency matrix of the reconstructed topology
-    if(length(nrow(my.arcs))>0 && nrow(my.arcs)>0) {
-        for (i in 1:nrow(my.arcs)) {
+    if (length(nrow(myArcs)) > 0 && nrow(myArcs) > 0) {
+        for (i in 1:nrow(myArcs)) {
             # [i,j] refers to causation i --> j
-            adj.matrix.fit[my.arcs[i,1],my.arcs[i,2]] = 1
+            adjMatrixFit[myArcs[i, 1], myArcs[i, 2]] <- 1
         }
     }
-    return(adj.matrix.fit)
+
+    return(adjMatrixFit)
 
 }
 
 #' Create a categorical data structure.
 #'
 #' @examples
-#' data(data_examples)
-#' data_example = data_examples[["as.categorical.dataset"]]
-#' res = as.categorical.dataset(data_example)
+#' data(dataExamples)
+#' dataExample <- dataExamples[["as.categorical.dataset"]]
+#' res <- as.categorical.dataset(dataExample)
 #'
 #' @title as.categorical.dataset
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #'
-as.categorical.dataset <- function( dataset ) {
+.asCategoricalDataset <- function(dataset) {
 
     # create a categorical data frame from the dataset
-    data = array("missing",c(nrow(dataset),ncol(dataset)))
+    data <- array("missing", c(nrow(dataset), ncol(dataset)))
     for (i in 1:nrow(dataset)) {
         for (j in 1:ncol(dataset)) {
-            if (dataset[i,j]==1) {
-                data[i,j] = "observed"
+            if (dataset[i, j] == 1) {
+                data[i, j] <- "observed"
             }
         }
     }
-    data = data.frame(data,stringsAsFactors=TRUE)
+    data <- data.frame(data, stringsAsFactors = TRUE)
     for (n in names(data)) {
-        levels(data[[n]]) = c("missing","observed")
+        levels(data[[n]]) <- c("missing", "observed")
     }
 
     # renaming
-    colnames(data) = as.character(1:ncol(data))
-    rownames(data) = as.character(1:nrow(data))
+    colnames(data) <- as.character(1:ncol(data))
+    rownames(data) <- as.character(1:nrow(data))
+
     return(data)
 
 }
