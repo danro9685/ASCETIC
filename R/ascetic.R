@@ -358,11 +358,11 @@ asceticCCF <- function( dataset, ccfDataset, regularization = c("aic","bic"), co
 #' data(datasetExamplePhylogenies)
 #' data(modelsPhylogenies)
 #' resExamplePhylogeniesDataset = asceticPhylogenies(
-#'                                                   dataset = datasetExamplePhylogenies,
-#'                                                   models = modelsPhylogenies,
-#'                                                   regularization = "aic",
-#'                                                   command = "hc",
-#'                                                   restarts = 0)
+#'                                          dataset = datasetExamplePhylogenies,
+#'                                          models = modelsPhylogenies,
+#'                                          regularization = "aic",
+#'                                          command = "hc",
+#'                                          restarts = 0)
 #'
 #' @title asceticPhylogenies
 #' @param dataset Binary matrix where rows are samples and columns are mutations.

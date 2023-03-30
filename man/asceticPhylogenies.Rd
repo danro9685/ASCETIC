@@ -43,10 +43,10 @@ set.seed(12345)
 data(datasetExamplePhylogenies)
 data(modelsPhylogenies)
 resExamplePhylogeniesDataset = asceticPhylogenies(
-                                                  dataset = datasetExamplePhylogenies,
-                                                  models = modelsPhylogenies,
-                                                  regularization = "aic",
-                                                  command = "hc",
-                                                  restarts = 0)
+                                         dataset = datasetExamplePhylogenies,
+                                         models = modelsPhylogenies,
+                                         regularization = "aic",
+                                         command = "hc",
+                                         restarts = 0)
 
 }

@@ -37,7 +37,7 @@ BiocManager::install("ASCETIC")
 
 # Changelog
 
-- *1.0.0* Package released in October 2022.
+- *1.0.0* Package released in April 2023.
 
 # Using the ASCETIC R package
 
@@ -45,10 +45,10 @@ We provide within the package example datasets for both the single biopsy and th
 
 ```{r}
 library("ASCETIC")
-data(dataset_example_single_samples)
-data(ccf_dataset_example_single_samples)
-data(dataset_example_phylogenies)
-data(models_phylogenies)
+data(datasetExampleSingleSamples)
+data(ccfDatasetExampleSingleSamples)
+data(datasetExamplePhylogenies)
+data(modelsPhylogenies)
 ```
 
 First, we outline the inference steps for the single biopsy NGS data scenario, where only one sample per patient is available and the temporal patters among genes are estimated considering cancer cell fractions data. To test this, we consider an example dataset comprising 10 hepatocellular carcinoma sequencing samples from Nguyen, Bastien, et al., 2022. We recall that such (reduced and partial) dataset was provided only for computational testing and should not be used for biological analysis/conclusions.
@@ -57,29 +57,29 @@ We now perform the basic ASCETIC inference.
 
 ```{r}
 set.seed(12345)
-res_example_single_samples = perform.ascetic.ccf.dataset( 
-                                dataset = dataset_example_single_samples, 
-                                ccf.dataset = ccf_dataset_example_single_samples, 
-                                regularization = "aic", 
-                                command = "hc", 
-                                restarts = 0 )
+resExampleSingleSamples = asceticCCF(
+                             dataset = datasetExampleSingleSamples,
+                             ccfDataset = ccfDatasetExampleSingleSamples,
+                             regularization = "aic",
+                             command = "hc", 
+                             restarts = 0 )
 ```
 
-The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) ccf dataset, input ccf dataset; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
+The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) ccfDataset, input ccf dataset; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 
 To improve the statistical stability of the framework expecially in the common situation of noisy data, ASCETIC implements a re-sampling algorithm which builds on the function just described. This procedure is more computational intensive compared to the basic one, but should be preferred on real data. It requires an additional dataset with variant allele frequencies information and can be executed as follows.
 
 ```{r}
 set.seed(12345)
-data(vaf_dataset_example_single_samples)
-res_example_single_samples_resampling = perform.ascetic.ccf.dataset.resampling( 
-                                            dataset = dataset_example_single_samples, 
-                                            ccf.dataset = ccf_dataset_example_single_samples, 
-                                            vaf.dataset = vaf_dataset_example_single_samples, 
-                                            nsampling = 5, 
-                                            regularization = "aic", 
-                                            command = "hc", 
-                                            restarts = 0 )
+data(vafDatasetExampleSingleSamples)
+resExampleSingleSamplesResampling <- asceticCCFResampling(
+                                              dataset = datasetExampleSingleSamples,
+                                              ccfDataset = ccfDatasetExampleSingleSamples,
+                                              vafDataset = vafDatasetExampleSingleSamples,
+                                              nsampling = 5,
+                                              regularization = "aic",
+                                              command = "hc",
+                                              restarts = 0 )
 ```
 
 We refer to the manual for a detailed description of each parameter.
@@ -90,12 +90,12 @@ We now perform the basic ASCETIC inference for this second scenario.
 
 ```{r}
 set.seed(12345)
-res_example_phylogenies_dataset = perform.ascetic.phylogenies.dataset( 
-                                    dataset = dataset_example_phylogenies, 
-                                    models = models_phylogenies, 
-                                    regularization = "aic", 
-                                    command = "hc", 
-                                    restarts = 0 )
+resExamplePhylogeniesDataset = asceticPhylogenies(
+                                      dataset = datasetExamplePhylogenies,
+                                      models = modelsPhylogenies,
+                                      regularization = "aic",
+                                      command = "hc",
+                                      restarts = 0)
 ```
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) models, input phylogenetic models; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
@@ -104,24 +104,23 @@ Also in this case we provide a method to improve the statistical stability of th
 
 ```{r}
 set.seed(12345)
-res_example_phylogenies_dataset_bootstrap = perform.ascetic.phylogenies.dataset.bootstrap( 
-                                                dataset = dataset_example_phylogenies, 
-                                                models = models_phylogenies, 
-                                                nsampling = 5, 
-                                                regularization = "aic", 
-                                                command = "hc", 
-                                                restarts = 0 )
+resExamplePhylogeniesDatasetBootstrap <- asceticPhylogeniesBootstrap(
+                                                   dataset = datasetExamplePhylogenies,
+                                                   models = modelsPhylogenies,
+                                                   nsampling = 5,
+                                                   regularization = "aic",
+                                                   command = "hc",
+                                                   restarts = 0 )
 ```
 
 Finally, ASCETIC can perform the extraction of evolutionary signatures significantly associated to prognosis and use them to stratify patients. This can be done as follows.
 
 ```{r}
 set.seed(12345)
-data(aml_example)
-res_example_evosigs = evosigs( 
-                              survival_data = aml_example$survival_data, 
-                              evolutionary_steps = aml_example$evolutionary_steps )
-print(names(res_example_evosigs))
+data(amlExample)
+resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data, 
+                            evolutionarySteps = amlExample$evolutionary_steps )
+print(names(resExampleEvosigs))
 ```
 
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
