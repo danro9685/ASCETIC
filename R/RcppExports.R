@@ -9,8 +9,10 @@
 #'
 #' @title agony
 #' @param inmatrix Input agony matrix.
+#' @param outname Output agony file.
 #' @return Output agony matrix.
 #'
 agony <- function(inmatrix) {
     .Call(`_ASCETIC_agony`, inmatrix)
 }
+
