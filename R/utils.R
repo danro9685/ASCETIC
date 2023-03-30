@@ -1,13 +1,13 @@
-#' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a dataset of cancer cell fractions.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["estimate.pr.model.single.samples"]]
-#' res <- .estimatePrModelSingleSamples(ccf.dataset=dataExample)
-#'
-#' @title .estimatePrModelSingleSamples
-#' @param ccfDataset Matrix where rows are samples and columns are mutations.
-#'
+### Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a dataset of cancer cell fractions.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["estimate.pr.model.single.samples"]]
+### res <- .estimatePrModelSingleSamples(ccf.dataset=dataExample)
+###
+### @title .estimatePrModelSingleSamples
+### @param ccfDataset Matrix where rows are samples and columns are mutations.
+###
 .estimatePrModelSingleSamples <- function(ccfDataset) {
     
     prModelEstimate <- array(0, c(ncol(ccfDataset), ncol(ccfDataset)))
@@ -37,17 +37,17 @@
     
 }
 
-#' Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a inferences on multiple patients.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["estimate.pr.model.multiple.samples"]]
-#' res <- .estimatePrModelMultipleSamples(dataExample$models,dataExample$events)
-#'
-#' @title .estimatePrModelMultipleSamples
-#' @param models Phylogenetic models estimated for each sample included in dataset.
-#' @param events Driver genes to be considered in the inference.
-#'
+### Estimate the model for the probability raising, i.e., j --> i, P(t_j<t_i|i,j), from a inferences on multiple patients.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["estimate.pr.model.multiple.samples"]]
+### res <- .estimatePrModelMultipleSamples(dataExample$models,dataExample$events)
+###
+### @title .estimatePrModelMultipleSamples
+### @param models Phylogenetic models estimated for each sample included in dataset.
+### @param events Driver genes to be considered in the inference.
+###
 .estimatePrModelMultipleSamples <- function(models, events) {
 
     prModelEstimate <- array(0, c(length(events), length(events)))
@@ -82,16 +82,16 @@
 
 }
 
-#' Estimate the null model for the probability raising, i.e., j --> i, P(i,not j).
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["estimate.pr.null"]]
-#' res <- .estimatePrNull(dataExample)
-#'
-#' @title .estimatePrNull
-#' @param dataset Binary matrix where rows are samples and columns are mutations.
-#'
+### Estimate the null model for the probability raising, i.e., j --> i, P(i,not j).
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["estimate.pr.null"]]
+### res <- .estimatePrNull(dataExample)
+###
+### @title .estimatePrNull
+### @param dataset Binary matrix where rows are samples and columns are mutations.
+###
 .estimatePrNull <- function(dataset) {
     
     prNullEstimate <- array(0, c(ncol(dataset), ncol(dataset)))
@@ -113,16 +113,16 @@
     
 }
 
-#' Estimate marginal and joint probabilities from the dataset.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["estimate.probs"]]
-#' res <- .estimateProbs(dataExample)
-#'
-#' @title .estimateProbs
-#' @param dataset Binary matrix where rows are samples and columns are mutations.
-#'
+### Estimate marginal and joint probabilities from the dataset.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["estimate.probs"]]
+### res <- .estimateProbs(dataExample)
+###
+### @title .estimateProbs
+### @param dataset Binary matrix where rows are samples and columns are mutations.
+###
 .estimateProbs <- function(dataset) {
 
     pairCount <- array(0, dim = c(ncol(dataset), ncol(dataset)))
@@ -142,11 +142,11 @@
 
 }
 
-#' Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions.
-#'
-#' @title .estimateAgonyPosetSingleSamples
-#' @param ccfDataset Matrix where rows are samples and columns are mutations.
-#'
+### Estimate the poset based on a best agony ranking from a dataset of cancer cell fractions.
+###
+### @title .estimateAgonyPosetSingleSamples
+### @param ccfDataset Matrix where rows are samples and columns are mutations.
+###
 .estimateAgonyPosetSingleSamples <- function(ccfDataset) {
 
     # compute a set of total orderings, one per patient
@@ -167,12 +167,12 @@
 
 }
 
-#' Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples.
-#'
-#' @title .estimateAgonyPosetMultipleSamples
-#' @param models Phylogenetic models estimated for each sample included in dataset.
-#' @param events Driver genes to be considered in the inference.
-#'
+### Estimate the poset based on a best agony ranking from a set of models inferred from multiple samples.
+###
+### @title .estimateAgonyPosetMultipleSamples
+### @param models Phylogenetic models estimated for each sample included in dataset.
+### @param events Driver genes to be considered in the inference.
+###
 .estimateAgonyPosetMultipleSamples <- function(models, events) {
 
     # compute a set of time orderings among each event, given a set of models inferred from multiple samples
@@ -191,16 +191,16 @@
 
 }
 
-#' Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["infer.order.in.ccf.dataset"]]
-#' res <- .inferOrderInCcfDataset(dataExample)
-#'
-#' @title .inferOrderInCcfDataset
-#' @param ccfDataset Matrix where rows are samples and columns are mutations.
-#'
+### Estimate a total ordering for a dataset given the observed cancer cell fractions in each sample.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["infer.order.in.ccf.dataset"]]
+### res <- .inferOrderInCcfDataset(dataExample)
+###
+### @title .inferOrderInCcfDataset
+### @param ccfDataset Matrix where rows are samples and columns are mutations.
+###
 .inferOrderInCcfDataset <- function(ccfDataset) {
 
     totalOrder <- list()
@@ -216,16 +216,16 @@
 
 }
 
-#' Estimate a total ordering for a sample given the observed cancer cell fractions.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["infer.total.order"]]
-#' res <- .inferTotalOrder(dataExample)
-#'
-#' @title .inferTotalOrder
-#' @param ccfEntry Cancer cell fractions for each sample.
-#'
+### Estimate a total ordering for a sample given the observed cancer cell fractions.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["infer.total.order"]]
+### res <- .inferTotalOrder(dataExample)
+###
+### @title .inferTotalOrder
+### @param ccfEntry Cancer cell fractions for each sample.
+###
 .inferTotalOrder <- function(ccfEntry) {
 
     totalOrderSort <- sort(ccfEntry, decreasing = TRUE, index.return = TRUE)
@@ -237,16 +237,16 @@
 
 }
 
-#' Create the input file for computing a best agony ranking given a total ordering.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["build.agony.input"]]
-#' res <- .buildAgonyInput(dataExample)
-#'
-#' @title .buildAgonyInput
-#' @param agonyOrders Agony-based rankings.
-#'
+### Create the input file for computing a best agony ranking given a total ordering.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["build.agony.input"]]
+### res <- .buildAgonyInput(dataExample)
+###
+### @title .buildAgonyInput
+### @param agonyOrders Agony-based rankings.
+###
 .buildAgonyInput <- function(agonyOrders) {
 
     myArcs <- NULL
@@ -278,17 +278,17 @@
 
 }
 
-#' Compute a set of time orderings among each event, given a set of models inferred from multiple samples.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["build.agony.input.multiple.samples"]]
-#' res <- .buildAgonyInputMultipleSamples(dataExample$models,dataExample$events)
-#'
-#' @title .buildAgonyInputMultipleSamples
-#' @param models Phylogenetic models estimated for each sample included in dataset.
-#' @param events Driver genes to be considered in the inference.
-#'
+### Compute a set of time orderings among each event, given a set of models inferred from multiple samples.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["build.agony.input.multiple.samples"]]
+### res <- .buildAgonyInputMultipleSamples(dataExample$models,dataExample$events)
+###
+### @title .buildAgonyInputMultipleSamples
+### @param models Phylogenetic models estimated for each sample included in dataset.
+### @param events Driver genes to be considered in the inference.
+###
 .buildAgonyInputMultipleSamples <- function(models, events) {
 
     myArcs <- NULL
@@ -323,12 +323,12 @@
 
 }
 
-#' Estimate an optimal agony ranking poset given a set of temporal observations.
-#'
-#' @title .computeAgonyPoset
-#' @param agonyArcs Agony-based rankings.
-#' @param numEvents Number of driver genes considered for the inference.
-#'
+### Estimate an optimal agony ranking poset given a set of temporal observations.
+###
+### @title .computeAgonyPoset
+### @param agonyArcs Agony-based rankings.
+### @param numEvents Number of driver genes considered for the inference.
+###
 .computeAgonyPoset <- function(agonyArcs, numEvents) {
 
     poset <- array(0, c(numEvents, numEvents))
@@ -347,17 +347,17 @@
 
 }
 
-#' Compute the poset based on the best agony ranking.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["build.ranking.adj.matrix"]]
-#' res <- .buildRankingAdjMatrix(agonyRanking=dataExample$agony_ranking,num_events=dataExample$num_events)
-#'
-#' @title .buildRankingAdjMatrix
-#' @param agonyRanking Agony-based rankings.
-#' @param num_events Number of driver genes considered for the inference.
-#'
+### Compute the poset based on the best agony ranking.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["build.ranking.adj.matrix"]]
+### res <- .buildRankingAdjMatrix(agonyRanking=dataExample$agony_ranking,num_events=dataExample$num_events)
+###
+### @title .buildRankingAdjMatrix
+### @param agonyRanking Agony-based rankings.
+### @param numEvents Number of driver genes considered for the inference.
+###
 .buildRankingAdjMatrix <- function(agonyRanking, numEvents) {
 
     adjMatrix <- array(0, c(numEvents, numEvents))
@@ -383,18 +383,20 @@
 
 }
 
-#' Enforce probability raising constraints.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["apply.pr"]]
-#' res <- .applyPr(poset=dataExample$poset,pr_model=dataExample$pr_model,pr_null=dataExample$pr_null)
-#'
-#' @title .applyPr
-#' @param poset Partially order set to be considered during the inference.
-#' @param pr_model ASCETIC statistical model based on Suppes' theory of probabilistic causation.
-#' @param pr_null ASCETIC null model based on Suppes' theory of probabilistic causation.
-#'
+### Enforce probability raising constraints.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["apply.pr"]]
+### res <- .applyPr( poset = dataExample$poset,
+###                  prModel = dataExample$pr_model,
+###                  prNull = dataExample$pr_null)
+###
+### @title .applyPr
+### @param poset Partially order set to be considered during the inference.
+### @param prModel ASCETIC statistical model based on Suppes' theory of probabilistic causation.
+### @param prNull ASCETIC null model based on Suppes' theory of probabilistic causation.
+###
 .applyPr <- function(poset, prModel, prNull) {
 
     for (i in 1:nrow(poset)) {
@@ -412,25 +414,25 @@
 
 }
 
-#' Perform structure learning by maximum likelihood given a poset.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["perform.likelihood.fit"]]
-#' res <- .performLikelihoodFit( dataset = dataExample$dataset,
-#'                              poset = dataExample$poset,
-#'                              regularization = "aic",
-#'                              command = "hc",
-#'                              restarts = 0)
-#'
-#' @title .performLikelihoodFit
-#' @param dataset Binary matrix where rows are samples and columns are mutations.
-#' @param poset Partially order set to be considered during the inference.
-#' @param regularization Regularization to be used for the maximum likelihood estimation.
-#' @param command Optimization technique to be used for maximum likelihood estimation.
-#' @param restarts Number of restarts to be performed during the maximum likelihood estimation when 
-#' Hill Climbing optimization technique is used.
-#'
+### Perform structure learning by maximum likelihood given a poset.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["perform.likelihood.fit"]]
+### res <- .performLikelihoodFit( dataset = dataExample$dataset,
+###                              poset = dataExample$poset,
+###                              regularization = "aic",
+###                              command = "hc",
+###                              restarts = 0)
+###
+### @title .performLikelihoodFit
+### @param dataset Binary matrix where rows are samples and columns are mutations.
+### @param poset Partially order set to be considered during the inference.
+### @param regularization Regularization to be used for the maximum likelihood estimation.
+### @param command Optimization technique to be used for maximum likelihood estimation.
+### @param restarts Number of restarts to be performed during the maximum likelihood estimation when 
+### Hill Climbing optimization technique is used.
+###
 .performLikelihoodFit <- function(dataset, poset, regularization, command, restarts) {
 
     # initialization
@@ -495,16 +497,16 @@
 
 }
 
-#' Create a categorical data structure.
-#'
-#' @examples
-#' data(dataExamples)
-#' dataExample <- dataExamples[["as.categorical.dataset"]]
-#' res <- as.categorical.dataset(dataExample)
-#'
-#' @title as.categorical.dataset
-#' @param dataset Binary matrix where rows are samples and columns are mutations.
-#'
+### Create a categorical data structure.
+###
+### @examples
+### data(dataExamples)
+### dataExample <- dataExamples[["as.categorical.dataset"]]
+### res <- as.categorical.dataset(dataExample)
+###
+### @title as.categorical.dataset
+### @param dataset Binary matrix where rows are samples and columns are mutations.
+###
 .asCategoricalDataset <- function(dataset) {
 
     # create a categorical data frame from the dataset

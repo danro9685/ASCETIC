@@ -8,8 +8,6 @@ agony(inmatrix)
 }
 \arguments{
 \item{inmatrix}{Input agony matrix.}
-
-\item{outname}{Output agony file.}
 }
 \value{
 Output agony matrix.

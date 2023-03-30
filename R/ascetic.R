@@ -319,10 +319,10 @@ asceticCCF <- function( dataset, ccfDataset, regularization = c("aic","bic"), co
         rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
         colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
     }
-    inference <- setNames(agonyInference, regularization)
+    names(agonyInference) <- regularization
 
     # Create the data structures with the results
-    results <- list(dataset = dataset, ccfDataset = ccfDataset, poset = poset, inference = inference)
+    results <- list(dataset = dataset, ccfDataset = ccfDataset, poset = poset, inference = agonyInference)
 
     return(results)
 
