@@ -1,4 +1,4 @@
-#' Select evolutionary steps from ASCETIC analysis which are significantly associated with survival data.
+#' Select the evolutionary steps from ASCETIC analysis that are significantly associated with survival data.
 #'
 #' @examples
 #' set.seed(12345)
@@ -20,45 +20,44 @@
 #'
 evoSigs <- function( survivalData, evolutionarySteps ) {
 
-    # Create analysis data structure
+    # create analysis data structure
     analysisData <- data.frame(
-        cbind(
-            as.matrix(survivalData),
-            as.matrix(evolutionarySteps)),
+        cbind(as.matrix(survivalData),
+              as.matrix(evolutionarySteps)),
         check.rows = FALSE,
         stringsAsFactors = FALSE
     )
     colnames(analysisData) <- c("status", "times", colnames(evolutionarySteps))
 
-    # Select significant evolutionary steps based on association to survival data
+    # select the significant evolutionary steps based on association to survival data
     survivalAnalysis <- list()
     isValid <- FALSE
     tryCatch({
-        y <- Surv(
-            as.numeric(analysisData$times),
-            as.numeric(analysisData$status)
-        )
         lassoCov <- analysisData[, colnames(analysisData)[3:ncol(analysisData)]]
+        selFeatures <- paste0("lassoCov$", colnames(lassoCov))
         x <- as.matrix(cbind(rep(1, nrow(analysisData)), analysisData[, -c(1, 2)]))
         rownames(x) <- 1:nrow(x)
-        colnames(x) <- c("(Intercept)", paste0("lassoCov$", colnames(lassoCov)))
+        colnames(x) <- c("(Intercept)", selFeatures)
+        y <- Surv(as.numeric(analysisData$times),
+                  as.numeric(analysisData$status)
+        )
         cvFit <- cv.glmnet(x, y, family = "cox", maxit = 1000000, alpha = 1)
         survivalAnalysis[["data"]] <- analysisData
         survivalAnalysis[["fit"]] <- cvFit
         isValid <- TRUE
     }, error = function(e) {})
 
-    # Evaluate selected features evolutionary steps
+    # evaluate the selected features evolutionary steps
     if (isValid == TRUE) {
         currData <- survivalAnalysis[["data"]]
         currFit <- survivalAnalysis[["fit"]]
-        betaTemp <- matrix(NA, nrow = dim(currData)[1], ncol = 1)
-        Coefficients <- as.numeric(coef(currFit, s = currFit$lambda.min)[-1, ])
-        coeffNames <- gsub("lassoCov\\$", "", names(coef(currFit, s = currFit$lambda.min)[-1, ]))
+        betaTemp <- matrix(NA, nrow = nrow(currData), ncol = 1)
+        Coefficients <- as.numeric(coef(currFit, s = currFit$lambda.min)[selFeatures, ])
+        coeffNames <- gsub("lassoCov\\$", "", names(coef(currFit, s = currFit$lambda.min)[selFeatures, ]))
         coeffNames <- coeffNames[which(Coefficients != 0)]
         Coefficients <- Coefficients[which(Coefficients != 0)]
+        x <- Coefficients
         for (k in 1:nrow(currData)) {
-            x <- Coefficients
             y <- currData[k, coeffNames, drop = FALSE]
             betaTemp[k] <- as.numeric(x %*% t(y))
         }
@@ -99,14 +98,15 @@ evoSigs <- function( survivalData, evolutionarySteps ) {
         isValid <- FALSE
     }
 
-    # Save the extracted evolutionary signatures
+    # save the extracted evolutionary signatures
     evolutionarySignatures <- list()
     if (isValid == FALSE) {
         message("No evolutionary step could be significantly associated to differences in prognosis...","\n")
     }
     if (isValid == TRUE) {
         survivalAnalysis <- survivalAnalysis
-        selectedEvolutionarySteps <- c(survivalAnalysis$significantCoefficients$positive, survivalAnalysis$significantCoefficients$negative)
+        selectedEvolutionarySteps <- c(survivalAnalysis$significantCoefficients$positive, 
+            survivalAnalysis$significantCoefficients$negative)
         selectedEvolutionarySteps <- selectedEvolutionarySteps[sort(unique(names(selectedEvolutionarySteps)))]
         clusters <- survivalAnalysis$clusters
         freqFeatures <- array(NA, c(length(unique(clusters)), length(evolutionarySteps)))

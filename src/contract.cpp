@@ -188,4 +188,3 @@ unroll_master(network & g)
 		}
 	}
 }
-

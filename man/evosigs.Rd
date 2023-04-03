@@ -17,7 +17,7 @@ A list of 3 elements: 1) survivalAnalysis, results from survival analysis.
                               3) clustersPrevalence, prevalence per cluster of the selected evolutionary steps.
 }
 \description{
-Select evolutionary steps from ASCETIC analysis which are significantly associated with survival data.
+Select the evolutionary steps from ASCETIC analysis that are significantly associated with survival data.
 }
 \examples{
 set.seed(12345)

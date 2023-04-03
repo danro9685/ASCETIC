@@ -191,4 +191,3 @@ Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
   return(output);
   
 }
-
