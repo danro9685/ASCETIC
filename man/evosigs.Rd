@@ -22,7 +22,7 @@ Select the evolutionary steps from ASCETIC analysis that are significantly assoc
 \examples{
 set.seed(12345)
 data(amlExample)
-resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data, 
+resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data,
                              evolutionarySteps = amlExample$evolutionary_steps )
 
 }

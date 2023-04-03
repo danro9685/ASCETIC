@@ -50,14 +50,14 @@ This parameter is ignored if tabu search is selected.}
 }
 \value{
 A list of 5 elements: 1) dataset, input dataset.
-                              2) ccf_dataset, input ccf_dataset.
-                              3) ranking_estimate, ranking among mutations estimated by agony.
+                              2) ccfDataset, input ccfDataset.
+                              3) rankingEstimate, ranking among mutations estimated by agony.
                                  Lower rankings correspond to early mutations.
                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 }
 \description{
-Perform the ASCETIC inference framework on single samples (using CCF) datasets 
+Perform the ASCETIC inference framework on single samples (using CCF) datasets
 with re-sampling for a robust estimation of the agony ranking.
 }
 \examples{

@@ -19,6 +19,7 @@
 #' @importFrom survival Surv
 #'
 evoSigs <- function(survivalData, evolutionarySteps) {
+
   # create analysis data structure
   analysisData <- data.frame(
     cbind(as.matrix(survivalData),

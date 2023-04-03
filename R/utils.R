@@ -10,6 +10,7 @@
 # @param ccfDataset Matrix where rows are samples and columns are mutations.
 #
 .estimatePrModelSingleSamples <- function(ccfDataset) {
+
   # data structure to save results
   prModelEstimate <-
     matrix(0,
@@ -61,6 +62,7 @@
 # @param events Driver genes to be considered in the inference.
 #
 .estimatePrModelMultipleSamples <- function(models, events) {
+
   # data structure to save results
   prModelEstimate <-
     matrix(0, nrow = length(events), ncol = length(events))
@@ -112,6 +114,7 @@
 # @param dataset Binary matrix where rows are samples and columns are mutations.
 #
 .estimatePrNull <- function(dataset) {
+
   # data structure to save results
   prNullEstimate <-
     matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
@@ -146,6 +149,7 @@
 # @param dataset Binary matrix where rows are samples and columns are mutations.
 #
 .estimateProbs <- function(dataset) {
+
   # data structure to save results
   pairCount <- matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
   
@@ -176,6 +180,7 @@
 # @param ccfDataset Matrix where rows are samples and columns are mutations.
 #
 .estimateAgonyPosetSingleSamples <- function(ccfDataset) {
+
   # compute a set of total orderings, one per patient
   totalOrderings <- .inferOrderInCcfDataset(ccfDataset)
   
@@ -204,6 +209,7 @@
 # @param events Driver genes to be considered in the inference.
 #
 .estimateAgonyPosetMultipleSamples <- function(models, events) {
+
   # compute a set of time orderings among events, given a set of models inferred from multiple samples
   agonyArcs <- .buildAgonyInputMultipleSamples(models, events)
   
@@ -232,6 +238,7 @@
 # @param ccfDataset Matrix where rows are samples and columns are mutations.
 #
 .inferOrderInCcfDataset <- function(ccfDataset) {
+
   totalOrder <- list()
   
   for (i in seq_len(nrow(ccfDataset))) {
@@ -256,6 +263,7 @@
 # @param ccfEntry Cancer cell fractions for each sample.
 #
 .inferTotalOrder <- function(ccfEntry) {
+
   totalOrderSort <-
     sort(ccfEntry, decreasing = TRUE, index.return = TRUE)
   totalOrder <- list()
@@ -279,6 +287,7 @@
 # @param agonyOrders Agony-based rankings.
 #
 .buildAgonyInput <- function(agonyOrders) {
+
   myArcs <- NULL
   
   if (length(agonyOrders) > 0) {
@@ -321,6 +330,7 @@
 # @param events Driver genes to be considered in the inference.
 #
 .buildAgonyInputMultipleSamples <- function(models, events) {
+
   myArcs <- NULL
   
   if (length(models) > 0) {
@@ -361,6 +371,7 @@
 # @param numEvents Number of driver genes considered for the inference.
 #
 .computeAgonyPoset <- function(agonyArcs, numEvents) {
+
   # data structure to save results
   poset <- matrix(0, nrow = numEvents, ncol = numEvents)
   
@@ -390,6 +401,7 @@
 # @param numEvents Number of driver genes considered for the inference.
 #
 .buildRankingAdjMatrix <- function(agonyRanking, numEvents) {
+
   # data structure to save results
   adjMatrix <- matrix(0, nrow = numEvents, ncol = numEvents)
   
@@ -431,6 +443,7 @@
 # @param prNull ASCETIC null model based on Suppes' theory of probabilistic causation.
 #
 .applyPr <- function(poset, prModel, prNull) {
+
   for (i in seq_len(nrow(poset))) {
     for (j in seq_len(ncol(poset))) {
       # Consider arc i --> j if it is in the poset.
@@ -465,12 +478,12 @@
 # @param restarts Number of restarts to be performed during the maximum likelihood estimation when
 # Hill Climbing optimization technique is used.
 #
-.performLikelihoodFit <-
-  function(dataset,
+.performLikelihoodFit <- function(dataset,
            poset,
            regularization,
            command,
            restarts) {
+
     # initialization
     adjMatrix <- poset
     rownames(adjMatrix) <- as.character(1:nrow(adjMatrix))
@@ -536,7 +549,7 @@
     
     return(adjMatrixFit)
     
-  }
+}
 
 # Create a categorical data structure.
 #
@@ -549,6 +562,7 @@
 # @param dataset Binary matrix where rows are samples and columns are mutations.
 #
 .asCategoricalDataset <- function(dataset) {
+
   # create a categorical data frame from the dataset
   data <-
     matrix("missing",

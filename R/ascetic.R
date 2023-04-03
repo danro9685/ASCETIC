@@ -1,4 +1,4 @@
-#' Perform the ASCETIC inference framework on single samples (using CCF) datasets 
+#' Perform the ASCETIC inference framework on single samples (using CCF) datasets
 #' with re-sampling for a robust estimation of the agony ranking.
 #'
 #' @examples
@@ -43,8 +43,8 @@
 #' Higher values lead to improved estimates, but require higher computational burden; default value is 10.
 #' This parameter is ignored if tabu search is selected.
 #' @return A list of 5 elements: 1) dataset, input dataset.
-#'                               2) ccf_dataset, input ccf_dataset.
-#'                               3) ranking_estimate, ranking among mutations estimated by agony.
+#'                               2) ccfDataset, input ccfDataset.
+#'                               3) rankingEstimate, ranking among mutations estimated by agony.
 #'                                  Lower rankings correspond to early mutations.
 #'                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
@@ -56,66 +56,87 @@
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
-asceticCCFResampling <- function( dataset, ccfDataset, vafDataset, nsampling = 100, regularization = c("aic","bic"), 
-    command = "hc", restarts = 10 ) {
+asceticCCFResampling <- function(dataset,
+           ccfDataset,
+           vafDataset,
+           nsampling = 100,
+           regularization = c("aic", "bic"),
+           command = "hc",
+           restarts = 10) {
 
-    # Estimate the probability raising models
+    # estimate the probability raising models
     prModel <- .estimatePrModelSingleSamples(ccfDataset)
     prNull <- .estimatePrNull(dataset)
-
-    # Estimate agony ranking nsampling times by resampling to obtain a robust and stable estimation
+    
+    # estimate agony ranking nsampling times by resampling to obtain a robust and stable estimation
     cat(0, "\n")
-    resamplingAgonyRankingEstimate <- array(0, c(ncol(ccfDataset), 2))
+    resamplingAgonyRankingEstimate <-
+      matrix(0, nrow = ncol(ccfDataset), ncol = 2)
     rownames(resamplingAgonyRankingEstimate) <- colnames(ccfDataset)
     colnames(resamplingAgonyRankingEstimate) <- c("variable", "rank")
-    resamplingAgonyRankingEstimate[,"variable"] <- 1:ncol(ccfDataset)
+    resamplingAgonyRankingEstimate[, "variable"] <- 1:ncol(ccfDataset)
     cont <- 0
-    for (i in 1:nsampling) {
-      # Assess temporal priority with minimum agony for nsampling sampling iterations
-      currCcfDataset <- array(0, c(length(unique(vafDataset$SAMPLE_ID)), length(unique(vafDataset$GENE_ID))))
+    for (i in seq_len(nsampling)) {
+      # assess temporal priority with minimum agony for nsampling sampling iterations
+      currCcfDataset <-
+        matrix(0, nrow = length(unique(vafDataset$SAMPLE_ID)), ncol = length(unique(vafDataset$GENE_ID)))
       rownames(currCcfDataset) <- sort(unique(vafDataset$SAMPLE_ID))
       colnames(currCcfDataset) <- sort(unique(vafDataset$GENE_ID))
-      for (j in 1:nrow(vafDataset)) {
-        vafDatasetSamples <- rbeta(n = 1, shape1 = vafDataset$ALT_COUNT[j], shape2 = vafDataset$REF_COUNT[j], ncp = 0)
-        currCcfEstimate <- as.numeric(((vafDataset$NORMAL_PLOIDY[j] 
-            + (vafDataset$COPY_NUMBER[j] - vafDataset$NORMAL_PLOIDY[j])) * vafDatasetSamples))
-        currCcfDataset[vafDataset$SAMPLE_ID[j], vafDataset$GENE_ID[j]] <- currCcfEstimate
+      for (j in seq_len(nrow(vafDataset))) {
+        vafDatasetSamples <-
+          rbeta(
+            n = 1,
+            shape1 = vafDataset$ALT_COUNT[j],
+            shape2 = vafDataset$REF_COUNT[j],
+            ncp = 0
+          )
+        currCcfEstimate <- as.numeric(((
+          vafDataset$NORMAL_PLOIDY[j]
+          + (vafDataset$COPY_NUMBER[j] - vafDataset$NORMAL_PLOIDY[j])
+        ) * vafDatasetSamples))
+        currCcfDataset[vafDataset$SAMPLE_ID[j], vafDataset$GENE_ID[j]] <-
+          currCcfEstimate
       }
+      currCcfDataset[which(currCcfDataset < 0)] <- 0
       currCcfDataset[which(currCcfDataset > 1)] <- 1
-      # Compute a set of total orderings, one per patient
+      # compute a set of total orderings, one per patient
       totalOrderings <- .inferOrderInCcfDataset(currCcfDataset)
-      # Compute a set of time orderings among each event, given the total orderings
+      # compute a set of time orderings among each event, given the total orderings
       agonyArcs <- .buildAgonyInput(totalOrderings)
-      # Estimate a best agony poset given the time orderings
+      # estimate a best agony poset given the time orderings
       if (!is.null(agonyArcs)) {
-        # Estimate a best agony ranking
+        # estimate a best agony ranking
         agonyRanking <- agony(agonyArcs)
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
-          resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <- resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] 
-                                                                            + agonyRanking[j, 2]
+          resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
+            resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"]
+          + agonyRanking[j, 2]
         }
       }
-      cat(i/nsampling, "\n")
+      cat(i / nsampling, "\n")
     }
-
-    # The final estimation is the mean (approximated to integer) of the nsampling rankings
+    
+    # the final estimation is the mean (approximated to integer) of the nsampling rankings
     if (cont > 0) {
-      resamplingAgonyRankingEstimate[, "rank"] <- round(resamplingAgonyRankingEstimate[, "rank"] / cont)
+      resamplingAgonyRankingEstimate[, "rank"] <-
+        round(resamplingAgonyRankingEstimate[, "rank"] / cont)
     }
-
-    # FIRST: Assess temporal priority with minimum agony
-    agonyPoset <- .buildRankingAdjMatrix(resamplingAgonyRankingEstimate, ncol(ccfDataset))
-    # SECOND: Verify probability raising
+    
+    # FIRST: assess temporal priority with minimum agony
+    agonyPoset <-
+      .buildRankingAdjMatrix(resamplingAgonyRankingEstimate, ncol(ccfDataset))
+    # SECOND: verify probability raising
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
-
-    # Perform the inference
+    
+    # perform the inference
     agonyInference <- list()
     for (reg in regularization) {
-      agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+      agonyInference[[reg]] <-
+        .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     }
-
-    # Create the data structures
+    
+    # create the data structures
     rownames(agonyPoset) <- as.character(1:ncol(dataset))
     colnames(agonyPoset) <- as.character(1:ncol(dataset))
     poset <- agonyPoset
@@ -124,17 +145,21 @@ asceticCCFResampling <- function( dataset, ccfDataset, vafDataset, nsampling = 1
       colnames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
     }
     inference <- agonyInference
-
-    # Create the data structures with the results
-    results <- list(dataset = dataset, ccfDataset = ccfDataset, 
-                    rankingEstimate = resamplingAgonyRankingEstimate, 
-                    poset = poset, inference = inference)
-
+    
+    # create the data structures with the results
+    results <- list(
+      dataset = dataset,
+      ccfDataset = ccfDataset,
+      rankingEstimate = resamplingAgonyRankingEstimate,
+      poset = poset,
+      inference = inference
+    )
+    
     return(results)
-
+    
 }
 
-#' Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets 
+#' Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets
 #' with bootstrap for a robust estimation of the agony ranking.
 #'
 #' @examples
@@ -165,7 +190,7 @@ asceticCCFResampling <- function( dataset, ccfDataset, vafDataset, nsampling = 1
 #' This parameter is ignored if tabu search is selected.
 #' @return A list of 5 elements: 1) dataset, input dataset.
 #'                               2) models, input phylogenetic models
-#'                               3) ranking_estimate, ranking among mutations estimated by agony.
+#'                               3) rankingEstimate, ranking among mutations estimated by agony.
 #'                                  Lower rankings correspond to early mutations.
 #'                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
@@ -176,63 +201,76 @@ asceticCCFResampling <- function( dataset, ccfDataset, vafDataset, nsampling = 1
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
-asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regularization = c("aic","bic"), 
-    command = "hc", restarts = 10 ) {
+asceticPhylogeniesBootstrap <- function(dataset,
+           models,
+           nsampling = 100,
+           regularization = c("aic", "bic"),
+           command = "hc",
+           restarts = 10) {
 
-    # Estimate the probability raising models
+    # estimate the probability raising models
     prModel <- .estimatePrModelMultipleSamples(models, colnames(dataset))
     prNull <- .estimatePrNull(dataset)
-
-    # Estimate agony ranking nsampling times by bootstrap to obtain a robust and stable estimation
+    
+    # estimate agony ranking nsampling times by bootstrap to obtain a robust and stable estimation
     cat(0, "\n")
-    bootstrapAgonyRankingEstimate <- array(0, c(ncol(dataset), 2))
+    bootstrapAgonyRankingEstimate <-
+      matrix(0, nrow = ncol(dataset), ncol = 2)
     rownames(bootstrapAgonyRankingEstimate) <- colnames(dataset)
     colnames(bootstrapAgonyRankingEstimate) <- c("variable", "rank")
-    bootstrapAgonyRankingEstimate[,"variable"] <- 1:ncol(dataset)
+    bootstrapAgonyRankingEstimate[, "variable"] <- 1:ncol(dataset)
     cont <- 0
-    for(i in 1:nsampling) {
-        # Assess temporal priority with minimum agony for nsampling bootstrap iterations
-        currModels <- sample(1:length(models), replace=TRUE)
-        currModels <- models[currModels]
-        for(j in 1:length(currModels)) {
-            currm <- currModels[[j]]
-            currModels[[j]] <- array(0, c(length(colnames(dataset)), length(colnames(dataset))))
-            rownames(currModels[[j]]) <- colnames(dataset)
-            colnames(currModels[[j]]) <- colnames(dataset)
-            currModels[[j]][rownames(currm),colnames(currm)] <- currm
+    for (i in 1:nsampling) {
+      # assess temporal priority with minimum agony for nsampling bootstrap iterations
+      currModels <- sample(1:length(models), replace = TRUE)
+      currModels <- models[currModels]
+      for (j in 1:length(currModels)) {
+        currm <- currModels[[j]]
+        currModels[[j]] <-
+          matrix(0,
+                 nrow = length(colnames(dataset)),
+                 ncol = length(colnames(dataset)))
+        rownames(currModels[[j]]) <- colnames(dataset)
+        colnames(currModels[[j]]) <- colnames(dataset)
+        currModels[[j]][rownames(currm), colnames(currm)] <- currm
+      }
+      # compute a set of time orderings among each event, given a set of models inferred from multiple samples
+      agonyArcs <-
+        .buildAgonyInputMultipleSamples(currModels, colnames(dataset))
+      # estimate a best agony poset given the time orderings
+      if (!is.null(agonyArcs)) {
+        # estimate a best agony ranking and save the results to file
+        agonyRanking <- agony(agonyArcs)
+        cont <- cont + 1
+        for (j in 1:nrow(agonyRanking)) {
+          bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
+            bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"]
+          + agonyRanking[j, 2]
         }
-        # Compute a set of time orderings among each event, given a set of models inferred from multiple samples
-        agonyArcs <- .buildAgonyInputMultipleSamples(currModels, colnames(dataset))
-        # Estimate a best agony poset given the time orderings
-        if(!is.null(agonyArcs)) {
-            # Estimate a best agony ranking and save the results to file
-            agonyRanking <- agony(agonyArcs)
-            cont <- cont + 1
-            for(j in 1:nrow(agonyRanking)) {
-                bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <- bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] 
-                                                                                + agonyRanking[j, 2]
-            }
-        }
-        cat(i/nsampling, "\n")
+      }
+      cat(i / nsampling, "\n")
     }
-
-    # The final estimation is the mean (approximated to integer) of the nsampling rankings
-    if(cont > 0) {
-        bootstrapAgonyRankingEstimate[,"rank"] <- round(bootstrapAgonyRankingEstimate[,"rank"]/cont)
+    
+    # the final estimation is the mean (approximated to integer) of the nsampling rankings
+    if (cont > 0) {
+      bootstrapAgonyRankingEstimate[, "rank"] <-
+        round(bootstrapAgonyRankingEstimate[, "rank"] / cont)
     }
-
-    # FIRST: Assess temporal priority with minimum agony
-    agonyPoset <- .buildRankingAdjMatrix(bootstrapAgonyRankingEstimate, ncol(dataset))
-    # SECOND: Verify probability raising
+    
+    # FIRST: assess temporal priority with minimum agony
+    agonyPoset <-
+      .buildRankingAdjMatrix(bootstrapAgonyRankingEstimate, ncol(dataset))
+    # SECOND: verify probability raising
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
-
-    # Perform the inference
+    
+    # perform the inference
     agonyInference <- list()
     for (reg in regularization) {
-      agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+      agonyInference[[reg]] <-
+        .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     }
-
-    # Create the data structures with the posets and the inference results
+    
+    # create the data structures with the posets and the inference results
     rownames(agonyPoset) <- as.character(1:ncol(dataset))
     colnames(agonyPoset) <- as.character(1:ncol(dataset))
     poset <- agonyPoset
@@ -241,18 +279,18 @@ asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regul
       colnames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
     }
     inference <- agonyInference
-
+    
     # Create the data structures with the results
     results <- list(
-         dataset = dataset,
-         models = models,
-         rankingEstimate = bootstrapAgonyRankingEstimate,
-         poset = poset,
-         inference = inference
+      dataset = dataset,
+      models = models,
+      rankingEstimate = bootstrapAgonyRankingEstimate,
+      poset = poset,
+      inference = inference
     )
-
+    
     return(results)
-
+    
 }
 
 #' Perform the ASCETIC inference framework on single samples (using CCF) datasets.
@@ -265,7 +303,7 @@ asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regul
 #'                               dataset = datasetExampleSingleSamples,
 #'                               ccfDataset = ccfDatasetExampleSingleSamples,
 #'                               regularization = "aic",
-#'                               command = "hc", 
+#'                               command = "hc",
 #'                               restarts = 0 )
 #'
 #' @title asceticCCF
@@ -285,7 +323,7 @@ asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regul
 #' Higher values lead to improved estimates, but require higher computational burden; default value is 10.
 #' This parameter is ignored if tabu search is selected.
 #' @return A list of 4 elements: 1) dataset, input dataset.
-#'                               2) ccf_dataset, input ccf_dataset.
+#'                               2) ccfDataset, input ccfDataset.
 #'                               3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticCCF
@@ -295,37 +333,48 @@ asceticPhylogeniesBootstrap <- function( dataset, models, nsampling = 100, regul
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
-asceticCCF <- function( dataset, ccfDataset, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
+asceticCCF <- function(dataset,
+           ccfDataset,
+           regularization = c("aic", "bic"),
+           command = "hc",
+           restarts = 10) {
 
-    # Estimate the probability raising models
+    # estimate the probability raising models
     prModel <- .estimatePrModelSingleSamples(ccfDataset)
     prNull <- .estimatePrNull(dataset)
-
-    # Compute the agony based poset
+    
+    # compute the agony based poset
     # First: assess temporal priority with minimum agony
     agonyPoset <- .estimateAgonyPosetSingleSamples(ccfDataset)
     # Second: verify probability raising
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
-
-    # Perform the inference
-    agonyInference <- lapply(regularization, function(reg) {
-        .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)})
-
-    # Create the data structures with the posets and the inference results
+    
+    # perform the inference
+    agonyInference = list()
+    for (reg in regularization) {
+      agonyInference[[reg]] = .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+    }
+    
+    # create the data structures with the posets and the inference results
     rownames(agonyPoset) <- as.character(1:ncol(dataset))
     colnames(agonyPoset) <- as.character(1:ncol(dataset))
     poset <- agonyPoset
-    for (i in seq_along(regularization)) {
-        rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
-        colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+    for (i in regularization) {
+      rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+      colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
     }
-    names(agonyInference) <- regularization
-
-    # Create the data structures with the results
-    results <- list(dataset = dataset, ccfDataset = ccfDataset, poset = poset, inference = agonyInference)
-
+    
+    # create the data structures with the results
+    results <-
+      list(
+        dataset = dataset,
+        ccfDataset = ccfDataset,
+        poset = poset,
+        inference = agonyInference
+      )
+    
     return(results)
-
+    
 }
 
 #' Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets.
@@ -364,40 +413,48 @@ asceticCCF <- function( dataset, ccfDataset, regularization = c("aic","bic"), co
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
-asceticPhylogenies <- function( dataset, models, regularization = c("aic","bic"), command = "hc", restarts = 10 ) {
+asceticPhylogenies <- function(dataset,
+           models,
+           regularization = c("aic", "bic"),
+           command = "hc",
+           restarts = 10) {
 
-    # Estimate the probability raising models
-    prModel <- .estimatePrModelMultipleSamples(models, colnames(dataset))
+    # estimate the probability raising models
+    prModel <-
+      .estimatePrModelMultipleSamples(models, colnames(dataset))
     prNull <- .estimatePrNull(dataset)
-
-    # Compute the agony-based poset
+    
+    # compute the agony-based poset
     # First: assess temporal priority with minimum agony
-    agonyPoset <- .estimateAgonyPosetMultipleSamples(models, colnames(dataset))
+    agonyPoset <-
+      .estimateAgonyPosetMultipleSamples(models, colnames(dataset))
     # Second: verify probability raising
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
-
-    # Perform the inference
-    agonyInference <- lapply(regularization, function(reg) {
-        .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-    })
-    names(agonyInference) <- regularization
-
-    # Create the data structures with the posets and the inference results
+    
+    # perform the inference
+    agonyInference = list()
+    for (reg in regularization) {
+      agonyInference[[reg]] = .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+    }
+    
+    # create the data structures with the posets and the inference results
     rownames(agonyPoset) <- as.character(1:ncol(dataset))
     colnames(agonyPoset) <- as.character(1:ncol(dataset))
     poset <- agonyPoset
-    inference <- lapply(agonyInference, function(inf) {
-        rownames(inf) <- as.character(1:ncol(dataset))
-        colnames(inf) <- as.character(1:ncol(dataset))
-        inf
-    })
+    for (i in regularization) {
+      rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+      colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+    }
 
-    # Create the data structures with the results
-    results <- list( dataset = dataset, 
-        models = models, 
-        poset = poset, 
-        inference = inference)
-
+    # create the data structures with the results
+    results <-
+      list(
+        dataset = dataset,
+        models = models,
+        poset = poset,
+        inference = agonyInference
+      )
+    
     return(results)
-
+    
 }

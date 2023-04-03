@@ -36,13 +36,13 @@ This parameter is ignored if tabu search is selected.}
 \value{
 A list of 5 elements: 1) dataset, input dataset.
                               2) models, input phylogenetic models
-                              3) ranking_estimate, ranking among mutations estimated by agony.
+                              3) rankingEstimate, ranking among mutations estimated by agony.
                                  Lower rankings correspond to early mutations.
                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 }
 \description{
-Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets 
+Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets
 with bootstrap for a robust estimation of the agony ranking.
 }
 \examples{

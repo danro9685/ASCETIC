@@ -35,7 +35,7 @@ This parameter is ignored if tabu search is selected.}
 }
 \value{
 A list of 4 elements: 1) dataset, input dataset.
-                              2) ccf_dataset, input ccf_dataset.
+                              2) ccfDataset, input ccfDataset.
                               3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 }
@@ -50,7 +50,7 @@ resExampleSingleSamples = asceticCCF(
                               dataset = datasetExampleSingleSamples,
                               ccfDataset = ccfDatasetExampleSingleSamples,
                               regularization = "aic",
-                              command = "hc", 
+                              command = "hc",
                               restarts = 0 )
 
 }
