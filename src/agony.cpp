@@ -78,7 +78,7 @@ outputrank(FILE *f, network & g, uint32_t ncnt)
 {
 	for (uint32_t i = 0; i < ncnt; i++) {
 		vertex_t *v = g.get(i);
-		fprintf(f, "%d %d\n", v->v.label, v->v.circ.dual);
+		//fprintf(f, "%d %d\n", v->v.label, v->v.circ.dual);
 	}
 }
 
