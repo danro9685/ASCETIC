@@ -111,13 +111,12 @@ asceticCCFResampling <- function(dataset,
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
-            resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"]
-          + agonyRanking[j, 2]
+            resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] + agonyRanking[j, 2]
         }
       }
       cat(i / nsampling, "\n")
     }
-    
+
     # the final estimation is the mean (approximated to integer) of the nsampling rankings
     if (cont > 0) {
       resamplingAgonyRankingEstimate[, "rank"] <-
@@ -246,8 +245,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
-            bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"]
-          + agonyRanking[j, 2]
+            bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] + agonyRanking[j, 2]
         }
       }
       cat(i / nsampling, "\n")
