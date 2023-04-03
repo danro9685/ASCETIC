@@ -53,6 +53,7 @@
 #' @import Rcpp
 #' @importFrom stats rbeta
 #' @importFrom utils read.table write.table
+#' @importFrom stats runif
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
@@ -198,6 +199,7 @@ asceticCCFResampling <- function(dataset,
 #' @import bnlearn
 #' @import Rcpp
 #' @importFrom utils read.table write.table
+#' @importFrom stats runif
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
@@ -330,6 +332,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
 #' @import bnlearn
 #' @import Rcpp
 #' @importFrom utils read.table write.table
+#' @importFrom stats runif
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
@@ -410,6 +413,7 @@ asceticCCF <- function(dataset,
 #' @import bnlearn
 #' @import Rcpp
 #' @importFrom utils read.table write.table
+#' @importFrom stats runif
 #' @useDynLib ASCETIC, .registration = TRUE
 #' @exportPattern "^[[:alpha:]]+"
 #'
