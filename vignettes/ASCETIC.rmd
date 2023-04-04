@@ -123,6 +123,8 @@ resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data,
 print(names(resExampleEvosigs))
 ```
 
+The accumulation of alterations in driver genes can follow repeated routes in different cancer patients. Detecting such trajectories could be important in order to implement appropriate therapeutic responses. As a matter of fact, being able to stratify cancer patients based on their molecular evolution could enable the prediction of the future steps of the disease progression, potentially allowing the execution of optimal and personalized treatments that anticipate the next stages of the cancer's evolution. In our example, ASCETIC could identify a set of evolutionary steps (see evolutionarySteps and clustersPrevalence variables) with a significant association to prognosis.
+
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
 
 # Current R Session
