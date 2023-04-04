@@ -12,5 +12,6 @@
 #' @return Output agony matrix.
 #'
 agony <- function(inmatrix) {
-  .Call(`_ASCETIC_agony`, inmatrix)
+    .Call(`_ASCETIC_agony`, inmatrix)
 }
+

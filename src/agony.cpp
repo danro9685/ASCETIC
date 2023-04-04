@@ -126,7 +126,6 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //'
 //' @title agony
 //' @param inmatrix Input agony matrix.
-//' @param outname Output agony file.
 //' @return Output agony matrix.
 //'
 // [[Rcpp::export]]
