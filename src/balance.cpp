@@ -312,9 +312,6 @@ balance(network & g, residual & r, double delta)
 		//printf("%d %d\n", source_cnt, s->id);
 		if (TAILQ_EMPTY(&sinks) || source_cnt == 0) break;
 
-		//if (source_cnt % 10 == 0)
-			//fprintf(stderr, "imbalanced nodes: %d  \r", source_cnt);
-
 		processworkset(r, &workset, &affected);
 		processaffected(r, &affected, &stack);
 	}
