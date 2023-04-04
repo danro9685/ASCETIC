@@ -10,13 +10,13 @@ Authors@R: c(
 Depends:
     R (>= 4.1.0)
 Imports:
+    utils,
     bnlearn,
-    glmnet,
     ggplot2,
-    Rcpp,
     stats,
     survival,
-    utils
+    glmnet,
+    Rcpp,
 Suggests:
     BiocStyle,
     testthat,

@@ -13,10 +13,6 @@
 #'                               2) evolutionarySteps, evolutionary steps significantly associated with survival data.
 #'                               3) clustersPrevalence, prevalence per cluster of the selected evolutionary steps.
 #' @export evoSigs
-#' @import ggplot2
-#' @importFrom glmnet cv.glmnet
-#' @importFrom stats coef fivenum
-#' @importFrom survival Surv
 #'
 evoSigs <- function(survivalData, evolutionarySteps) {
 

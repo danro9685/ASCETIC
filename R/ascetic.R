@@ -49,14 +49,6 @@
 #'                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticCCFResampling
-#' @import bnlearn
-#' @import Rcpp
-#' @import utils
-#' @importFrom stats rbeta
-#' @importFrom utils read.table write.table
-#' @importFrom stats runif
-#' @useDynLib ASCETIC, .registration = TRUE
-#' @exportPattern "^[[:alpha:]]+"
 #'
 asceticCCFResampling <- function(dataset,
            ccfDataset,
@@ -196,12 +188,6 @@ asceticCCFResampling <- function(dataset,
 #'                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticPhylogeniesBootstrap
-#' @import bnlearn
-#' @import Rcpp
-#' @importFrom utils read.table write.table
-#' @importFrom stats runif
-#' @useDynLib ASCETIC, .registration = TRUE
-#' @exportPattern "^[[:alpha:]]+"
 #'
 asceticPhylogeniesBootstrap <- function(dataset,
            models,
@@ -328,12 +314,6 @@ asceticPhylogeniesBootstrap <- function(dataset,
 #'                               3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticCCF
-#' @import bnlearn
-#' @import Rcpp
-#' @importFrom utils read.table write.table
-#' @importFrom stats runif
-#' @useDynLib ASCETIC, .registration = TRUE
-#' @exportPattern "^[[:alpha:]]+"
 #'
 asceticCCF <- function(dataset,
            ccfDataset,
@@ -409,12 +389,6 @@ asceticCCF <- function(dataset,
 #'                               3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticPhylogenies
-#' @import bnlearn
-#' @import Rcpp
-#' @importFrom utils read.table write.table
-#' @importFrom stats runif
-#' @useDynLib ASCETIC, .registration = TRUE
-#' @exportPattern "^[[:alpha:]]+"
 #'
 asceticPhylogenies <- function(dataset,
            models,
