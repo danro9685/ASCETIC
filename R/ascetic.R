@@ -51,6 +51,7 @@
 #' @export asceticCCFResampling
 #' @import bnlearn
 #' @import Rcpp
+#' @import utils
 #' @importFrom stats rbeta
 #' @importFrom utils read.table write.table
 #' @importFrom stats runif
