@@ -1,3 +1,36 @@
+/*
+ * 
+ * 
+ * The software for agony computation (exact algorithm) adopted
+ * here was developed by Professor Nikolaj Tatti and colleagues.
+ * For a detailed description, please refer to: Tatti, Nikolaj.
+ * "Tiers for peers: a practical algorithm for discovering hierarchy
+ * in weighted networks." Data mining and knowledge discovery
+ * 31.3 (2017): 702-738.
+ *
+ * Copyright 2002 Niels Provos <provos@citi.umich.edu>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -88,15 +121,11 @@ IntegerMatrix
 outputrank(compgraph & g, uint32_t ncnt)
 {
 	IntegerMatrix output(ncnt, 2);
-	//printf("outputrank:\n");
 	for (uint32_t i = 0; i < ncnt; i++) {
 		cvertex_t *v = g.get(i);
 		output(i, 0) = v->v.label;
 		output(i, 1) = v->v.dual;
-		//printf("%d %d\n", v->v.label, v->v.dual);
-		//fprintf(f, "%d %d\n", v->v.label, v->v.dual);
 	}
-	//printf("\n");
 	return(output);
 }
 
@@ -118,15 +147,33 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 }
 
 
-//' Perform agony computation. The software for agony computation (exact algorithm) adopted here was developed by Professor Nikolaj Tatti and colleagues.
-//' Agony is a measure of hierarchy within a directed graph. Given a directed graph and a ranking metric (e.g., in our case the time ordering of accumulation 
-//' of driver alterations during tumor evolution), any arc from nodes that are higher in the hierarchy (e.g., alterations that occur in later stages of the tumor) 
-//' to nodes that are lower in the hierarchy (e.g., alterations that occur at the initiation of the tumor) are not expected and they are said to be causing agony.
-//' For a detailed description, please refer to: Tatti, Nikolaj. "Tiers for peers: a practical algorithm for discovering hierarchy in weighted networks." Data mining and knowledge discovery 31.3 (2017): 702-738.
+//' Perform agony computation. The software for agony computation 
+//' (exact algorithm) adopted here was developed by Professor Nikolaj
+//' Tatti and colleagues.
+//' Agony is a measure of hierarchy within a directed graph.
+//' Given a directed graph and a ranking metric (e.g., in our
+//' case the time ordering of accumulation of driver alterations
+//' during tumor evolution), any arc from nodes that are higher
+//' in the hierarchy (e.g., alterations that occur in later stages
+//' of the tumor) to nodes that are lower in the hierarchy
+//' (e.g., alterations that occur at the initiation of the tumor)
+//' are not expected and they are said to be causing agony.
+//'
+//' For a detailed description, please refer to: Tatti, Nikolaj.
+//' "Tiers for peers: a practical algorithm for discovering hierarchy
+//' in weighted networks." Data mining and knowledge discovery
+//' 31.3 (2017): 702-738.
 //'
 //' @title agony
 //' @param inmatrix Input agony matrix.
 //' @return Output agony matrix.
+//'
+//' The software for agony computation (exact algorithm) adopted
+//' here was developed by Professor Nikolaj Tatti and colleagues.
+//' For a detailed description, please refer to: Tatti, Nikolaj.
+//' "Tiers for peers: a practical algorithm for discovering hierarchy
+//' in weighted networks." Data mining and knowledge discovery
+//' 31.3 (2017): 702-738.
 //'
 // [[Rcpp::export]]
 Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
@@ -143,7 +190,6 @@ Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
   
   IntegerMatrix m = as<IntegerMatrix>(inmatrix);
   
-  //compgraph *cg = read(m, weighted, self);
   compgraph *cg = read(m);
 
   cvertexhead roots;
@@ -176,10 +222,7 @@ Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
   canonize(*joined, r);
   migrate_dual(*cg, comps, *joined);
   
-  //f = stdout;
-  //FILE *f = fopen(test_out, "w");
   IntegerMatrix output = outputrank(*cg, cg->nodebudget());
-  //fclose(f);
   
   for (uint32_t i = 0; i < comps.size(); i++)
     delete comps[i];
