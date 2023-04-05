@@ -1,6 +1,6 @@
 Package: ASCETIC
-Version: 0.99.8
-Date: 2023-03-13
+Version: 0.99.11
+Date: 2023-04-03
 Title: ASCETIC
 Authors@R: c(
     person("Daniele", "Ramazzotti", role=c("aut"),email="daniele.ramazzotti@unimib.it",
@@ -10,12 +10,13 @@ Authors@R: c(
 Depends:
     R (>= 4.1.0)
 Imports:
+    utils,
     bnlearn,
-    glmnet,
     ggplot2,
-    Rcpp,
     stats,
-    survival
+    survival,
+    glmnet,
+    Rcpp,
 Suggests:
     BiocStyle,
     testthat,

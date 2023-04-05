@@ -1,5 +1,41 @@
+/*
+ * 
+ * 
+ * The software for agony computation (exact algorithm) adopted
+ * here was developed by Professor Nikolaj Tatti and colleagues.
+ * For a detailed description, please refer to: Tatti, Nikolaj.
+ * "Tiers for peers: a practical algorithm for discovering hierarchy
+ * in weighted networks." Data mining and knowledge discovery
+ * 31.3 (2017): 702-738.
+ *
+ * Copyright 2002 Niels Provos <provos@citi.umich.edu>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 #include "circulation.h"
 #include <stdio.h>
+#include <Rcpp.h>
+using namespace Rcpp;
 
 network *
 read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_t limit)
@@ -27,8 +63,6 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 		}
 		ecnt++;
 	}
-
-	//printf("%d vertices, %d edges\n", cnt, ecnt);
 
 	rewind(f);
 
@@ -65,8 +99,6 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 		middle->v.circ.bias = -w;
 		to->v.circ.bias += w;
 
-		//printf("%d %d %d\n", from->id, to->id, middle->id);
-
 		ind++;
 	}
 
@@ -89,28 +121,10 @@ read(FILE *f, bool weighted, bool self, uint32_t & cnt, uint32_t & ecnt, uint32_
 	else
 		loop->v.circ.cost = limit - 1;
 
-	/*
-	g = network_t(edges.begin(), edges.end(), ei.begin(), cnt);
-
-	viterator vi = boost::vertices(g).first;
-
-	for (intmap::iterator it = lm.begin(); it != lm.end(); ++it)
-		g[vi[it->second]].label = it->first;
-	
-	for (uint32_t i = 0; i < cnt; i++) {
-		g[vi[i]].id = i;
-		g[vi[i]].rank = 0;
-		g[vi[i]].ccomp = 0;
-	}
-	
-	//boost::print_graph(g);
-	*/
-
 	return g;
 }
 
-compgraph *
-read(FILE *f, bool weighted, bool self)
+compgraph * read(IntegerMatrix m)
 {
 	uint32_t a, b;
 
@@ -119,56 +133,51 @@ read(FILE *f, bool weighted, bool self)
 
 	uintmap lm;
 
-
-	while (fscanf(f, "%d%d", &a, &b) == 2) {
-		if (weighted) {
-			int resscanf = fscanf(f, "%*f");
-		}
-		
-		if (!self && a == b) {
-			continue;
-		}
-		if (lm.count(a) == 0) {
-			lm[a] = cnt++;
-		}
-		if (lm.count(b) == 0) {
-			lm[b] = cnt++;
-		}
-		ecnt++;
-	}
-
-	//printf("%d vertices, %d edges\n", cnt, ecnt);
-
-	rewind(f);
-
+  for(int i = 0; i < m.nrow(); i++) {
+    a = m(i,0);
+    b = m(i,1);
+    
+    if (a != b) {
+      if (lm.count(a) == 0) {
+        lm[a] = cnt++;
+      }
+      if (lm.count(b) == 0) {
+        lm[b] = cnt++;
+      }
+      ecnt++;
+    }
+    
+  }
+  
 	compgraph *g = new compgraph(cnt, ecnt); 
 	for (uint32_t i = 0; i < cnt; i++) {
 		g->addnode();
 	}
-
+	
 	uint32_t ind = 0;
-	while (fscanf(f, "%d%d", &a, &b) == 2) {
-		double w = 1;
-		if (weighted) {
-			int resscanf = fscanf(f, "%lf", &w);
-		}
-		
-		if (!self && a == b) {
-			continue;
-		}
-		uint32_t x = lm[a];
-		uint32_t y = lm[b];
-
-		cvertex_t *from = g->get(x);
-		cvertex_t *to = g->get(y);
-		from->v.label = a;
-		to->v.label = b;
-		carc_t *e = g->addedge();
-
-		g->bindedge(e, from, to);
-		e->v.cost = w;
-
-		ind++;
+	
+	for(int i = 0; i < m.nrow(); i++) {
+	  a = m(i,0);
+	  b = m(i,1);
+	  double w = 1;
+	  
+	  if (a != b) {
+	    uint32_t x = lm[a];
+	    uint32_t y = lm[b];
+	    
+	    cvertex_t *from = g->get(x);
+	    cvertex_t *to = g->get(y);
+	    from->v.label = a;
+	    to->v.label = b;
+	    carc_t *e = g->addedge();
+	    
+	    g->bindedge(e, from, to);
+	    e->v.cost = w;
+	    
+	    ind++;
+	  
+	  }
+	  
 	}
 
 	return g;

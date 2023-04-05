@@ -4,17 +4,37 @@
 \alias{agony}
 \title{agony}
 \usage{
-agony(inname, outname)
+agony(inmatrix)
 }
 \arguments{
-\item{inname}{Input agony file.}
+\item{inmatrix}{Input agony matrix.}
+}
+\value{
+Output agony matrix.
 
-\item{outname}{Output agony file.}
+The software for agony computation (exact algorithm) adopted
+here was developed by Professor Nikolaj Tatti and colleagues.
+For a detailed description, please refer to: Tatti, Nikolaj.
+"Tiers for peers: a practical algorithm for discovering hierarchy
+in weighted networks." Data mining and knowledge discovery
+31.3 (2017): 702-738.
 }
 \description{
-Perform agony computation. The software for agony computation (exact algorithm) adopted here was developed by Professor Nikolaj Tatti and colleagues.
-Agony is a measure of hierarchy within a directed graph. Given a directed graph and a ranking metric (e.g., in our case the time ordering of accumulation 
-of driver alterations during tumor evolution), any arc from nodes that are higher in the hierarchy (e.g., alterations that occur in later stages of the tumor) 
-to nodes that are lower in the hierarchy (e.g., alterations that occur at the initiation of the tumor) are not expected and they are said to be causing agony.
-For a detailed description, please refer to: Tatti, Nikolaj. "Tiers for peers: a practical algorithm for discovering hierarchy in weighted networks." Data mining and knowledge discovery 31.3 (2017): 702-738.
+Perform agony computation. The software for agony computation 
+(exact algorithm) adopted here was developed by Professor Nikolaj
+Tatti and colleagues.
+Agony is a measure of hierarchy within a directed graph.
+Given a directed graph and a ranking metric (e.g., in our
+case the time ordering of accumulation of driver alterations
+during tumor evolution), any arc from nodes that are higher
+in the hierarchy (e.g., alterations that occur in later stages
+of the tumor) to nodes that are lower in the hierarchy
+(e.g., alterations that occur at the initiation of the tumor)
+are not expected and they are said to be causing agony.
+}
+\details{
+For a detailed description, please refer to: Tatti, Nikolaj.
+"Tiers for peers: a practical algorithm for discovering hierarchy
+in weighted networks." Data mining and knowledge discovery
+31.3 (2017): 702-738.
 }

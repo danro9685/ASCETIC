@@ -1,3 +1,36 @@
+/*
+ * 
+ * 
+ * The software for agony computation (exact algorithm) adopted
+ * here was developed by Professor Nikolaj Tatti and colleagues.
+ * For a detailed description, please refer to: Tatti, Nikolaj.
+ * "Tiers for peers: a practical algorithm for discovering hierarchy
+ * in weighted networks." Data mining and knowledge discovery
+ * 31.3 (2017): 702-738.
+ *
+ * Copyright 2002 Niels Provos <provos@citi.umich.edu>
+ * All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without
+ * modification, are permitted provided that the following conditions
+ * are met:
+ * 1. Redistributions of source code must retain the above copyright
+ *    notice, this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
+ *
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR ``AS IS'' AND ANY EXPRESS OR
+ * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES
+ * OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+ * IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT, INDIRECT,
+ * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT
+ * NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+ * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
+ * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
 #include <getopt.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -78,17 +111,22 @@ outputrank(FILE *f, network & g, uint32_t ncnt)
 {
 	for (uint32_t i = 0; i < ncnt; i++) {
 		vertex_t *v = g.get(i);
-		fprintf(f, "%d %d\n", v->v.label, v->v.circ.dual);
+		//fprintf(f, "%d %d\n", v->v.label, v->v.circ.dual);
 	}
 }
 
-void
-outputrank(FILE *f, compgraph & g, uint32_t ncnt)
+
+// ytfyt
+IntegerMatrix
+outputrank(compgraph & g, uint32_t ncnt)
 {
+	IntegerMatrix output(ncnt, 2);
 	for (uint32_t i = 0; i < ncnt; i++) {
 		cvertex_t *v = g.get(i);
-		fprintf(f, "%d %d\n", v->v.label, v->v.dual);
+		output(i, 0) = v->v.label;
+		output(i, 1) = v->v.dual;
 	}
+	return(output);
 }
 
 double
@@ -108,38 +146,52 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 	return shift - agony;
 }
 
+
+//' Perform agony computation. The software for agony computation 
+//' (exact algorithm) adopted here was developed by Professor Nikolaj
+//' Tatti and colleagues.
+//' Agony is a measure of hierarchy within a directed graph.
+//' Given a directed graph and a ranking metric (e.g., in our
+//' case the time ordering of accumulation of driver alterations
+//' during tumor evolution), any arc from nodes that are higher
+//' in the hierarchy (e.g., alterations that occur in later stages
+//' of the tumor) to nodes that are lower in the hierarchy
+//' (e.g., alterations that occur at the initiation of the tumor)
+//' are not expected and they are said to be causing agony.
+//'
+//' For a detailed description, please refer to: Tatti, Nikolaj.
+//' "Tiers for peers: a practical algorithm for discovering hierarchy
+//' in weighted networks." Data mining and knowledge discovery
+//' 31.3 (2017): 702-738.
+//'
+//' @title agony
+//' @param inmatrix Input agony matrix.
+//' @return Output agony matrix.
+//'
+//' The software for agony computation (exact algorithm) adopted
+//' here was developed by Professor Nikolaj Tatti and colleagues.
+//' For a detailed description, please refer to: Tatti, Nikolaj.
+//' "Tiers for peers: a practical algorithm for discovering hierarchy
+//' in weighted networks." Data mining and knowledge discovery
+//' 31.3 (2017): 702-738.
+//'
 // [[Rcpp::export]]
-void agony(Rcpp::String inname, Rcpp::String outname)
+Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
 {
   
-  bool weighted = false;
-  bool self = false;
+  //bool weighted = false;
+  //bool self = false;
   uint32_t groupcnt = 0;
   
   uint32_t ncnt; 
   uint32_t ecnt; 
   
-  const char* test_in = inname.get_cstring();
-  const char* test_out = outname.get_cstring();
+  //const char* test_out = outname.get_cstring();
   
-  //Rprintf("%s\n", test_in);
-  //Rprintf("%s\n", test_out);
+  IntegerMatrix m = as<IntegerMatrix>(inmatrix);
   
-  FILE *fptr = fopen(test_in, "r");
-  char c;
-  c = fgetc(fptr);
-  while (c != EOF)
-  {
-    //Rprintf ("%c", c);
-    c = fgetc(fptr);
-  }
-  
-  fclose(fptr);
-  
-  FILE *f = fopen(test_in, "r");
-  compgraph *cg = read(f, weighted, self);
-  fclose(f);
-  
+  compgraph *cg = read(m);
+
   cvertexhead roots;
   uint32_t compcnt = ccomp(*cg, &roots);
   
@@ -161,8 +213,6 @@ void agony(Rcpp::String inname, Rcpp::String outname)
     sc += score(*g, ncnt, ecnt);
     unroll_master(*g);
     ind++;
-    //Rprintf("%d", sc);
-    //Rprintf("%u", ind);
   }
   
   network *joined = join(comps, *cg);
@@ -172,16 +222,14 @@ void agony(Rcpp::String inname, Rcpp::String outname)
   canonize(*joined, r);
   migrate_dual(*cg, comps, *joined);
   
-  //f = stdout;
-  f = fopen(test_out, "w");
-  outputrank(f, *cg, cg->nodebudget());
-  fclose(f);
+  IntegerMatrix output = outputrank(*cg, cg->nodebudget());
   
   for (uint32_t i = 0; i < comps.size(); i++)
     delete comps[i];
   
   delete joined;
   delete cg;
+
+  return(output);
   
 }
-

@@ -1,6 +1,13 @@
-/*	$NetBSD: tree.h,v 1.16 2008/03/21 13:07:15 ad Exp $	*/
-/*	$OpenBSD: tree.h,v 1.7 2002/10/17 21:51:54 art Exp $	*/
 /*
+ * 
+ * 
+ * The software for agony computation (exact algorithm) adopted
+ * here was developed by Professor Nikolaj Tatti and colleagues.
+ * For a detailed description, please refer to: Tatti, Nikolaj.
+ * "Tiers for peers: a practical algorithm for discovering hierarchy
+ * in weighted networks." Data mining and knowledge discovery
+ * 31.3 (2017): 702-738.
+ *
  * Copyright 2002 Niels Provos <provos@citi.umich.edu>
  * All rights reserved.
  *

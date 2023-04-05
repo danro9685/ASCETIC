@@ -11,19 +11,19 @@ Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
 // agony
-void agony(Rcpp::String inname, Rcpp::String outname);
-RcppExport SEXP _ASCETIC_agony(SEXP innameSEXP, SEXP outnameSEXP) {
+Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix);
+RcppExport SEXP _ASCETIC_agony(SEXP inmatrixSEXP) {
 BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Rcpp::String >::type inname(innameSEXP);
-    Rcpp::traits::input_parameter< Rcpp::String >::type outname(outnameSEXP);
-    agony(inname, outname);
-    return R_NilValue;
+    Rcpp::traits::input_parameter< Rcpp::IntegerMatrix >::type inmatrix(inmatrixSEXP);
+    rcpp_result_gen = Rcpp::wrap(agony(inmatrix));
+    return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_ASCETIC_agony", (DL_FUNC) &_ASCETIC_agony, 2},
+    {"_ASCETIC_agony", (DL_FUNC) &_ASCETIC_agony, 1},
     {NULL, NULL, 0}
 };
 
