@@ -22,55 +22,31 @@
     <loc>/reference/agony.html</loc>
   </url>
   <url>
-    <loc>/reference/aml_example.html</loc>
+    <loc>/reference/amlExample.html</loc>
   </url>
   <url>
-    <loc>/reference/apply.pr.html</loc>
+    <loc>/reference/asceticCCF.html</loc>
   </url>
   <url>
-    <loc>/reference/as.categorical.dataset.html</loc>
+    <loc>/reference/asceticCCFResampling.html</loc>
   </url>
   <url>
-    <loc>/reference/build.agony.input.html</loc>
+    <loc>/reference/asceticPhylogenies.html</loc>
   </url>
   <url>
-    <loc>/reference/build.agony.input.multiple.samples.html</loc>
+    <loc>/reference/asceticPhylogeniesBootstrap.html</loc>
   </url>
   <url>
-    <loc>/reference/build.ranking.adj.matrix.html</loc>
+    <loc>/reference/ccfDatasetExampleSingleSamples.html</loc>
   </url>
   <url>
-    <loc>/reference/ccf_dataset_example_single_samples.html</loc>
+    <loc>/reference/dataExamples.html</loc>
   </url>
   <url>
-    <loc>/reference/compute.agony.poset.html</loc>
+    <loc>/reference/datasetExamplePhylogenies.html</loc>
   </url>
   <url>
-    <loc>/reference/data_examples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dataset_example_phylogenies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dataset_example_single_samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.agony.poset.multiple.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.agony.poset.single.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.model.multiple.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.model.single.samples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.pr.null.html</loc>
-  </url>
-  <url>
-    <loc>/reference/estimate.probs.html</loc>
+    <loc>/reference/datasetExampleSingleSamples.html</loc>
   </url>
   <url>
     <loc>/reference/evosigs.html</loc>
@@ -79,36 +55,15 @@
     <loc>/reference/index.html</loc>
   </url>
   <url>
-    <loc>/reference/infer.order.in.ccf.dataset.html</loc>
+    <loc>/reference/modelsPhylogenies.html</loc>
   </url>
   <url>
-    <loc>/reference/infer.total.order.html</loc>
+    <loc>/reference/resExamplePhylogeniesDatasetBootstrap.html</loc>
   </url>
   <url>
-    <loc>/reference/models_phylogenies.html</loc>
+    <loc>/reference/resExampleSingleSamplesResampling.html</loc>
   </url>
   <url>
-    <loc>/reference/perform.ascetic.ccf.dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/perform.ascetic.ccf.dataset.resampling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/perform.ascetic.phylogenies.dataset.bootstrap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/perform.ascetic.phylogenies.dataset.html</loc>
-  </url>
-  <url>
-    <loc>/reference/perform.likelihood.fit.html</loc>
-  </url>
-  <url>
-    <loc>/reference/res_example_phylogenies_dataset_bootstrap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/res_example_single_samples_resampling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vaf_dataset_example_single_samples.html</loc>
+    <loc>/reference/vafDatasetExampleSingleSamples.html</loc>
   </url>
 </urlset>
