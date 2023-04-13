@@ -564,21 +564,14 @@
 .asCategoricalDataset <- function(dataset) {
 
   # create a categorical data frame from the dataset
-  data <-
-    matrix("missing",
-           nrow = nrow(dataset),
-           ncol = ncol(dataset))
-  for (i in seq_len(nrow(dataset))) {
-    for (j in seq_len(ncol(dataset))) {
-      if (dataset[i, j] == 1) {
-        data[i, j] <- "observed"
-      }
-    }
-  }
+  data <- matrix("missing", nrow = nrow(dataset), ncol = ncol(dataset))
+  data[dataset == 1] <- "observed"
   data <- data.frame(data, stringsAsFactors = TRUE)
-  for (n in names(data)) {
-    levels(data[[n]]) <- c("missing", "observed")
-  }
+
+  data <- as.data.frame(lapply(data, function(x) {
+    levels(x) <- c("missing", "observed")
+    x
+  }))
   
   # renaming
   colnames(data) <- as.character(seq_len(ncol(data)))

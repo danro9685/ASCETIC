@@ -10,4 +10,3 @@
 #' @exportPattern "^[[:alpha:]]+"
 NULL
 #> NULL
-
