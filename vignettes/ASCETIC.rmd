@@ -57,12 +57,12 @@ We now perform the basic ASCETIC inference.
 
 ```{r}
 set.seed(12345)
-resExampleSingleSamples = asceticCCF(
-                             dataset = datasetExampleSingleSamples,
-                             ccfDataset = ccfDatasetExampleSingleSamples,
-                             regularization = "aic",
-                             command = "hc", 
-                             restarts = 0 )
+resExampleSingleSamples <- asceticCCF(
+                              dataset = datasetExampleSingleSamples,
+                              ccfDataset = ccfDatasetExampleSingleSamples,
+                              regularization = "aic",
+                              command = "hc", 
+                              restarts = 0 )
 ```
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) ccfDataset, input ccf dataset; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
@@ -90,7 +90,7 @@ We now perform the basic ASCETIC inference for this second scenario.
 
 ```{r}
 set.seed(12345)
-resExamplePhylogeniesDataset = asceticPhylogenies(
+resExamplePhylogeniesDataset <- asceticPhylogenies(
                                       dataset = datasetExamplePhylogenies,
                                       models = modelsPhylogenies,
                                       regularization = "aic",
@@ -118,8 +118,8 @@ Finally, ASCETIC can perform the extraction of evolutionary signatures significa
 ```{r}
 set.seed(12345)
 data(amlExample)
-resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data, 
-                            evolutionarySteps = amlExample$evolutionary_steps )
+resExampleEvosigs <- evoSigs(survivalData = amlExample$survival_data, 
+                             evolutionarySteps = amlExample$evolutionary_steps)
 print(names(resExampleEvosigs))
 ```
 
