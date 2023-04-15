@@ -166,6 +166,7 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //'
 //' @title agony
 //' @param inmatrix Input agony matrix.
+//' @param seed Input seed
 //' @return Output agony matrix.
 //'
 //' The software for agony computation (exact algorithm) adopted
@@ -176,9 +177,13 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //' 31.3 (2017): 702-738.
 //'
 // [[Rcpp::export]]
-Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix)
+Rcpp::IntegerMatrix agony(Rcpp::IntegerMatrix inmatrix, uint32_t seed)
 {
   
+  // seed can be used as seed.
+  // let's decide if we want to use it or not
+	//printf("seed: %d \n", seed);
+
   //bool weighted = false;
   //bool self = false;
   uint32_t groupcnt = 0;

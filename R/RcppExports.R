@@ -20,6 +20,7 @@
 #'
 #' @title agony
 #' @param inmatrix Input agony matrix.
+#' @param seed Input seed
 #' @return Output agony matrix.
 #'
 #' The software for agony computation (exact algorithm) adopted
@@ -29,6 +30,7 @@
 #' in weighted networks." Data mining and knowledge discovery
 #' 31.3 (2017): 702-738.
 #'
-agony <- function(inmatrix) {
-    .Call(`_ASCETIC_agony`, inmatrix)
+agony <- function(inmatrix, seed) {
+    .Call(`_ASCETIC_agony`, inmatrix, seed)
 }
+

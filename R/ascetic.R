@@ -101,7 +101,7 @@ asceticCCFResampling <- function(dataset,
       if (!is.null(agonyArcs)) {
         # estimate a best agony ranking
         cRandomSeed <- round(runif(1, min = 1, max = 5000), digits = 0)
-        agonyRanking <- agony(agonyArcs)
+        agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
@@ -230,7 +230,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
       if (!is.null(agonyArcs)) {
         # estimate a best agony ranking and save the results to file
         cRandomSeed <- round(runif(1, min = 1, max = 5000), digits = 0)
-        agonyRanking <- agony(agonyArcs)
+        agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-

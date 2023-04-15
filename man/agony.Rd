@@ -4,10 +4,12 @@
 \alias{agony}
 \title{agony}
 \usage{
-agony(inmatrix)
+agony(inmatrix, seed)
 }
 \arguments{
 \item{inmatrix}{Input agony matrix.}
+
+\item{seed}{Input seed}
 }
 \value{
 Output agony matrix.
