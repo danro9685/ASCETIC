@@ -4,7 +4,7 @@
     <loc>/404.html</loc>
   </url>
   <url>
-    <loc>/LICENSE-text.html</loc>
+    <loc>/LICENSE.html</loc>
   </url>
   <url>
     <loc>/articles/ASCETIC.html</loc>
@@ -20,6 +20,9 @@
   </url>
   <url>
     <loc>/reference/agony.html</loc>
+  </url>
+  <url>
+    <loc>/reference/agonyArcs.html</loc>
   </url>
   <url>
     <loc>/reference/amlExample.html</loc>
