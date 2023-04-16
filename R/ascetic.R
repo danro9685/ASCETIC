@@ -68,7 +68,7 @@ asceticCCFResampling <- function(dataset,
       matrix(0, nrow = ncol(ccfDataset), ncol = 2)
     rownames(resamplingAgonyRankingEstimate) <- colnames(ccfDataset)
     colnames(resamplingAgonyRankingEstimate) <- c("variable", "rank")
-    resamplingAgonyRankingEstimate[, "variable"] <- 1:ncol(ccfDataset)
+    resamplingAgonyRankingEstimate[, "variable"] <- seq_len(ncol(ccfDataset))
     cont <- 0
     for (i in seq_len(nsampling)) {
       # assess temporal priority with minimum agony for nsampling sampling iterations
@@ -79,10 +79,10 @@ asceticCCFResampling <- function(dataset,
       for (j in seq_len(nrow(vafDataset))) {
         vafDatasetSamples <-
           rbeta(
-            n = 1,
-            shape1 = vafDataset$ALT_COUNT[j],
-            shape2 = vafDataset$REF_COUNT[j],
-            ncp = 0
+            n <- 1,
+            shape1 <- vafDataset$ALT_COUNT[j],
+            shape2 <- vafDataset$REF_COUNT[j],
+            ncp <- 0
           )
         currCcfEstimate <- as.numeric(((
           vafDataset$NORMAL_PLOIDY[j]
@@ -102,7 +102,7 @@ asceticCCFResampling <- function(dataset,
         # estimate a best agony ranking
         agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
-        for (j in 1:nrow(agonyRanking)) {
+        for (j in seq_len(nrow(agonyRanking))) {
           resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
             resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] + agonyRanking[j, 2]
         }
@@ -130,12 +130,12 @@ asceticCCFResampling <- function(dataset,
     }
     
     # create the data structures
-    rownames(agonyPoset) <- as.character(1:ncol(dataset))
-    colnames(agonyPoset) <- as.character(1:ncol(dataset))
+    rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
+    colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
     for (reg in regularization) {
-      rownames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
-      colnames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
+      rownames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
+      colnames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
     }
     inference <- agonyInference
     
@@ -206,13 +206,13 @@ asceticPhylogeniesBootstrap <- function(dataset,
       matrix(0, nrow = ncol(dataset), ncol = 2)
     rownames(bootstrapAgonyRankingEstimate) <- colnames(dataset)
     colnames(bootstrapAgonyRankingEstimate) <- c("variable", "rank")
-    bootstrapAgonyRankingEstimate[, "variable"] <- 1:ncol(dataset)
+    bootstrapAgonyRankingEstimate[, "variable"] <- seq_len(ncol(dataset))
     cont <- 0
-    for (i in 1:nsampling) {
+    for (i in seq_len(nsampling)) {
       # assess temporal priority with minimum agony for nsampling bootstrap iterations
-      currModels <- sample(1:length(models), replace = TRUE)
+      currModels <- sample(seq_len(length(models)), replace = TRUE)
       currModels <- models[currModels]
-      for (j in 1:length(currModels)) {
+      for (j in seq_len(length(currModels))) {
         currm <- currModels[[j]]
         currModels[[j]] <-
           matrix(0,
@@ -230,7 +230,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
         # estimate a best agony ranking and save the results to file
         agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
-        for (j in 1:nrow(agonyRanking)) {
+        for (j in seq_len(nrow(agonyRanking))) {
           bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
             bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] + agonyRanking[j, 2]
         }
@@ -258,12 +258,12 @@ asceticPhylogeniesBootstrap <- function(dataset,
     }
     
     # create the data structures with the posets and the inference results
-    rownames(agonyPoset) <- as.character(1:ncol(dataset))
-    colnames(agonyPoset) <- as.character(1:ncol(dataset))
+    rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
+    colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
     for (reg in regularization) {
-      rownames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
-      colnames(agonyInference[[reg]]) <- as.character(1:ncol(dataset))
+      rownames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
+      colnames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
     }
     inference <- agonyInference
     
@@ -286,7 +286,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
 #' set.seed(12345)
 #' data(datasetExampleSingleSamples)
 #' data(ccfDatasetExampleSingleSamples)
-#' resExampleSingleSamples = asceticCCF(
+#' resExampleSingleSamples <- asceticCCF(
 #'                               dataset = datasetExampleSingleSamples,
 #'                               ccfDataset = ccfDatasetExampleSingleSamples,
 #'                               regularization = "aic",
@@ -332,18 +332,18 @@ asceticCCF <- function(dataset,
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
     
     # perform the inference
-    agonyInference = list()
+    agonyInference <- list()
     for (reg in regularization) {
-      agonyInference[[reg]] = .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+      agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     }
     
     # create the data structures with the posets and the inference results
-    rownames(agonyPoset) <- as.character(1:ncol(dataset))
-    colnames(agonyPoset) <- as.character(1:ncol(dataset))
+    rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
+    colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
     for (i in regularization) {
-      rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
-      colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+      rownames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
+      colnames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
     }
     
     # create the data structures with the results
@@ -365,7 +365,7 @@ asceticCCF <- function(dataset,
 #' set.seed(12345)
 #' data(datasetExamplePhylogenies)
 #' data(modelsPhylogenies)
-#' resExamplePhylogeniesDataset = asceticPhylogenies(
+#' resExamplePhylogeniesDataset <- asceticPhylogenies(
 #'                                          dataset = datasetExamplePhylogenies,
 #'                                          models = modelsPhylogenies,
 #'                                          regularization = "aic",
@@ -409,18 +409,18 @@ asceticPhylogenies <- function(dataset,
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
     
     # perform the inference
-    agonyInference = list()
+    agonyInference <- list()
     for (reg in regularization) {
-      agonyInference[[reg]] = .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+      agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     }
     
     # create the data structures with the posets and the inference results
-    rownames(agonyPoset) <- as.character(1:ncol(dataset))
-    colnames(agonyPoset) <- as.character(1:ncol(dataset))
+    rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
+    colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
     for (i in regularization) {
-      rownames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
-      colnames(agonyInference[[i]]) <- as.character(1:ncol(dataset))
+      rownames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
+      colnames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
     }
 
     # create the data structures with the results

@@ -46,7 +46,7 @@ Perform the ASCETIC inference framework on single samples (using CCF) datasets.
 set.seed(12345)
 data(datasetExampleSingleSamples)
 data(ccfDatasetExampleSingleSamples)
-resExampleSingleSamples = asceticCCF(
+resExampleSingleSamples <- asceticCCF(
                               dataset = datasetExampleSingleSamples,
                               ccfDataset = ccfDatasetExampleSingleSamples,
                               regularization = "aic",
