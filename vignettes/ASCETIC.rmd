@@ -20,7 +20,13 @@ Cancer development is a stochastic process involving large populations of cells.
 
 ASCETIC (Agony-baSed Cancer EvoluTion InferenCe) is a novel framework for the inference of a set of statistically significant temporal patterns involving alternations in driver genes from cancer genomics data. The framework can be applied to data at different resolutions, from classical NGS genomics data of cancer samples, to single-cell data.
 
-In its basic implementation, ASCETIC requires two main inputs: (i) a binary matrix where rows are patients (i.e., samples) and columns are mutations. Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise. (2) Information of temporal patters across the considered driver genes. Such information can be determined either from classical NGS genomics data considering a single biopsy per patient, in terms of cancer cell fractions reported for each gene, or from data at different resolutions such as multi-region or single-cell data where multiple samples per patients are provided; in this latter case, ASCETIC takes as input a phylogenetic tree per patient.
+In its basic implementation, ASCETIC requires two main inputs: (i) a binary matrix where rows are patients (i.e., samples) and columns are mutations. Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise. (2) Information of temporal patters across the considered driver genes. Such information can be determined either from classical NGS genomics data considering a single biopsy per patient, in terms of cancer cell fractions reported for each gene, or from data at different resolutions such as multi-region or single-cell data where multiple samples per patients are provided. In this latter case, ASCETIC takes as input a phylogenetic tree per patient.
+
+The ASCETIC framework is built upon the observation that, in most cases, the accumulation of passenger mutations during cancer progression follows random dynamics. However, a small set of genes drive tumor evolution, and for these alterations, drift-driven evolution and selective pressures may lead to a consistent ordering across multiple patients. However, this ordering may not be unique and can be confounded by the presence of heterogeneous cancer subtypes within a tumor dataset. To address this challenge, ASCETIC decomposes the inference problem into three main tasks.
+
+First, it combines information of temporal patters obtained for multiple patients in order to create an agony-derived ranking of the considered alterations, providing a partial temporal ordering among the drivers during cancer evolution. Agony is a measure of hierarchy within a directed graph. Given a directed graph and a ranking metric (e.g., in our case the time ordering of accumulation of driver alterations during tumor evolution), any arc from nodes that are higher in the hierarchy (e.g., alterations that occur in later stages of the tumor) to nodes that are lower in the hierarchy (e.g., alterations that occur at the initiation of the tumor) are not expected and they are said to be causing agony. The output of this phase is a partially ordered set (poset), which minimizes inconsistencies measured in terms of agony.
+
+Then, the approach adopts a likelihood-based approach grounded in the theory of probabilistic causation to select the most significant relationships among driver genes in a Bayesian Network that depicts repeated evolutionary trajectories. Finally, ASCETIC leverages the inferred evolutionary steps to stratify patients based on survival data and selects the most relevant features from the model to cluster the samples into different risk groups or clusters. Survival analysis of the different risk groups is then performed via the standard Kaplan-Meier estimate. ASCETIC outputs a set of evolutionary signatures associated with the different risk groups, displaying the inferred risk for each of the selected evolutionary steps and their relative prevalence in the cluster.
 
 In this vignette, we give an overview of the package by presenting some of its main functions.
 
@@ -57,15 +63,17 @@ We now perform the basic ASCETIC inference.
 
 ```{r}
 set.seed(12345)
-resExampleSingleSamples = asceticCCF(
-                             dataset = datasetExampleSingleSamples,
-                             ccfDataset = ccfDatasetExampleSingleSamples,
-                             regularization = "aic",
-                             command = "hc", 
-                             restarts = 0 )
+resExampleSingleSamples <- asceticCCF(
+                              dataset = datasetExampleSingleSamples,
+                              ccfDataset = ccfDatasetExampleSingleSamples,
+                              regularization = "aic",
+                              command = "hc", 
+                              restarts = 0 )
 ```
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) ccfDataset, input ccf dataset; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
+
+The poset represents an estimate of the agony ranking for this dataset, while the Bayesian Network obtained after the likelihood-fit step is the inference output of ASCETIC, which provides the inferred repeated evolutionary trajectories.
 
 To improve the statistical stability of the framework expecially in the common situation of noisy data, ASCETIC implements a re-sampling algorithm which builds on the function just described. This procedure is more computational intensive compared to the basic one, but should be preferred on real data. It requires an additional dataset with variant allele frequencies information and can be executed as follows.
 
@@ -90,7 +98,7 @@ We now perform the basic ASCETIC inference for this second scenario.
 
 ```{r}
 set.seed(12345)
-resExamplePhylogeniesDataset = asceticPhylogenies(
+resExamplePhylogeniesDataset <- asceticPhylogenies(
                                       dataset = datasetExamplePhylogenies,
                                       models = modelsPhylogenies,
                                       regularization = "aic",
@@ -99,6 +107,8 @@ resExamplePhylogeniesDataset = asceticPhylogenies(
 ```
 
 The output of this analysis is a a list of 4 elements: 1) dataset, input dataset; 2) models, input phylogenetic models; 3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking and 4) inference, inferred ASCETIC evolutionary model for each selected regularization.
+
+The resulting poset and inference elements have the same semantics as the previous example.
 
 Also in this case we provide a method to improve the statistical stability of the framework expecially in the situation of noisy data. ASCETIC implements a bootstrap procedure which builds on the function just described. This procedure should be preferred on real data. It can be executed as follows.
 
@@ -118,12 +128,18 @@ Finally, ASCETIC can perform the extraction of evolutionary signatures significa
 ```{r}
 set.seed(12345)
 data(amlExample)
-resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data, 
-                            evolutionarySteps = amlExample$evolutionary_steps )
+resExampleEvosigs <- evoSigs(survivalData = amlExample$survival_data, 
+                             evolutionarySteps = amlExample$evolutionary_steps)
 print(names(resExampleEvosigs))
+print(resExampleEvosigs$evolutionarySteps)
+print(resExampleEvosigs$clustersPrevalence)
 ```
 
 The accumulation of alterations in driver genes can follow repeated routes in different cancer patients. Detecting such trajectories could be important in order to implement appropriate therapeutic responses. As a matter of fact, being able to stratify cancer patients based on their molecular evolution could enable the prediction of the future steps of the disease progression, potentially allowing the execution of optimal and personalized treatments that anticipate the next stages of the cancer's evolution. In our example, ASCETIC could identify a set of evolutionary steps (see evolutionarySteps and clustersPrevalence variables) with a significant association to prognosis.
+
+Specifically, the evolutionarySteps variable reports 20 evolutionary steps that, in this example dataset, show a significant association with overall survival. The steps with negative values are negatively associated with risk, meaning that patients with these mutations have a better prognosis. On the other hand, steps with positive values increase the risk, indicating that patients with these mutations have a worse prognosis.
+
+Finally, the clustersPrevalence variable provides the three clusters discovered based on the detected evolutionary signatures, along with the relative prevalences of each evolutionary step in the clusters.
 
 We refer to the manual for a detailed description of each parameter and to the ASCETIC manuscript for details on the method.
 

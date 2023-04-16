@@ -100,7 +100,7 @@ asceticCCFResampling <- function(dataset,
       # estimate a best agony poset given the time orderings
       if (!is.null(agonyArcs)) {
         # estimate a best agony ranking
-        agonyRanking <- agony(agonyArcs)
+        agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           resamplingAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-
@@ -228,7 +228,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
       # estimate a best agony poset given the time orderings
       if (!is.null(agonyArcs)) {
         # estimate a best agony ranking and save the results to file
-        agonyRanking <- agony(agonyArcs)
+        agonyRanking <- agony(agonyArcs, .get_seed())
         cont <- cont + 1
         for (j in 1:nrow(agonyRanking)) {
           bootstrapAgonyRankingEstimate[agonyRanking[j, 1], "rank"] <-

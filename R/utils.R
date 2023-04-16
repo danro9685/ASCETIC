@@ -377,8 +377,7 @@
   
   if (!is.null(agonyArcs)) {
     # estimate the best agony ranking and save the results to file
-    cRandomSeed <- round(runif(1, min = 1, max = 5000), digits = 0)
-    agonyRanking <- agony(agonyArcs)
+    agonyRanking <- agony(agonyArcs, .get_seed())
     
     # compute the poset based on the best agony ranking
     poset <- .buildRankingAdjMatrix(agonyRanking, numEvents)
@@ -564,21 +563,14 @@
 .asCategoricalDataset <- function(dataset) {
 
   # create a categorical data frame from the dataset
-  data <-
-    matrix("missing",
-           nrow = nrow(dataset),
-           ncol = ncol(dataset))
-  for (i in seq_len(nrow(dataset))) {
-    for (j in seq_len(ncol(dataset))) {
-      if (dataset[i, j] == 1) {
-        data[i, j] <- "observed"
-      }
-    }
-  }
+  data <- matrix("missing", nrow = nrow(dataset), ncol = ncol(dataset))
+  data[dataset == 1] <- "observed"
   data <- data.frame(data, stringsAsFactors = TRUE)
-  for (n in names(data)) {
-    levels(data[[n]]) <- c("missing", "observed")
-  }
+
+  data <- as.data.frame(lapply(data, function(x) {
+    levels(x) <- c("missing", "observed")
+    x
+  }))
   
   # renaming
   colnames(data) <- as.character(seq_len(ncol(data)))
@@ -586,4 +578,13 @@
   
   return(data)
   
+}
+
+# Get a number to be used as seed
+#
+#
+# @title get.seed
+#
+.get_seed <- function() {
+  sample.int(.Machine$integer.max, 1)
 }
