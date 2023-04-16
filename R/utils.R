@@ -377,7 +377,6 @@
   
   if (!is.null(agonyArcs)) {
     # estimate the best agony ranking and save the results to file
-    cRandomSeed <- round(runif(1, min = 1, max = 5000), digits = 0)
     agonyRanking <- agony(agonyArcs, .get_seed())
     
     # compute the poset based on the best agony ranking
