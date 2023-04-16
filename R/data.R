@@ -85,3 +85,13 @@ NULL
 #' @source Tyner, Jeffrey W., et al. "Functional genomic landscape of acute myeloid leukaemia." Nature 562.7728 (2018): 526-531.
 #' @return List of two elements, i.e., survival data and evolutionary steps extracted by ASCETIC.
 NULL
+
+#' @name agonyArcs
+#' @title Example dataset to test the agony function.
+#' @description Example dataset to test the agony function.
+#' @docType data
+#' @usage data(agonyArcs)
+#' @format Example dataset to test the agony function.
+#' @source Example dataset to test the agony function.
+#' @return Example dataset to test the agony function.
+NULL

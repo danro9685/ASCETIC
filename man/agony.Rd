@@ -2,7 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{agony}
 \alias{agony}
-\title{agony}
+\title{agony
+'}
 \usage{
 agony(inmatrix, seed)
 }
@@ -13,6 +14,7 @@ agony(inmatrix, seed)
 }
 \value{
 Output agony matrix.
+
 
 The software for agony computation (exact algorithm) adopted
 here was developed by Professor Nikolaj Tatti and colleagues.
@@ -39,4 +41,9 @@ For a detailed description, please refer to: Tatti, Nikolaj.
 "Tiers for peers: a practical algorithm for discovering hierarchy
 in weighted networks." Data mining and knowledge discovery
 31.3 (2017): 702-738.
+}
+\examples{
+data(agonyArcs)
+agony(agonyArcs, 12345)
+
 }

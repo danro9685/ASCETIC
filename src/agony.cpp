@@ -165,10 +165,16 @@ score(network & g, uint32_t ncnt, uint32_t ecnt)
 //' 31.3 (2017): 702-738.
 //'
 //' @title agony
+//''
+//' @examples
+//' data(agonyArcs)
+//' agony(agonyArcs, 12345)
+//'
 //' @param inmatrix Input agony matrix.
 //' @param seed Input seed
 //' @return Output agony matrix.
 //'
+//' 
 //' The software for agony computation (exact algorithm) adopted
 //' here was developed by Professor Nikolaj Tatti and colleagues.
 //' For a detailed description, please refer to: Tatti, Nikolaj.

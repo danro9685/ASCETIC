@@ -42,7 +42,7 @@ Perform the ASCETIC inference framework on multiple samples (using phylogenies a
 set.seed(12345)
 data(datasetExamplePhylogenies)
 data(modelsPhylogenies)
-resExamplePhylogeniesDataset = asceticPhylogenies(
+resExamplePhylogeniesDataset <- asceticPhylogenies(
                                          dataset = datasetExamplePhylogenies,
                                          models = modelsPhylogenies,
                                          regularization = "aic",

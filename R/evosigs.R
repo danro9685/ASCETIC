@@ -3,7 +3,7 @@
 #' @examples
 #' set.seed(12345)
 #' data(amlExample)
-#' resExampleEvosigs = evoSigs( survivalData = amlExample$survival_data,
+#' resExampleEvosigs <- evoSigs( survivalData = amlExample$survival_data,
 #'                              evolutionarySteps = amlExample$evolutionary_steps )
 #'
 #' @title evoSigs
@@ -35,7 +35,7 @@ evoSigs <- function(survivalData, evolutionarySteps) {
     selFeatures <- paste0("lassoCov$", colnames(lassoCov))
     x <-
       as.matrix(cbind(rep(1, nrow(analysisData)), analysisData[,-c(1, 2)]))
-    rownames(x) <- 1:nrow(x)
+    rownames(x) <- seq_len(nrow(x))
     colnames(x) <- c("(Intercept)", selFeatures)
     y <- Surv(as.numeric(analysisData$times),
               as.numeric(analysisData$status))
@@ -63,7 +63,7 @@ evoSigs <- function(survivalData, evolutionarySteps) {
     coeffNames <- coeffNames[which(Coefficients != 0)]
     Coefficients <- Coefficients[which(Coefficients != 0)]
     x <- Coefficients
-    for (k in 1:nrow(currData)) {
+    for (k in seq_len(nrow(currData))) {
       y <- currData[k, coeffNames, drop = FALSE]
       betaTemp[k] <- as.numeric(x %*% t(y))
     }

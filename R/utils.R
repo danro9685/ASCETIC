@@ -310,7 +310,7 @@
     }
     if (!is.null(myArcs)) {
       colnames(myArcs) <- c("parent", "child")
-      rownames(myArcs) <- as.character(1:nrow(myArcs))
+      rownames(myArcs) <- as.character(seq_len(nrow(myArcs)))
     }
   }
   
@@ -357,7 +357,7 @@
   }
   if (!is.null(myArcs)) {
     colnames(myArcs) <- c("parent", "child")
-    rownames(myArcs) <- as.character(1:nrow(myArcs))
+    rownames(myArcs) <- as.character(seq_len(nrow(myArcs)))
   }
   
   return(myArcs)
@@ -485,12 +485,12 @@
 
     # initialization
     adjMatrix <- poset
-    rownames(adjMatrix) <- as.character(1:nrow(adjMatrix))
-    colnames(adjMatrix) <- as.character(1:ncol(adjMatrix))
+    rownames(adjMatrix) <- as.character(seq_len(nrow(adjMatrix)))
+    colnames(adjMatrix) <- as.character(seq_len(ncol(adjMatrix)))
     adjMatrixFit <-
       matrix(0, nrow = nrow(adjMatrix), ncol = ncol(adjMatrix))
-    rownames(adjMatrixFit) <- as.character(1:ncol(adjMatrixFit))
-    colnames(adjMatrixFit) <- as.character(1:nrow(adjMatrixFit))
+    rownames(adjMatrixFit) <- as.character(seq_len(ncol(adjMatrixFit)))
+    colnames(adjMatrixFit) <- as.character(seq_len(nrow(adjMatrixFit)))
     
     # create a categorical data frame from the dataset
     data <- .asCategoricalDataset(dataset)
