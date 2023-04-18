@@ -17,7 +17,8 @@ asceticPhylogeniesBootstrap(
 \item{dataset}{Binary matrix where rows are samples and columns are mutations.
 Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise.}
 
-\item{models}{Phylogenetic models estimated for each sample included in dataset.}
+\item{models}{Phylogenetic models estimated for each sample included in dataset given as input 
+to ASCETIC as a adjacency matrices representing mutational trees.}
 
 \item{nsampling}{Number of re-sampling to be performed for a robust estimation of the agony ranking.
 Higher values lead to improved estimates, but require higher computational burden; default value is 100.}
@@ -35,14 +36,14 @@ This parameter is ignored if tabu search is selected.}
 }
 \value{
 A list of 5 elements: 1) dataset, input dataset.
-                              2) models, input phylogenetic models
+                              2) models, input mutational trees
                               3) rankingEstimate, ranking among mutations estimated by agony.
                                  Lower rankings correspond to early mutations.
                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.
 }
 \description{
-Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets
+Perform the ASCETIC inference framework on multiple samples (using mutational trees as inputs) datasets
 with bootstrap for a robust estimation of the agony ranking.
 }
 \examples{

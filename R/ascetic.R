@@ -152,7 +152,7 @@ asceticCCFResampling <- function(dataset,
     
 }
 
-#' Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets
+#' Perform the ASCETIC inference framework on multiple samples (using mutational trees as inputs) datasets
 #' with bootstrap for a robust estimation of the agony ranking.
 #'
 #' @examples
@@ -170,7 +170,8 @@ asceticCCFResampling <- function(dataset,
 #' @title asceticPhylogeniesBootstrap
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #' Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise.
-#' @param models Phylogenetic models estimated for each sample included in dataset.
+#' @param models Phylogenetic models estimated for each sample included in dataset given as input 
+#' to ASCETIC as a adjacency matrices representing mutational trees.
 #' @param nsampling Number of re-sampling to be performed for a robust estimation of the agony ranking.
 #' Higher values lead to improved estimates, but require higher computational burden; default value is 100.
 #' @param regularization Regularization to be used for the maximum likelihood estimation.
@@ -182,7 +183,7 @@ asceticCCFResampling <- function(dataset,
 #' Higher values lead to improved estimates, but require higher computational burden; default value is 10.
 #' This parameter is ignored if tabu search is selected.
 #' @return A list of 5 elements: 1) dataset, input dataset.
-#'                               2) models, input phylogenetic models
+#'                               2) models, input mutational trees
 #'                               3) rankingEstimate, ranking among mutations estimated by agony.
 #'                                  Lower rankings correspond to early mutations.
 #'                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
@@ -359,7 +360,7 @@ asceticCCF <- function(dataset,
     
 }
 
-#' Perform the ASCETIC inference framework on multiple samples (using phylogenies as inputs) datasets.
+#' Perform the ASCETIC inference framework on multiple samples (using mutational trees as inputs) datasets.
 #'
 #' @examples
 #' set.seed(12345)
@@ -375,7 +376,8 @@ asceticCCF <- function(dataset,
 #' @title asceticPhylogenies
 #' @param dataset Binary matrix where rows are samples and columns are mutations.
 #' Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise.
-#' @param models Phylogenetic models estimated for each sample included in dataset.
+#' @param models Phylogenetic models estimated for each sample included in dataset given as input 
+#' to ASCETIC as a adjacency matrices representing mutational trees.
 #' @param regularization Regularization to be used for the maximum likelihood estimation.
 #' Possible values are aic for the Akaike information criterion and bic for the Bayesian information criterion.
 #' For the complete list of options, we refer to the manual of the bnlearn package.
@@ -385,7 +387,7 @@ asceticCCF <- function(dataset,
 #' Higher values lead to improved estimates, but require higher computational burden; default value is 10.
 #' This parameter is ignored if tabu search is selected.
 #' @return A list of 4 elements: 1) dataset, input dataset.
-#'                               2) models, input phylogenetic models
+#'                               2) models, input mutational trees
 #'                               3) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
 #'                               4) inference, inferred ASCETIC evolutionary model for each selected regularization.
 #' @export asceticPhylogenies
