@@ -63,6 +63,8 @@ evoSigs <- function(survivalData, evolutionarySteps) {
     coeffNames <- coeffNames[which(Coefficients != 0)]
     Coefficients <- Coefficients[which(Coefficients != 0)]
     x <- Coefficients
+    # warning: side-effects of for loops
+    # no possible refactoring with apply-style
     for (k in seq_len(nrow(currData))) {
       y <- currData[k, coeffNames, drop = FALSE]
       betaTemp[k] <- as.numeric(x %*% t(y))
@@ -97,6 +99,8 @@ evoSigs <- function(survivalData, evolutionarySteps) {
     }
     clusters <- rep(NA, length(beta))
     clustPos <- 0
+    # warning: side-effects of for loops
+    # no possible refactoring with apply-style
     for (currClustPos in sort(unique(survivalAnalysis$clusters))) {
       clustPos <- clustPos + 1
       clusters[which(survivalAnalysis$clusters == currClustPos)] <-
@@ -131,6 +135,8 @@ evoSigs <- function(survivalData, evolutionarySteps) {
       array(NA, c(length(unique(clusters)), length(evolutionarySteps)))
     rownames(freqFeatures) <- sort(unique(clusters))
     colnames(freqFeatures) <- sort(names(evolutionarySteps))
+    # warning: side-effects of for loops
+    # no possible refactoring with apply-style
     for (i in rownames(freqFeatures)) {
       currSamplesData <-
         evolutionarySteps[which(clusters == i), , drop = FALSE]

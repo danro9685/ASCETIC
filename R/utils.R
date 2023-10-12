@@ -18,6 +18,8 @@
            ncol = ncol(ccfDataset))
   
   # consider any pair of events in the dataset
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
   for (i in seq_len(nrow(prModelEstimate))) {
     for (j in i:nrow(prModelEstimate)) {
       if (i != j) {
@@ -64,44 +66,46 @@
 .estimatePrModelMultipleSamples <- function(models, events) {
 
   # data structure to save results
-  prModelEstimate <-
-    matrix(0, nrow = length(events), ncol = length(events))
-  
+  prModelEstimate <- matrix(0, nrow = length(events), ncol = length(events))
+
   # data structures to save the counts for each event
-  countsTimeOrderings <-
-    matrix(0, nrow = length(events), ncol = length(events))
-  countsCoOccurrence <-
-    matrix(0, nrow = length(events), ncol = length(events))
-  
-  # consider any pair of events in the dataset
-  for (i in seq_len(length(models))) {
-    # compute the time ordering counts, i.e., P(t_j<t_i,i,j)
-    currModel <- models[[i]]
+  countsTimeOrderings <- matrix(0, nrow = length(events), ncol = length(events))
+  countsCoOccurrence <- matrix(0, nrow = length(events), ncol = length(events))
+
+  # Function to update countsTimeOrderings and countsCoOccurrence for each model
+  update_counts <- function(currModel) {
+    # compute the time ordering counts, i.e., P(t_j < t_i, i, j)
     timeOrderings <- which(currModel == 1, arr.ind = TRUE)
     if (nrow(timeOrderings) > 0) {
       timeOrderingsParents <- rownames(currModel)[timeOrderings[, "row"]]
-      timeOrderingsChildren <-
-        colnames(currModel)[timeOrderings[, "col"]]
+      timeOrderingsChildren <- colnames(currModel)[timeOrderings[, "col"]]
+      # warning: side-effects of for loops
+      # no possible refactoring with apply-style
       for (j in seq_len(length(timeOrderingsParents))) {
-        countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] <-
+        countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] <- 
           countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] + 1
       }
     }
-    
-    # increment the co-occurrence count, i.e., P(i,j)
-    countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] <-
-      countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] + 1
-    
+
+    # increment the co-occurrence count, i.e., P(i, j)
+    event_indices <- which(events %in% colnames(currModel))
+    countsCoOccurrence[cbind(event_indices, event_indices)] <-
+      countsCoOccurrence[cbind(event_indices, event_indices)] + 1
   }
-  
-  # save the results
+
+  # Loop through the list of models and update countsTimeOrderings and countsCoOccurrence
+  for (i in seq_along(models)) {
+    update_counts(models[[i]])
+  }
+
+  # Calculate the final prModelEstimate
   prModelEstimate <- countsTimeOrderings / countsCoOccurrence
-  prModelEstimate[which(is.nan(prModelEstimate), arr.ind = TRUE)] <-
-    0
-  
+  prModelEstimate[is.nan(prModelEstimate)] <- 0
+
   return(prModelEstimate)
-  
+
 }
+
 
 # Estimate the null model for the probability raising, i.e., j --> i, P(i, not j).
 #
@@ -113,30 +117,31 @@
 # @title .estimatePrNull
 # @param dataset Binary matrix where rows are samples and columns are mutations.
 #
+
 .estimatePrNull <- function(dataset) {
 
   # data structure to save results
-  prNullEstimate <-
-    matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
-  
+  prNullEstimate <- matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
+
   # compute marginal and joint probabilities
   probsEstimate <- .estimateProbs(dataset)
-  
-  # consider any pair of events in the dataset
-  for (i in seq_len(nrow(prNullEstimate))) {
-    for (j in i:nrow(prNullEstimate)) {
-      if (i != j) {
-        prNullEstimate[i, j] <-
-          probsEstimate$marginalProbs[i, 1] - probsEstimate$jointProbs[i, j]
-        prNullEstimate[j, i] <-
-          probsEstimate$marginalProbs[j, 1] - probsEstimate$jointProbs[j, i]
-      }
+
+  # Function to calculate the estimate for each pair of events
+  calc_estimate <- function(i, j) {
+    if (i != j) {
+      prNullEstimate[i, j] <- probsEstimate$marginalProbs[i, 1] - probsEstimate$jointProbs[i, j]
+      prNullEstimate[j, i] <- probsEstimate$marginalProbs[j, 1] - probsEstimate$jointProbs[j, i]
     }
   }
-  
+
+  # consider any pair of events in the dataset using apply
+  pair_indices <- expand.grid(1:nrow(prNullEstimate), 1:nrow(prNullEstimate))
+  apply(pair_indices, 1, function(row) calc_estimate(row[1], row[2]))
+
   return(prNullEstimate)
-  
+
 }
+
 
 # Estimate marginal and joint probabilities from the dataset.
 #
@@ -151,27 +156,17 @@
 .estimateProbs <- function(dataset) {
 
   # data structure to save results
-  pairCount <- matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
-  
+  pairCount <- crossprod(dataset)
+
   # compute marginal and joint probabilities
-  for (i in seq_len(ncol(dataset))) {
-    for (j in seq_len(ncol(dataset))) {
-      val1 <- dataset[, i]
-      val2 <- dataset[, j]
-      pairCount[i, j] <- (t(val1) %*% val2)
-    }
-  }
-  marginalProbs <-
-    matrix(as.matrix(diag(pairCount) / nrow(dataset)),
-           nrow = ncol(dataset),
-           ncol = 1)
-  jointProbs <- as.matrix(pairCount / nrow(dataset))
-  
+  n <- nrow(dataset)
+  marginalProbs <- matrix(diag(pairCount) / n, nrow = ncol(dataset), ncol = 1)
+  jointProbs <- pairCount / n
+
   # save results
-  results <-
-    list(marginalProbs = marginalProbs, jointProbs = jointProbs)
+  results <- list(marginalProbs = marginalProbs, jointProbs = jointProbs)
   return(results)
-  
+
 }
 
 # Estimate the poset based on the best agony ranking inferred from a dataset of cancer cell fractions.
@@ -238,18 +233,22 @@
 # @param ccfDataset Matrix where rows are samples and columns are mutations.
 #
 .inferOrderInCcfDataset <- function(ccfDataset) {
-
   totalOrder <- list()
-  
+
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
   for (i in seq_len(nrow(ccfDataset))) {
-    currRes <- .inferTotalOrder(ccfDataset[i,])
+    currRes <- .inferTotalOrder(ccfDataset[i, ])
     if (length(currRes) > 1) {
-      totalOrder[[(length(totalOrder) + 1)]] <- currRes
+      totalOrder[[length(totalOrder) + 1]] <- currRes
     }
   }
-  
+
+  if (length(totalOrder) == 0) {
+    totalOrder <- NULL
+  }
+
   return(totalOrder)
-  
 }
 
 # Estimate a total ordering for a sample given the observed cancer cell fractions.
@@ -290,6 +289,8 @@
 
   myArcs <- NULL
   
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
   if (length(agonyOrders) > 0) {
     for (i in seq_len(length(agonyOrders))) {
       currOrder <- agonyOrders[[i]]
@@ -334,6 +335,8 @@
   myArcs <- NULL
   
   if (length(models) > 0) {
+    # warning: side-effects of for loops
+    # no possible refactoring with apply-style
     for (i in seq_len(length(models))) {
       currModel <- models[[i]]
       timeOrderings <- which(currModel == 1, arr.ind = TRUE)
@@ -404,6 +407,8 @@
   # data structure to save results
   adjMatrix <- matrix(0, nrow = numEvents, ncol = numEvents)
   
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
   if (length(agonyRanking) > 0) {
     currRank <- (max(agonyRanking[, 2]) - 1)
     while (currRank >= 0) {
@@ -443,6 +448,8 @@
 #
 .applyPr <- function(poset, prModel, prNull) {
 
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
   for (i in seq_len(nrow(poset))) {
     for (j in seq_len(ncol(poset))) {
       # Consider arc i --> j if it is in the poset.
@@ -499,6 +506,8 @@
     cont <- 0
     parent <- -1
     child <- -1
+    # warning: side-effects of for loops
+    # no possible refactoring with apply-style
     for (i in rownames(adjMatrix)) {
       for (j in colnames(adjMatrix)) {
         if (i != j) {
