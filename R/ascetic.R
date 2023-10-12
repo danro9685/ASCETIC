@@ -128,11 +128,14 @@ asceticCCFResampling <- function(dataset,
     #  agonyInference[[reg]] <-
     #    .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
     #}
-
+    
     # perform the inference using lapply
-    agonyInference <- lapply(regularization, function(reg) {
-      .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-    })
+    agonyInference <- setNames(
+      lapply(regularization, function(reg) {
+        .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
+      }),
+      regularization
+    )
     
     # create the data structures
     rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
