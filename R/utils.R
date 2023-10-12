@@ -94,9 +94,10 @@
   }
 
   # Loop through the list of models and update countsTimeOrderings and countsCoOccurrence
-  for (i in seq_along(models)) {
-    update_counts(models[[i]])
-  }
+  #for (i in seq_along(models)) {
+  #  update_counts(models[[i]])
+  #}
+  models <- lapply(models, update_counts)
 
   # Calculate the final prModelEstimate
   prModelEstimate <- countsTimeOrderings / countsCoOccurrence

@@ -2,7 +2,7 @@
 #' @import bnlearn
 #' @import ggplot2
 #' @importFrom utils read.table write.table
-#' @importFrom stats rbeta runif coef fivenum
+#' @importFrom stats rbeta runif coef fivenum setNames
 #' @importFrom survival Surv
 #' @importFrom glmnet cv.glmnet
 #' @importFrom Rcpp evalCpp
