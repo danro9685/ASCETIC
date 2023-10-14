@@ -452,14 +452,14 @@ asceticPhylogenies <- function(dataset,
     prModel <-
       .estimatePrModelMultipleSamples(models, colnames(dataset))
     prNull <- .estimatePrNull(dataset)
-    
+
     # compute the agony-based poset
     # First: assess temporal priority with minimum agony
     agonyPoset <-
       .estimateAgonyPosetMultipleSamples(models, colnames(dataset))
     # Second: verify probability raising
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
-    
+
     # perform the inference
     #agonyInference <- list()
     #for (reg in regularization) {

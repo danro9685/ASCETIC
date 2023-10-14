@@ -66,45 +66,45 @@
 .estimatePrModelMultipleSamples <- function(models, events) {
 
   # data structure to save results
-  prModelEstimate <- matrix(0, nrow = length(events), ncol = length(events))
-
+  prModelEstimate <-
+    matrix(0, nrow = length(events), ncol = length(events))
+  
   # data structures to save the counts for each event
-  countsTimeOrderings <- matrix(0, nrow = length(events), ncol = length(events))
-  countsCoOccurrence <- matrix(0, nrow = length(events), ncol = length(events))
-
-  # Function to update countsTimeOrderings and countsCoOccurrence for each model
-  update_counts <- function(currModel) {
-    # compute the time ordering counts, i.e., P(t_j < t_i, i, j)
+  countsTimeOrderings <-
+    matrix(0, nrow = length(events), ncol = length(events))
+  countsCoOccurrence <-
+    matrix(0, nrow = length(events), ncol = length(events))
+  
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
+  # consider any pair of events in the dataset
+  for (i in seq_len(length(models))) {
+    # compute the time ordering counts, i.e., P(t_j<t_i,i,j)
+    currModel <- models[[i]]
     timeOrderings <- which(currModel == 1, arr.ind = TRUE)
     if (nrow(timeOrderings) > 0) {
       timeOrderingsParents <- rownames(currModel)[timeOrderings[, "row"]]
-      timeOrderingsChildren <- colnames(currModel)[timeOrderings[, "col"]]
-      # warning: side-effects of for loops
-      # no possible refactoring with apply-style
+      timeOrderingsChildren <-
+        colnames(currModel)[timeOrderings[, "col"]]
       for (j in seq_len(length(timeOrderingsParents))) {
-        countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] <- 
+        countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] <-
           countsTimeOrderings[which(events == timeOrderingsParents[j]), which(events == timeOrderingsChildren[j])] + 1
       }
     }
-
-    # increment the co-occurrence count, i.e., P(i, j)
-    event_indices <- which(events %in% colnames(currModel))
-    countsCoOccurrence[cbind(event_indices, event_indices)] <-
-      countsCoOccurrence[cbind(event_indices, event_indices)] + 1
+    
+    # increment the co-occurrence count, i.e., P(i,j)
+    countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] <-
+      countsCoOccurrence[which(events %in% colnames(currModel)), which(events %in% colnames(currModel))] + 1
+    
   }
-
-  # Loop through the list of models and update countsTimeOrderings and countsCoOccurrence
-  #for (i in seq_along(models)) {
-  #  update_counts(models[[i]])
-  #}
-  models <- lapply(models, update_counts)
-
-  # Calculate the final prModelEstimate
+  
+  # save the results
   prModelEstimate <- countsTimeOrderings / countsCoOccurrence
-  prModelEstimate[is.nan(prModelEstimate)] <- 0
-
+  prModelEstimate[which(is.nan(prModelEstimate), arr.ind = TRUE)] <-
+    0
+  
   return(prModelEstimate)
-
+  
 }
 
 
@@ -122,25 +122,28 @@
 .estimatePrNull <- function(dataset) {
 
   # data structure to save results
-  prNullEstimate <- matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
-
+  prNullEstimate <-
+    matrix(0, nrow = ncol(dataset), ncol = ncol(dataset))
+  
   # compute marginal and joint probabilities
   probsEstimate <- .estimateProbs(dataset)
-
-  # Function to calculate the estimate for each pair of events
-  calc_estimate <- function(i, j) {
-    if (i != j) {
-      prNullEstimate[i, j] <- probsEstimate$marginalProbs[i, 1] - probsEstimate$jointProbs[i, j]
-      prNullEstimate[j, i] <- probsEstimate$marginalProbs[j, 1] - probsEstimate$jointProbs[j, i]
+  
+  # warning: side-effects of for loops
+  # no possible refactoring with apply-style
+  # consider any pair of events in the dataset
+  for (i in seq_len(nrow(prNullEstimate))) {
+    for (j in i:nrow(prNullEstimate)) {
+      if (i != j) {
+        prNullEstimate[i, j] <-
+          probsEstimate$marginalProbs[i, 1] - probsEstimate$jointProbs[i, j]
+        prNullEstimate[j, i] <-
+          probsEstimate$marginalProbs[j, 1] - probsEstimate$jointProbs[j, i]
+      }
     }
   }
-
-  # consider any pair of events in the dataset using apply
-  pair_indices <- expand.grid(1:nrow(prNullEstimate), 1:nrow(prNullEstimate))
-  apply(pair_indices, 1, function(row) calc_estimate(row[1], row[2]))
-
+  
   return(prNullEstimate)
-
+  
 }
 
 
