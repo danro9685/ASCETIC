@@ -45,9 +45,17 @@ if (!require("BiocManager", quietly = TRUE))
 BiocManager::install("ASCETIC")
 ```
 
+Or it can be installed directly from GitHub using the R package devtools as follows.
+
+```{r eval=FALSE}
+library("devtools")
+install_github("danro9685/ASCETIC", ref = 'master')
+```
+
 # Changelog
 
-- *1.0.0* Package released in April 2023.
+- *0.99.20* Package pre-release in October 2023.
+- *0.99.0* Package created in March 2023.
 
 # Using the ASCETIC R package
 
