@@ -4,7 +4,14 @@
 
 \section{Changes in Version 0.99.20}{
     \itemize{
-        \item Package pre-release in October 2023.
+        \item Added cross-validation for evolutionary model confidence estimate.
+        \item Pre-released in May 2024.
+    }
+}
+
+\section{Changes in Version 0.99.20}{
+    \itemize{
+        \item Package pre-released in October 2023.
     }
 }
 
