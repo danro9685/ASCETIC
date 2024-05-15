@@ -118,7 +118,6 @@
 # @title .estimatePrNull
 # @param dataset Binary matrix where rows are samples and columns are mutations.
 #
-
 .estimatePrNull <- function(dataset) {
 
   # data structure to save results

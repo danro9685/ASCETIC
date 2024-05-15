@@ -39,4 +39,3 @@
 agony <- function(inmatrix, seed) {
     .Call(`_ASCETIC_agony`, inmatrix, seed)
 }
-

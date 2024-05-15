@@ -135,6 +135,26 @@ resExamplePhylogeniesDatasetBootstrap <- asceticPhylogeniesBootstrap(
                                                    restarts = 0 )
 ```
 
+ASCETIC allows for estimating confidence in the inferred evolutionary trajectories through cross-validation. Specifically, the algorithm is applied multiple times on sampled data (80% sampling), and statistics are returned regarding the confidence of each evolutionary step.
+
+Cross-validation can be executed for both bulk data providing single samples and for multi-region bulk data and single-cell data. The estimation can be executed as follows.
+
+```{r}
+resExampleCCFAssessment <- asceticCCFAssessment(
+                                       inference = resExampleSingleSamplesResampling,
+                                       niterations = 5,
+                                       vafDataset = vafDatasetExampleSingleSamples,
+                                       nsampling = 5)
+```
+
+```{r}
+set.seed(12345)
+resExamplePhylogeniesAssessment <- asceticPhylogeniesAssessment(
+                                          inference = resExamplePhylogeniesDatasetBootstrap,
+                                          niterations = 5,
+                                          nsampling = 5)
+```
+
 Finally, ASCETIC can perform the extraction of evolutionary signatures significantly associated to prognosis and use them to stratify patients. This can be done as follows.
 
 ```{r}

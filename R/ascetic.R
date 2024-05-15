@@ -126,13 +126,6 @@ asceticCCFResampling <- function(dataset,
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
     
     # perform the inference
-    #agonyInference <- list()
-    #for (reg in regularization) {
-    #  agonyInference[[reg]] <-
-    #    .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-    #}
-    
-    # perform the inference using lapply
     agonyInference <- setNames(
       lapply(regularization, function(reg) {
         result <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
@@ -219,7 +212,7 @@ asceticPhylogeniesBootstrap <- function(dataset,
   bootstrapAgonyRankingEstimate[, "variable"] <- seq_len(ncol(dataset))
   cont <- 0
 
-  # Use lapply for bootstrap iterations
+  # use lapply for bootstrap iterations
   bootstrap_results <- lapply(seq_len(nsampling), function(i) {
     # assess temporal priority with minimum agony for nsampling bootstrap iterations
     currModels <- sample(seq_len(length(models)), replace = TRUE)
@@ -247,14 +240,14 @@ asceticPhylogeniesBootstrap <- function(dataset,
       }
     }
     cat(i / nsampling, "\n")
-    # Return the results for this iteration
+    # return the results for this iteration
     return(list(
       currModels = currModels,
       agonyArcs = agonyArcs
     ))
   })
 
-  # Combine the results from the lapply output
+  # combine the results from the lapply output
   for (i in seq_len(nsampling)) {
     currModels <- bootstrap_results[[i]]$currModels
     agonyArcs <- bootstrap_results[[i]]$agonyArcs
@@ -284,12 +277,6 @@ asceticPhylogeniesBootstrap <- function(dataset,
   agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
 
   # perform the inference
-  #agonyInference <- list()
-  #for (reg in regularization) {
-  #  agonyInference[[reg]] <-
-  #    .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-  #}
-  
   agonyInference <- setNames(
     lapply(regularization, function(reg) {
       result <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
@@ -303,10 +290,6 @@ asceticPhylogeniesBootstrap <- function(dataset,
   rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
   colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
   poset <- agonyPoset
-  #for (reg in regularization) {
-  #  rownames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
-  #  colnames(agonyInference[[reg]]) <- as.character(seq_len(ncol(dataset)))
-  #}
   inference <- agonyInference
 
   # Create the data structures with the results
@@ -374,11 +357,6 @@ asceticCCF <- function(dataset,
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
     
     # perform the inference
-    #agonyInference <- list()
-    #for (reg in regularization) {
-    #  agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-    #}
-    
     agonyInference <- setNames(
       lapply(regularization, function(reg) {
         result <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
@@ -392,10 +370,6 @@ asceticCCF <- function(dataset,
     rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
-    #for (i in regularization) {
-    #  rownames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
-    #  colnames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
-    #}
     
     # create the data structures with the results
     results <-
@@ -461,11 +435,6 @@ asceticPhylogenies <- function(dataset,
     agonyPoset <- .applyPr(agonyPoset, prModel, prNull)
 
     # perform the inference
-    #agonyInference <- list()
-    #for (reg in regularization) {
-    #  agonyInference[[reg]] <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
-    #}
-    
     agonyInference <- setNames(
       lapply(regularization, function(reg) {
         result <- .performLikelihoodFit(dataset, agonyPoset, reg, command, restarts)
@@ -479,10 +448,6 @@ asceticPhylogenies <- function(dataset,
     rownames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     colnames(agonyPoset) <- as.character(seq_len(ncol(dataset)))
     poset <- agonyPoset
-    #for (i in regularization) {
-    #  rownames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
-    #  colnames(agonyInference[[i]]) <- as.character(seq_len(ncol(dataset)))
-    #}
 
     # create the data structures with the results
     results <-
@@ -495,4 +460,230 @@ asceticPhylogenies <- function(dataset,
     
     return(results)
     
+}
+
+#' Perform the assessment via cross-validation of the model inferred by the ASCETIC framework on 
+#' single samples (using CCF) datasets.
+#'
+#' @examples
+#' set.seed(12345)
+#' data(datasetExampleSingleSamples)
+#' data(ccfDatasetExampleSingleSamples)
+#' data(vafDatasetExampleSingleSamples)
+#' resExampleSingleSamplesResampling <- asceticCCFResampling(
+#'                                                dataset = datasetExampleSingleSamples,
+#'                                                ccfDataset = ccfDatasetExampleSingleSamples,
+#'                                                vafDataset = vafDatasetExampleSingleSamples,
+#'                                                nsampling = 3,
+#'                                                regularization = c("aic","bic"),
+#'                                                command = "hc",
+#'                                                restarts = 0 )
+#' resExampleCCFAssessment <- asceticCCFAssessment(
+#'                                        inference = resExampleSingleSamplesResampling,
+#'                                        niterations = 3,
+#'                                        vafDataset = vafDatasetExampleSingleSamples,
+#'                                        nsampling = 3)
+#'
+#' @title asceticCCFAssessment
+#' @param inference Model inferred with ASCETIC using either the function asceticCCFResampling or the function asceticCCF
+#' @param niterations Number of cross-validation iterations to be performed for a robust assessment of ASCETIC model.
+#' Higher values lead to improved estimates, but require higher computational burden; default value is 100.
+#' @param vafDataset R data.frame with 8 columns: 1) SAMPLE_ID, sample name.
+#'                                                2) GENE_ID, gene name.
+#'                                                3) REF_COUNT, total counts for reference allele.
+#'                                                4) ALT_COUNT, total counts for alternate allele.
+#'                                                5) COPY_NUMBER, total copy number estimate.
+#'                                                6) NORMAL_PLOIDY, ploidy for normal sample; this is either 1 for mutations on sex chromosomes or 2.
+#'                                                7) VAF_ESTIMATE, variant allele frequency (VAF) estimate.
+#'                                                8) CCF_ESTIMATE, cancer cell fraction (CCF) estimate.
+#' Values reported in vafDataset must be consistent with the ones reported in dataset and ccfDataset.
+#' If vafDataset is not provided, sampling cannot be performed.
+#' @param nsampling Number of re-sampling to be performed for a robust estimation of the agony ranking.
+#' Higher values lead to improved estimates, but require higher computational burden; default value is 100.
+#' @return A list of 3 elements for which the estimate by cross-validation is performed: 
+#'                               1) rankingEstimate, ranking among mutations estimated by agony.
+#'                                  Lower rankings correspond to early mutations. This is returned only if nsampling > 0.
+#'                               2) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
+#'                               3) inference, inferred ASCETIC evolutionary model for each selected regularization.
+#' @export asceticCCFAssessment
+#'
+asceticCCFAssessment <- function(inference, niterations = 100, vafDataset = NULL, nsampling = 100) {
+
+    # structures to save the results
+    niterations <- max(1,niterations) # at least 1 iteration needs to be performed
+    ranking_estimate <- matrix(NA, nrow = ncol(inference$dataset), ncol = niterations)
+    rownames(ranking_estimate) <- colnames(inference$dataset)
+    colnames(ranking_estimate) <- paste0("Iteration ",1:ncol(ranking_estimate))
+    poset <- matrix(0, nrow = ncol(inference$dataset), ncol = ncol(inference$dataset))
+    rownames(poset) <- colnames(inference$dataset)
+    colnames(poset) <- colnames(inference$dataset)
+    reg <- list()
+    for(i in names(inference$inference)) {
+      reg[[i]] <- poset
+    }
+
+    # perform the assessment of the inferred ASCETIC model via cross-validation
+    valid_samples <- 1:nrow(inference$dataset)
+    cv_size <- round(length(valid_samples) * 0.80) # consider 80% samples at each cross-validation step
+    cat("Starting cross-validation...","\n")
+    if(is.null(vafDataset)) { # if vafDataset is not provided, I cannot perform sampling
+      nsampling <- 0
+    }
+    for(i in 1:niterations) {
+
+      # build the inputs for the current iteration
+      selected_samples <- sample(valid_samples, size = cv_size, replace = FALSE)
+      curr_dataset <- inference$dataset[selected_samples,]
+      curr_ccf_dataset <- inference$ccfDataset[selected_samples,]
+      curr_vaf_dataset <- vafDataset[which(vafDataset$SAMPLE_ID%in%rownames(curr_dataset)),]
+      
+      # perform the inference for the current iteration
+      if(nsampling > 0) {
+        cv_ascetic_results <- asceticCCFResampling(dataset = curr_dataset, 
+                                            ccfDataset = curr_ccf_dataset, 
+                                            vafDataset = curr_vaf_dataset, 
+                                            nsampling = nsampling, 
+                                            regularization = names(inference$inference), 
+                                            command = "hc", 
+                                            restarts = 10)
+      }
+      else {
+        cv_ascetic_results <- asceticCCF(dataset = curr_dataset, 
+                                      ccfDataset = curr_ccf_dataset, 
+                                      regularization = names(inference$inference), 
+                                      command = "hc", 
+                                      restarts = 10)
+      }
+
+      # save the results for the current iteration
+      if(nsampling > 0) {
+        ranking_estimate[,i] <- as.numeric(cv_ascetic_results$rankingEstimate[,"rank"])
+      }
+      poset <- (poset + cv_ascetic_results$poset)
+      for(j in names(inference$inference)) {
+        reg[[j]] <- (reg[[j]] + cv_ascetic_results$inference[[j]])
+      }
+      cat("Cross-validation progress: ",(i/niterations),"\n")
+        
+    }
+
+    # save the results
+    results <- list()
+    if(nsampling > 0) {
+      results[["ranking"]] <- (rowSums(ranking_estimate) / niterations)
+    }
+    else {
+      results[["ranking"]] <- NA
+    }
+    results[["poset"]] <- (poset / niterations)
+    for(i in names(inference$inference)) {
+      results[["inference"]][[i]] <- (reg[[i]] / niterations)
+    }
+      
+    return(results)
+
+}
+
+#' Perform the assessment via cross-validation of the model inferred by the ASCETIC framework on 
+#' multiple samples (using mutational trees as inputs) datasets.
+#'
+#' @examples
+#' set.seed(12345)
+#' data(datasetExamplePhylogenies)
+#' data(modelsPhylogenies)
+#' resExamplePhylogeniesDatasetBootstrap <- asceticPhylogeniesBootstrap(
+#'                                                     dataset = datasetExamplePhylogenies,
+#'                                                     models = modelsPhylogenies,
+#'                                                     nsampling = 3,
+#'                                                     regularization = c("aic","bic"),
+#'                                                     command = "hc",
+#'                                                     restarts = 0 )
+#' resExamplePhylogeniesAssessment <- asceticPhylogeniesAssessment(
+#'                                           inference = resExamplePhylogeniesDatasetBootstrap,
+#'                                           niterations = 3,
+#'                                           nsampling = 3)
+#'
+#' @title asceticPhylogeniesAssessment
+#' @param inference Model inferred with ASCETIC using either the function asceticPhylogeniesBootstrap or the function asceticPhylogenies.
+#' @param niterations Number of cross-validation iterations to be performed for a robust assessment of ASCETIC model.
+#' Higher values lead to improved estimates, but require higher computational burden; default value is 100.
+#' @param nsampling Number of re-sampling to be performed for a robust estimation of the agony ranking.
+#' Higher values lead to improved estimates, but require higher computational burden; default value is 100.
+#' @return A list of 3 elements for which the estimate by cross-validation is performed: 
+#'                               1) rankingEstimate, ranking among mutations estimated by agony.
+#'                                  Lower rankings correspond to early mutations. This is returned only if nsampling > 0.
+#'                               2) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
+#'                               3) inference, inferred ASCETIC evolutionary model for each selected regularization.
+#' @export asceticPhylogeniesAssessment
+#'
+asceticPhylogeniesAssessment <- function(inference, niterations = 100, nsampling = 100) {
+
+    # structures to save the results
+    niterations <- max(1,niterations) # at least 1 iteration needs to be performed
+    ranking_estimate <- matrix(NA, nrow = ncol(inference$dataset), ncol = niterations)
+    rownames(ranking_estimate) <- colnames(inference$dataset)
+    colnames(ranking_estimate) <- paste0("Iteration ",1:ncol(ranking_estimate))
+    poset <- matrix(0, nrow = ncol(inference$dataset), ncol = ncol(inference$dataset))
+    rownames(poset) <- colnames(inference$dataset)
+    colnames(poset) <- colnames(inference$dataset)
+    reg <- list()
+    for(i in names(inference$inference)) {
+      reg[[i]] <- poset
+    }
+
+    # perform the assessment of the inferred ASCETIC model via cross-validation
+    valid_samples <- 1:nrow(inference$dataset)
+    cv_size <- round(length(valid_samples) * 0.80) # consider 80% samples at each cross-validation step
+    cat("Starting cross-validation...","\n")
+    for(i in 1:niterations) {
+
+      # build the inputs for the current iteration
+      selected_samples <- sample(valid_samples, size = cv_size, replace = FALSE)
+      curr_dataset <- inference$dataset[selected_samples,]
+      curr_models <- inference$models[names(inference$models)[which(names(inference$models)%in%rownames(curr_dataset))]]
+      
+      # perform the inference for the current iteration
+      if(nsampling > 0) {
+        cv_ascetic_results <- asceticPhylogeniesBootstrap(dataset = curr_dataset, 
+                                               models = curr_models, 
+                                               nsampling = nsampling, 
+                                               regularization = names(inference$inference), 
+                                               command = "hc", 
+                                               restarts = 10)
+      }
+      else {
+        cv_ascetic_results <- asceticPhylogenies(dataset = curr_dataset, 
+                                        models = curr_models, 
+                                        regularization = names(inference$inference), 
+                                        command = "hc", 
+                                        restarts = 10)
+      }
+
+      # save the results for the current iteration
+      if(nsampling > 0) {
+        ranking_estimate[,i] <- as.numeric(cv_ascetic_results$rankingEstimate[,"rank"])
+      }
+      poset <- (poset + cv_ascetic_results$poset)
+      for(j in names(inference$inference)) {
+        reg[[j]] <- (reg[[j]] + cv_ascetic_results$inference[[j]])
+      }
+      cat("Cross-validation progress: ",(i/niterations),"\n")
+        
+    }
+
+    # save the results
+    results <- list()
+    if(nsampling > 0) {
+      results[["ranking"]] <- (rowSums(ranking_estimate) / niterations)
+    }
+    else {
+      results[["ranking"]] <- NA
+    }
+    results[["poset"]] <- (poset / niterations)
+    for(i in names(inference$inference)) {
+      results[["inference"]][[i]] <- (reg[[i]] / niterations)
+    }
+      
+    return(results)
+
 }
