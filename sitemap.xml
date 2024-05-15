@@ -31,10 +31,16 @@
     <loc>/reference/asceticCCF.html</loc>
   </url>
   <url>
+    <loc>/reference/asceticCCFAssessment.html</loc>
+  </url>
+  <url>
     <loc>/reference/asceticCCFResampling.html</loc>
   </url>
   <url>
     <loc>/reference/asceticPhylogenies.html</loc>
+  </url>
+  <url>
+    <loc>/reference/asceticPhylogeniesAssessment.html</loc>
   </url>
   <url>
     <loc>/reference/asceticPhylogeniesBootstrap.html</loc>
