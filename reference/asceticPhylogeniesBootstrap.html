@@ -4,6 +4,8 @@ with bootstrap for a robust estimation of the agony ranking."><!-- mathjax --><s
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -16,9 +18,10 @@ with bootstrap for a robust estimation of the agony ranking."><!-- mathjax --><s
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ASCETIC</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/ASCETIC.html">Get started</a>
@@ -29,22 +32,28 @@ with bootstrap for a robust estimation of the agony ranking."><!-- mathjax --><s
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/danro9685/ASCETIC/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
+
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>asceticPhylogeniesBootstrap</h1>
-    <small class="dont-index">Source: <a href="https://github.com/danro9685/ASCETIC/blob/HEAD/R/ascetic.R" class="external-link"><code>R/ascetic.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/danro9685/ASCETIC/blob/master/R/ascetic.R" class="external-link"><code>R/ascetic.R</code></a></small>
     <div class="hidden name"><code>asceticPhylogeniesBootstrap.Rd</code></div>
     </div>
+
     <div class="ref-description">
     <p>Perform the ASCETIC inference framework on multiple samples (using mutational trees as inputs) datasets
 with bootstrap for a robust estimation of the agony ranking.</p>
     </div>
+
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">asceticPhylogeniesBootstrap</span><span class="op">(</span></span>
 <span>  <span class="va">dataset</span>,</span>
@@ -55,38 +64,53 @@ with bootstrap for a robust estimation of the agony ranking.</p>
 <span>  restarts <span class="op">=</span> <span class="fl">10</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
+
+
+<dl><dt id="arg-dataset">dataset<a class="anchor" aria-label="anchor" href="#arg-dataset"></a></dt>
 <dd><p>Binary matrix where rows are samples and columns are mutations.
 Each cell of the matrix is 1 if the related mutation was observed in the sample; 0 otherwise.</p></dd>
+
+
 <dt id="arg-models">models<a class="anchor" aria-label="anchor" href="#arg-models"></a></dt>
 <dd><p>Phylogenetic models estimated for each sample included in dataset given as input
 to ASCETIC as a adjacency matrices representing mutational trees.</p></dd>
+
+
 <dt id="arg-nsampling">nsampling<a class="anchor" aria-label="anchor" href="#arg-nsampling"></a></dt>
 <dd><p>Number of re-sampling to be performed for a robust estimation of the agony ranking.
 Higher values lead to improved estimates, but require higher computational burden; default value is 100.</p></dd>
+
+
 <dt id="arg-regularization">regularization<a class="anchor" aria-label="anchor" href="#arg-regularization"></a></dt>
 <dd><p>Regularization to be used for the maximum likelihood estimation.
 Possible values are aic for the Akaike information criterion and bic for the Bayesian information criterion.
 For the complete list of options, we refer to the manual of the bnlearn package.</p></dd>
+
+
 <dt id="arg-command">command<a class="anchor" aria-label="anchor" href="#arg-command"></a></dt>
 <dd><p>Optimization technique to be used for maximum likelihood estimation.
 Valid values are either hc for Hill Climbing or tabu for Tabu Search.</p></dd>
+
+
 <dt id="arg-restarts">restarts<a class="anchor" aria-label="anchor" href="#arg-restarts"></a></dt>
 <dd><p>Number of restarts to be performed during the maximum likelihood estimation when Hill Climbing optimization technique is used.
 Higher values lead to improved estimates, but require higher computational burden; default value is 10.
 This parameter is ignored if tabu search is selected.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-<p>A list of 5 elements: 1) dataset, input dataset.
+    <p>A list of 5 elements: 1) dataset, input dataset.
                               2) models, input mutational trees
                               3) rankingEstimate, ranking among mutations estimated by agony.
                                  Lower rankings correspond to early mutations.
                               4) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               5) inference, inferred ASCETIC evolutionary model for each selected regularization.</p>
     </div>
+
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span></span>
@@ -113,12 +137,22 @@ This parameter is ignored if tabu search is selected.</p></dd>
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
+
+
       <footer><div class="copyright">
   <p></p><p>Developed by Daniele Ramazzotti, Luca De Sano.</p>
 </div>
+
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
 </div>
+
       </footer></div>
+
+
+
+
+
+
   </body></html>
 

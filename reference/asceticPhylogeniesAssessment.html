@@ -4,6 +4,8 @@ multiple samples (using mutational trees as inputs) datasets."><!-- mathjax --><
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]--></head><body data-spy="scroll" data-target="#toc">
+
+
     <div class="container template-reference-topic">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -16,9 +18,10 @@ multiple samples (using mutational trees as inputs) datasets."><!-- mathjax --><
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">ASCETIC</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">0.99.22</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="">1.0.0</span>
       </span>
     </div>
+
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav"><li>
   <a href="../articles/ASCETIC.html">Get started</a>
@@ -29,44 +32,59 @@ multiple samples (using mutational trees as inputs) datasets."><!-- mathjax --><
       </ul><ul class="nav navbar-nav navbar-right"><li>
   <a href="https://github.com/danro9685/ASCETIC/" class="external-link">
     <span class="fab fa-github fa-lg"></span>
+
   </a>
 </li>
       </ul></div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
+
+
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>asceticPhylogeniesAssessment</h1>
-    <small class="dont-index">Source: <a href="https://github.com/danro9685/ASCETIC/blob/HEAD/R/ascetic.R" class="external-link"><code>R/ascetic.R</code></a></small>
+    <small class="dont-index">Source: <a href="https://github.com/danro9685/ASCETIC/blob/master/R/ascetic.R" class="external-link"><code>R/ascetic.R</code></a></small>
     <div class="hidden name"><code>asceticPhylogeniesAssessment.Rd</code></div>
     </div>
+
     <div class="ref-description">
     <p>Perform the assessment via cross-validation of the model inferred by the ASCETIC framework on
 multiple samples (using mutational trees as inputs) datasets.</p>
     </div>
+
     <div id="ref-usage">
     <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">asceticPhylogeniesAssessment</span><span class="op">(</span><span class="va">inference</span>, niterations <span class="op">=</span> <span class="fl">100</span>, nsampling <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
     </div>
+
     <div id="arguments">
     <h2>Arguments</h2>
-    <dl><dt id="arg-inference">inference<a class="anchor" aria-label="anchor" href="#arg-inference"></a></dt>
+
+
+<dl><dt id="arg-inference">inference<a class="anchor" aria-label="anchor" href="#arg-inference"></a></dt>
 <dd><p>Model inferred with ASCETIC using either the function asceticPhylogeniesBootstrap or the function asceticPhylogenies.</p></dd>
+
+
 <dt id="arg-niterations">niterations<a class="anchor" aria-label="anchor" href="#arg-niterations"></a></dt>
 <dd><p>Number of cross-validation iterations to be performed for a robust assessment of ASCETIC model.
 Higher values lead to improved estimates, but require higher computational burden; default value is 100.</p></dd>
+
+
 <dt id="arg-nsampling">nsampling<a class="anchor" aria-label="anchor" href="#arg-nsampling"></a></dt>
 <dd><p>Number of re-sampling to be performed for a robust estimation of the agony ranking.
 Higher values lead to improved estimates, but require higher computational burden; default value is 100.</p></dd>
+
 </dl></div>
     <div id="value">
     <h2>Value</h2>
-<p>A list of 3 elements for which the estimate by cross-validation is performed:
+    <p>A list of 3 elements for which the estimate by cross-validation is performed:
                               1) rankingEstimate, ranking among mutations estimated by agony.
                                  Lower rankings correspond to early mutations. This is returned only if nsampling &gt; 0.
                               2) poset, partially order set among mutations estimated by ASCETIC from the agony ranking.
                               3) inference, inferred ASCETIC evolutionary model for each selected regularization.</p>
     </div>
+
     <div id="ref-examples">
     <h2>Examples</h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">12345</span><span class="op">)</span></span></span>
@@ -123,12 +141,22 @@ Higher values lead to improved estimates, but require higher computational burde
     <nav id="toc" data-toggle="toc" class="sticky-top"><h2 data-toc-skip>Contents</h2>
     </nav></div>
 </div>
+
+
       <footer><div class="copyright">
   <p></p><p>Developed by Daniele Ramazzotti, Luca De Sano.</p>
 </div>
+
 <div class="pkgdown">
-  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.0.9.9000.</p>
+  <p></p><p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.1.0.9000.</p>
 </div>
+
       </footer></div>
+
+
+
+
+
+
   </body></html>
 

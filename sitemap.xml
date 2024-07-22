@@ -1,78 +1,28 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>/404.html</loc>
-  </url>
-  <url>
-    <loc>/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>/articles/ASCETIC.html</loc>
-  </url>
-  <url>
-    <loc>/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>/authors.html</loc>
-  </url>
-  <url>
-    <loc>/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/agony.html</loc>
-  </url>
-  <url>
-    <loc>/reference/agonyArcs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/amlExample.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticCCF.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticCCFAssessment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticCCFResampling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticPhylogenies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticPhylogeniesAssessment.html</loc>
-  </url>
-  <url>
-    <loc>/reference/asceticPhylogeniesBootstrap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/ccfDatasetExampleSingleSamples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/dataExamples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/datasetExamplePhylogenies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/datasetExampleSingleSamples.html</loc>
-  </url>
-  <url>
-    <loc>/reference/evosigs.html</loc>
-  </url>
-  <url>
-    <loc>/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>/reference/modelsPhylogenies.html</loc>
-  </url>
-  <url>
-    <loc>/reference/resExamplePhylogeniesDatasetBootstrap.html</loc>
-  </url>
-  <url>
-    <loc>/reference/resExampleSingleSamplesResampling.html</loc>
-  </url>
-  <url>
-    <loc>/reference/vafDatasetExampleSingleSamples.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>/404.html</loc></url>
+<url><loc>/LICENSE.html</loc></url>
+<url><loc>/articles/ASCETIC.html</loc></url>
+<url><loc>/articles/index.html</loc></url>
+<url><loc>/authors.html</loc></url>
+<url><loc>/index.html</loc></url>
+<url><loc>/reference/agony.html</loc></url>
+<url><loc>/reference/agonyArcs.html</loc></url>
+<url><loc>/reference/amlExample.html</loc></url>
+<url><loc>/reference/asceticCCF.html</loc></url>
+<url><loc>/reference/asceticCCFAssessment.html</loc></url>
+<url><loc>/reference/asceticCCFResampling.html</loc></url>
+<url><loc>/reference/asceticPhylogenies.html</loc></url>
+<url><loc>/reference/asceticPhylogeniesAssessment.html</loc></url>
+<url><loc>/reference/asceticPhylogeniesBootstrap.html</loc></url>
+<url><loc>/reference/ccfDatasetExampleSingleSamples.html</loc></url>
+<url><loc>/reference/dataExamples.html</loc></url>
+<url><loc>/reference/datasetExamplePhylogenies.html</loc></url>
+<url><loc>/reference/datasetExampleSingleSamples.html</loc></url>
+<url><loc>/reference/evosigs.html</loc></url>
+<url><loc>/reference/index.html</loc></url>
+<url><loc>/reference/modelsPhylogenies.html</loc></url>
+<url><loc>/reference/resExamplePhylogeniesDatasetBootstrap.html</loc></url>
+<url><loc>/reference/resExampleSingleSamplesResampling.html</loc></url>
+<url><loc>/reference/vafDatasetExampleSingleSamples.html</loc></url>
 </urlset>
+
