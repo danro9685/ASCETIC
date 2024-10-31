@@ -1,6 +1,6 @@
-pandoc: '3.2'
-pkgdown: 2.1.0.9000
-pkgdown_sha: 2841c0f994fda7f7c7da94034bd24e3882fc7a37
+pandoc: '3.4'
+pkgdown: 2.1.1.9000
+pkgdown_sha: ffe60d5f60934e95285d416dae12c05e24ed1dac
 articles:
   ASCETIC: ASCETIC.html
-last_built: 2024-07-22T07:37Z
+last_built: 2024-10-31T14:52Z
